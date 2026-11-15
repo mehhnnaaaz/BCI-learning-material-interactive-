@@ -1,0 +1,2707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>20CS2E03 BCI Interactive Academy & Video Studio</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --background: #0b1120;
+      --sidebar: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --card-border: #334155;
+      --foreground: #f8fafc;
+      --muted-foreground: #94a3b8;
+      --primary: #38bdf8;
+      --primary-foreground: #090d16;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    .tab-btn.active {
+      background: var(--primary);
+      color: var(--primary-foreground);
+      font-weight: 600;
+    }
+    .subtab-btn.active {
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .hl-badge {
+      background: color-mix(in srgb, var(--warning) 24%, transparent);
+      color: var(--foreground);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      border: 1px solid color-mix(in srgb, var(--warning) 45%, transparent);
+    }
+    .card-hover {
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-1px);
+      border-color: var(--primary);
+    }
+    .p300-cell {
+      transition: background-color 0.06s ease, transform 0.06s ease, color 0.06s ease;
+      user-select: none;
+    }
+    .p300-flash {
+      background: var(--warning) !important;
+      color: #000 !important;
+      transform: scale(1.06);
+      font-weight: 800;
+      box-shadow: 0 0 12px var(--warning);
+    }
+    .cloak-blur {
+      filter: blur(5px);
+      cursor: pointer;
+      transition: filter 0.2s ease;
+      user-select: none;
+    }
+    .cloak-blur.revealed {
+      filter: none;
+      user-select: auto;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased m-0 p-0 min-h-screen">
+
+  <!-- Sticky Top Navigation Bar -->
+  <header class="sticky top-0 z-30 bg-[var(--sidebar)] border-b border-[var(--border)] px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] flex items-center justify-center font-bold text-base shadow-sm">
+          🧠
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm font-bold tracking-tight m-0">20CS2E03 Brain Computer Interface</h1>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-[var(--card)] border border-[var(--border)] text-[var(--muted-foreground)]">SREC · B.E. CSE · Sem VII</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)] m-0">Complete 25-Page Interactive Study Hub, Video Player & Virtual BCI Labs</p>
+        </div>
+      </div>
+
+      <!-- Progress Pill -->
+      <div class="flex items-center gap-3 bg-[var(--card)] border border-[var(--border)] rounded-lg px-3 py-1.5 text-xs">
+        <span class="text-[var(--muted-foreground)]">Mastery Progress:</span>
+        <div class="w-28 h-2 rounded-full bg-[var(--border)] overflow-hidden">
+          <div id="global-progress-bar" class="h-full bg-[var(--success)] transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <span id="global-progress-text" class="font-mono font-semibold">0%</span>
+      </div>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="max-w-7xl mx-auto mt-3 flex flex-wrap gap-1.5" id="main-tabs">
+      <button onclick="switchTab('video')" id="tab-btn-video" class="tab-btn active text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
+        🎬 <span>1. Interactive Video Lecture</span>
+      </button>
+      <button onclick="switchTab('labs')" id="tab-btn-labs" class="tab-btn text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
+        ⚡ <span>2. Live BCI Simulators (5 Labs)</span>
+      </button>
+      <button onclick="switchTab('part1')" id="tab-btn-part1" class="tab-btn text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
+        ⭐ <span>3. Part 1: The 8 Big Answers (10-Mark)</span>
+      </button>
+      <button onclick="switchTab('part2')" id="tab-btn-part2" class="tab-btn text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
+        🧩 <span>4. Part 2: Small Topics (9 Topics)</span>
+      </button>
+      <button onclick="switchTab('part3')" id="tab-btn-part3" class="tab-btn text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
+        🗂️ <span>5. Part 3: 2-Mark Flashcards (30)</span>
+      </button>
+      <button onclick="switchTab('part4')" id="tab-btn-part4" class="tab-btn text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
+        🎯 <span>6. Part 4: 1-Mark Speed Drill (47)</span>
+      </button>
+      <button onclick="switchTab('cheatsheet')" id="tab-btn-cheatsheet" class="tab-btn text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
+        🔥 <span>7. Last-Page Cheat Sheet</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="max-w-7xl mx-auto p-4 space-y-6">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: INTERACTIVE VIDEO LECTURE & OVERVIEW -->
+    <!-- ========================================== -->
+    <section id="tab-video" class="space-y-6">
+      <!-- Intro Banner: How to use these notes & 10-Mark Formula -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-[var(--primary)]">📘 How to Use These Notes</span>
+            <span class="text-xs text-[var(--muted-foreground)]">Page 1</span>
+          </div>
+          <p class="text-xs leading-relaxed text-[var(--foreground)] m-0">
+            Read <strong>Part 1 first</strong> (the 8 big answers). Each one has a simple idea, a diagram to draw, and points to write. Then read <strong>Part 2</strong> (small topics). Finish with the <strong>last page (cheat sheet)</strong> before you sleep and before the exam.
+          </p>
+          <div class="pt-2 border-t border-[var(--border)]">
+            <div class="text-xs font-semibold mb-1.5">🏆 How to write ANY 10-mark answer (6-Step Formula):</div>
+            <div class="flex flex-wrap gap-1 text-xs">
+              <span class="px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)]">1) Definition</span>
+              <span>→</span>
+              <span class="px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)]">2) Diagram</span>
+              <span>→</span>
+              <span class="px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)]">3) Steps/Points</span>
+              <span>→</span>
+              <span class="px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)]">4) One Table</span>
+              <span>→</span>
+              <span class="px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)]">5) One Example</span>
+              <span>→</span>
+              <span class="px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)]">6) 2-Line Conclusion</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-[var(--success)]">⚡ The Whole Subject in 5 Lines (Click any step to jump to its visual scene)</span>
+            <span class="text-xs text-[var(--muted-foreground)]">Core BCI Pipeline</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 pt-1">
+            <div onclick="jumpToScene(0)" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
+              <div class="text-xs font-bold text-[var(--primary)]">1. Brain Only</div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">A BCI lets a person control a machine <strong>using only brain signals</strong>, with no muscles.</p>
+            </div>
+            <div onclick="jumpToScene(1)" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
+              <div class="text-xs font-bold text-[var(--primary)]">2. Record EEG</div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">The brain signal is usually recorded with <strong>EEG</strong> (electrodes on the scalp).</p>
+            </div>
+            <div onclick="jumpToScene(4)" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
+              <div class="text-xs font-bold text-[var(--primary)]">3. Clean & Filter</div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">The signal is weak and noisy, so we <strong>clean it, filter it, and pick out features</strong>.</p>
+            </div>
+            <div onclick="jumpToScene(5)" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
+              <div class="text-xs font-bold text-[var(--primary)]">4. ML / DL Model</div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">A <strong>machine learning</strong> model reads the features and decides what the user wants.</p>
+            </div>
+            <div onclick="jumpToScene(8)" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
+              <div class="text-xs font-bold text-[var(--primary)]">5. Command & Loop</div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">Decision becomes a <strong>command</strong> (move wheelchair, type letter) + user sees <strong>feedback</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Animated Video Player -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden shadow-sm">
+        <div class="p-3 bg-[var(--sidebar)] border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)]" id="video-chapter-badge">Chapter 1 / 12</span>
+            <h2 class="text-sm font-bold m-0" id="video-scene-title">The Whole Subject in 5 Lines: Closed-Loop BCI</h2>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-xs flex items-center gap-1.5 cursor-pointer bg-[var(--card)] px-2.5 py-1 rounded border border-[var(--border)]">
+              <input type="checkbox" id="voice-narration-toggle" onchange="toggleVoiceNarration()" class="accent-[var(--primary)]" />
+              <span>🔊 Voice Narration (TTS)</span>
+            </label>
+            <select id="video-speed-select" onchange="updateVideoSpeed()" class="text-xs bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] rounded px-2 py-1">
+              <option value="1">1.0x Speed</option>
+              <option value="1.25">1.25x Speed</option>
+              <option value="1.5">1.5x Speed</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Animated Canvas Viewport -->
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+          <div class="lg:col-span-2 relative bg-[var(--background)] border-b lg:border-b-0 lg:border-r border-[var(--border)] flex flex-col justify-between">
+            <canvas id="video-canvas" width="760" height="380" class="w-full h-auto block"></canvas>
+
+            <!-- Caption Subtitle Overlay -->
+            <div class="px-4 py-3 bg-[var(--sidebar)] border-t border-[var(--border)]">
+              <p id="video-subtitle" class="text-xs sm:text-sm font-medium leading-relaxed m-0 text-[var(--foreground)]"></p>
+            </div>
+          </div>
+
+          <!-- Chapter Playlist & Key Exam Takeaways -->
+          <div class="p-4 flex flex-col justify-between space-y-4 bg-[var(--card)] max-h-[450px] overflow-y-auto">
+            <div class="space-y-2">
+              <div class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">📝 Scene Exam Key Points</div>
+              <ul id="video-keypoints" class="text-xs space-y-1.5 pl-4 m-0 leading-relaxed"></ul>
+              <div id="video-memory-trick" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs mt-2"></div>
+            </div>
+
+            <div class="space-y-1.5 pt-2 border-t border-[var(--border)]">
+              <div class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">🎬 12-Chapter Video Playlist</div>
+              <div id="video-playlist" class="space-y-1 max-h-44 overflow-y-auto pr-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Controls Bar -->
+        <div class="p-3 bg-[var(--sidebar)] border-t border-[var(--border)] flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <button onclick="prevScene()" class="text-xs px-3 py-1.5 rounded bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)] cursor-pointer">⏮ Prev</button>
+            <button onclick="toggleVideoPlay()" id="video-play-btn" class="text-xs px-4 py-1.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)] font-bold cursor-pointer">▶ Play Lecture</button>
+            <button onclick="nextScene()" class="text-xs px-3 py-1.5 rounded bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)] cursor-pointer">Next ⏭</button>
+          </div>
+          <div class="flex-1 max-w-md flex items-center gap-2">
+            <span class="text-xs font-mono text-[var(--muted-foreground)]" id="scene-timer-label">00:00 / 00:12</span>
+            <input type="range" id="scene-scrubber" min="0" max="100" value="0" oninput="scrubScene(this.value)" class="w-full accent-[var(--primary)] cursor-pointer" />
+          </div>
+          <div class="text-xs text-[var(--muted-foreground)]">
+            Tip: Click any chapter on the right or press Play for automatic animated walkthrough!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: 5 INTERACTIVE HANDS-ON BCI LABS     -->
+    <!-- ========================================== -->
+    <section id="tab-labs" class="hidden space-y-6">
+      <div class="flex flex-wrap gap-2 border-b border-[var(--border)] pb-2">
+        <button onclick="switchLab('mi')" id="lab-btn-mi" class="subtab-btn active text-xs px-3 py-2 cursor-pointer bg-transparent border-0">
+          🖐️ Lab 1: Motor Imagery & ERD/ERS Calculator
+        </button>
+        <button onclick="switchLab('p300')" id="lab-btn-p300" class="subtab-btn text-xs px-3 py-2 cursor-pointer bg-transparent border-0">
+          🔤 Lab 2: P300 Oddball 6×6 Speller
+        </button>
+        <button onclick="switchLab('filter')" id="lab-btn-filter" class="subtab-btn text-xs px-3 py-2 cursor-pointer bg-transparent border-0">
+          🎛️ Lab 3: EEG Artifact & Filter Studio
+        </button>
+        <button onclick="switchLab('bands')" id="lab-btn-bands" class="subtab-btn text-xs px-3 py-2 cursor-pointer bg-transparent border-0">
+          🌊 Lab 4: D-T-A-B-G Frequency Synthesizer
+        </button>
+        <button onclick="switchLab('headmap')" id="lab-btn-headmap" class="subtab-btn text-xs px-3 py-2 cursor-pointer bg-transparent border-0">
+          🧭 Lab 5: 10–20 Electrode & Brain Lobe Explorer
+        </button>
+      </div>
+
+      <!-- LAB 1: MOTOR IMAGERY SIMULATOR -->
+      <div id="lab-panel-mi" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-4">
+          <div>
+            <span class="text-xs font-bold text-[var(--primary)] uppercase">Big Answer #1 · ★★★★★</span>
+            <h3 class="text-base font-bold mt-0.5 m-0">Motor Imagery (Opposite-Side Rule)</h3>
+            <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">
+              Click a movement below to imagine it for 4 seconds. Watch where <strong>Mu (8–12 Hz)</strong> and <strong>Beta (13–30 Hz)</strong> rhythms drop (ERD)!
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="setMIMode('right')" id="mi-btn-right" class="p-3 rounded-lg border border-[var(--border)] bg-[var(--background)] text-left cursor-pointer card-hover">
+              <div class="text-xs font-bold">👉 Right Hand</div>
+              <div class="text-xs text-[var(--muted-foreground)]">Drops at <strong>C3 (Left)</strong></div>
+            </button>
+            <button onclick="setMIMode('left')" id="mi-btn-left" class="p-3 rounded-lg border border-[var(--border)] bg-[var(--background)] text-left cursor-pointer card-hover">
+              <div class="text-xs font-bold">👈 Left Hand</div>
+              <div class="text-xs text-[var(--muted-foreground)]">Drops at <strong>C4 (Right)</strong></div>
+            </button>
+            <button onclick="setMIMode('feet')" id="mi-btn-feet" class="p-3 rounded-lg border border-[var(--border)] bg-[var(--background)] text-left cursor-pointer card-hover">
+              <div class="text-xs font-bold">🦶 Both Feet</div>
+              <div class="text-xs text-[var(--muted-foreground)]">Drops at <strong>Cz (Middle)</strong></div>
+            </button>
+            <button onclick="setMIMode('rest')" id="mi-btn-rest" class="p-3 rounded-lg border border-[var(--border)] bg-[var(--background)] text-left cursor-pointer card-hover">
+              <div class="text-xs font-bold">😌 Rest / Just Ended</div>
+              <div class="text-xs text-[var(--muted-foreground)]">Strong Mu + <strong>Beta Rebound (ERS)</strong></div>
+            </button>
+          </div>
+
+          <!-- ERD / ERS Live Formula Calculator -->
+          <div class="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-2">
+            <div class="text-xs font-bold text-[var(--primary)]">📐 Interactive ERD / ERS Formula Calculator</div>
+            <div class="text-xs font-mono bg-[var(--card)] p-2 rounded border border-[var(--border)]">
+              ERD% = ((A − R) / R) × 100
+            </div>
+            <div class="space-y-1 text-xs">
+              <div class="flex justify-between">
+                <span>Rest Power (R):</span>
+                <span id="erd-r-val" class="font-mono font-bold">50 µV²</span>
+              </div>
+              <input type="range" id="erd-r-slider" min="10" max="100" value="50" oninput="calcERD()" class="w-full accent-[var(--primary)]" />
+              <div class="flex justify-between">
+                <span>Task Power (A):</span>
+                <span id="erd-a-val" class="font-mono font-bold">20 µV²</span>
+              </div>
+              <input type="range" id="erd-a-slider" min="5" max="100" value="20" oninput="calcERD()" class="w-full accent-[var(--primary)]" />
+            </div>
+            <div id="erd-result-box" class="p-2 rounded text-xs font-semibold"></div>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+            <strong>Memory Trick:</strong> <span class="hl-badge">C3</span> is odd, odd is left, left brain = <strong>right hand</strong>. Everything is "opposite side"!
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">Live Scalp C3 / Cz / C4 Sensorimotor Map & 7-Step Pipeline</div>
+            <span id="mi-status-pill" class="text-xs px-2.5 py-0.5 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold">Imagining: Right Hand → C3 ERD</span>
+          </div>
+          <canvas id="mi-canvas" width="700" height="320" class="w-full h-auto bg-[var(--background)] rounded-lg border border-[var(--border)]"></canvas>
+          <div class="grid grid-cols-7 gap-1 text-center text-xs">
+            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>1. Record</strong><br><span class="text-[var(--muted-foreground)]">C3, Cz, C4</span></div>
+            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>2. Clean</strong><br><span class="text-[var(--muted-foreground)]">50Hz + ICA</span></div>
+            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>3. Spectral</strong><br><span class="text-[var(--muted-foreground)]">8–30 Hz</span></div>
+            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>4. Spatial</strong><br><span class="text-[var(--muted-foreground)]">CSP filter</span></div>
+            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>5. Features</strong><br><span class="text-[var(--muted-foreground)]">Band power</span></div>
+            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>6. Classify</strong><br><span class="text-[var(--muted-foreground)]">LDA/EEGNet</span></div>
+            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>7. Command</strong><br><span class="text-[var(--muted-foreground)]" id="mi-cmd-text">Turn Right</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAB 2: P300 SPELLER SIMULATOR -->
+      <div id="lab-panel-p300" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-4">
+          <div>
+            <span class="text-xs font-bold text-[var(--primary)] uppercase">Big Answer #8A & Topic 2.2 · Farwell & Donchin (1988)</span>
+            <h3 class="text-base font-bold mt-0.5 m-0">6 × 6 P300 Oddball Speller</h3>
+            <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">
+              1) Click any letter in the 6×6 grid to focus your attention on it.<br>
+              2) Click <strong>Start Flashing</strong>. Rows and columns flash randomly.<br>
+              3) Whenever your target's row or column flashes, the brain produces a positive <strong>P300 wave at ~300 ms at Pz</strong>!
+            </p>
+          </div>
+
+          <div class="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-2 text-xs">
+            <div class="flex justify-between items-center">
+              <span>Attended Target Letter:</span>
+              <span id="p300-target-display" class="text-base font-extrabold px-2.5 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)]">B</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span>Detected Row / Col Peak:</span>
+              <span id="p300-intersection-display" class="font-mono">Row 1 × Col 2</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span>Spelled Output Word:</span>
+              <span id="p300-spelled-word" class="font-mono font-bold text-sm text-[var(--success)]">BCI_</span>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <button onclick="startP300Trial()" id="p300-start-btn" class="flex-1 py-2 px-3 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-bold text-xs cursor-pointer">
+              ⚡ Flash Rows & Columns
+            </button>
+            <button onclick="clearP300Word()" class="py-2 px-3 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs cursor-pointer">
+              Clear Text
+            </button>
+          </div>
+
+          <div class="text-xs space-y-1 p-3 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+            <div><strong>Why Oddball?</strong> Target flash is <em>rare</em> among many common flashes.</div>
+            <div><strong>Where strongest?</strong> <span class="hl-badge">Pz</span> (Parietal midline).</div>
+            <div><strong>Good:</strong> Almost no training, high accuracy.</div>
+            <div><strong>Bad:</strong> Slow (few letters/min), tiring for eyes.</div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+          <div>
+            <div class="text-xs font-bold mb-2 text-center text-[var(--muted-foreground)]">Click a character to attend to it, then press Flash:</div>
+            <div id="p300-grid" class="grid grid-cols-6 gap-1.5 max-w-xs mx-auto"></div>
+          </div>
+          <div class="space-y-3">
+            <div class="text-xs font-bold text-[var(--muted-foreground)]">Live ERP Trace at Electrode Pz (Averaged Trials)</div>
+            <canvas id="p300-canvas" width="360" height="240" class="w-full h-auto bg-[var(--background)] rounded-lg border border-[var(--border)]"></canvas>
+            <p class="text-xs text-[var(--muted-foreground)] m-0" id="p300-log-msg">
+              Waiting for flash sequence... Notice how N100 is a negative peak at ~100 ms and <strong>P300 is a large positive peak at ~300 ms</strong> only when the attended row/column flashes!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAB 3: ARTIFACT & FILTER STUDIO -->
+      <div id="lab-panel-filter" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div>
+            <span class="text-xs font-bold text-[var(--primary)] uppercase">Big Answers #4 & #6 · ★★★★</span>
+            <h3 class="text-base font-bold mt-0.5 m-0">EEG Noise & Filter Tuner</h3>
+            <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">
+              Raw EEG is like a weak radio station with static. Inject body/equipment artifacts below, then turn on filters & ICA to clean the signal!
+            </p>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="text-xs font-bold text-[var(--error)]">1. Inject Artifacts (Noise Sources):</div>
+            <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
+              <span>👀 Eye Blink (EOG · Big slow waves at Fp1/Fp2)</span>
+              <input type="checkbox" id="art-blink" checked onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
+            </label>
+            <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
+              <span>😬 Jaw/Muscle (EMG · Fast spiky noise &gt;40 Hz)</span>
+              <input type="checkbox" id="art-emg" checked onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
+            </label>
+            <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
+              <span>🔌 India Power Line (50 Hz steady hum)</span>
+              <input type="checkbox" id="art-50hz" checked onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
+            </label>
+            <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
+              <span>💧 Sweat / Head Move (Slow drift &lt;0.5 Hz)</span>
+              <input type="checkbox" id="art-drift" onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
+            </label>
+          </div>
+
+          <div class="space-y-1.5 pt-2 border-t border-[var(--border)]">
+            <div class="text-xs font-bold text-[var(--success)]">2. Apply Preprocessing & Filters:</div>
+            <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
+              <span>🛡️ <strong>ICA</strong> (Removes Eye Blink / Muscle without losing trials)</span>
+              <input type="checkbox" id="fix-ica" onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
+            </label>
+            <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
+              <span>✂️ <strong>50 Hz Notch Filter</strong> (Removes Power-line hum)</span>
+              <input type="checkbox" id="fix-notch" onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
+            </label>
+            <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
+              <span>📉 <strong>Low-Pass (~40 Hz)</strong> (Removes high-freq EMG muscle)</span>
+              <input type="checkbox" id="fix-lowpass" onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
+            </label>
+            <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
+              <span>📈 <strong>High-Pass (~0.5 Hz)</strong> (Removes slow sweat/move drift)</span>
+              <input type="checkbox" id="fix-highpass" onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
+            </label>
+          </div>
+          <button onclick="cleanAllSignal()" class="w-full py-2 rounded-lg bg-[var(--success)] text-white font-bold text-xs cursor-pointer">✨ Auto-Apply Full Clean Pipeline (Notch + Band-Pass + ICA)</button>
+        </div>
+
+        <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold uppercase text-[var(--muted-foreground)]">Live Oscilloscope: Raw Noisy EEG (Top) vs Cleaned Signal (Bottom)</span>
+            <span id="snr-readout" class="text-xs font-mono px-2.5 py-0.5 rounded bg-[var(--background)] border border-[var(--border)]">SNR Status: Noisy</span>
+          </div>
+          <canvas id="filter-canvas" width="700" height="330" class="w-full h-auto bg-[var(--background)] rounded-lg border border-[var(--border)]"></canvas>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+            <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]"><strong>Eye blink →</strong> ICA or EOG regression</div>
+            <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]"><strong>Muscle →</strong> Low-pass filter, ICA, relax</div>
+            <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]"><strong>Movement →</strong> High-pass filter, reject (&gt;±100µV)</div>
+            <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]"><strong>50 Hz line →</strong> Notch filter</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAB 4: FREQUENCY BANDS SYNTHESIZER -->
+      <div id="lab-panel-bands" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div>
+            <span class="text-xs font-bold text-[var(--primary)] uppercase">Topic 2.1 · ★★★ · "Do Take A Break, Guys"</span>
+            <h3 class="text-base font-bold mt-0.5 m-0">EEG Frequency Bands (D-T-A-B-G + Mu)</h3>
+            <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">
+              Select a rhythm below to visualize its exact frequency, amplitude, brain state, and memory word.
+            </p>
+          </div>
+          <div id="band-selector-list" class="space-y-1.5"></div>
+        </div>
+        <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div class="flex justify-between items-center">
+            <span id="band-title-readout" class="text-sm font-bold">Alpha (8–13 Hz) — Relaxed, eyes closed (back of head)</span>
+            <span id="band-memory-badge" class="hl-badge text-xs">Memory Word: At rest</span>
+          </div>
+          <canvas id="band-canvas" width="700" height="290" class="w-full h-auto bg-[var(--background)] rounded-lg border border-[var(--border)]"></canvas>
+          <div class="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs leading-relaxed">
+            <strong>Mnemonic Order (Low to High Hz):</strong> <span class="hl-badge">D - T - A - B - G</span> → <em>"<strong>D</strong>o <strong>T</strong>ake <strong>A</strong> <strong>B</strong>reak, <strong>G</strong>uys"</em> (Delta 0.5–4 Hz → Theta 4–8 Hz → Alpha 8–13 Hz → Beta 13–30 Hz → Gamma 30+ Hz). Note: <strong>Mu (8–12 Hz)</strong> shares the alpha frequency range but is recorded over the <strong>motor cortex (C3, Cz, C4)</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- LAB 5: 10-20 SYSTEM & BRAIN LOBES EXPLORER -->
+      <div id="lab-panel-headmap" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div>
+            <span class="text-xs font-bold text-[var(--primary)] uppercase">Topics 2.4, 2.5 & 2.7 · ★★★</span>
+            <h3 class="text-base font-bold mt-0.5 m-0">10–20 System, Brain Lobes & Neuron</h3>
+            <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">
+              Click any electrode on the interactive scalp map (right) or choose a brain lobe below to inspect its exact role and exam rules.
+            </p>
+          </div>
+          <div id="headmap-info-card" class="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--primary)] space-y-1.5 text-xs">
+            <div class="text-sm font-bold text-[var(--primary)]" id="hm-selected-title">C3 — Central Left Electrode</div>
+            <div id="hm-selected-Region"><strong>Region:</strong> Central (Motor Cortex) · Left Side (Odd Number)</div>
+            <div id="hm-selected-role"><strong>BCI Role:</strong> Drops in Mu/Beta power (ERD) when user imagines moving their <strong>Right Hand</strong>.</div>
+          </div>
+
+          <div class="space-y-1.5 text-xs">
+            <div class="font-bold">10–20 System Rules (Measured Nasion to Inion):</div>
+            <div class="grid grid-cols-3 gap-1.5 text-center">
+              <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]"><strong>Odd (1,3,7)</strong><br>Left Side</div>
+              <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]"><strong>z (Zero)</strong><br>Midline</div>
+              <div class="p-2 rounded bg-[var(--background)] border border-[var(--border)]"><strong>Even (2,4,8)</strong><br>Right Side</div>
+            </div>
+          </div>
+
+          <div class="space-y-1.5 text-xs pt-2 border-t border-[var(--border)]">
+            <div class="font-bold">Neuron Basics (86 Billion Neurons · −70 mV at rest):</div>
+            <p class="text-[var(--muted-foreground)] m-0">
+              <strong>Dendrites</strong> receive signals → <strong>Cell body</strong> processes them → <strong>Axon</strong> sends action potential (spike ~1 ms) out → <strong>Synapse</strong> passes signal via chemical <strong>neurotransmitters</strong>. Millions of slow <strong>postsynaptic potentials</strong> sum up to form scalp EEG!
+            </p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+          <div>
+            <div class="text-xs font-bold text-center mb-1 text-[var(--muted-foreground)]">Click Any 10–20 Electrode on the Scalp Map:</div>
+            <canvas id="headmap-canvas" width="340" height="340" class="w-full max-w-[320px] mx-auto h-auto block cursor-pointer"></canvas>
+          </div>
+          <div class="space-y-2">
+            <div class="text-xs font-bold uppercase text-[var(--muted-foreground)]">Brain Lobes & Structures (Click to highlight):</div>
+            <div class="space-y-1.5 text-xs">
+              <div onclick="selectLobe('Frontal')" class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
+                <strong>Frontal Lobe (Front · Fp, F):</strong> Thinking, planning, decisions, <strong>movement</strong> (motor cortex at back of frontal lobe under C3, Cz, C4), speech.
+              </div>
+              <div onclick="selectLobe('Parietal')" class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
+                <strong>Parietal Lobe (Top, behind frontal · P):</strong> <strong>Touch</strong>, body position, spatial sense. Strongest <strong>P300 at Pz</strong>.
+              </div>
+              <div onclick="selectLobe('Temporal')" class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
+                <strong>Temporal Lobe (Sides near ears · T):</strong> <strong>Hearing</strong>, memory, understanding language.
+              </div>
+              <div onclick="selectLobe('Occipital')" class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
+                <strong>Occipital Lobe (Back · O):</strong> <strong>Vision</strong> (SSVEP & Alpha rhythm with eyes closed).
+              </div>
+              <div class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)]">
+                <strong>Cerebellum:</strong> Balance and coordination · <strong>Brainstem:</strong> Breathing and heartbeat.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: PART 1 - THE 8 BIG ANSWERS          -->
+    <!-- ========================================== -->
+    <section id="tab-part1" class="hidden space-y-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold m-0">PART 1: THE 8 BIG ANSWERS (MOST IMPORTANT FIRST)</h2>
+          <p class="text-xs text-[var(--muted-foreground)] m-0">Complete verbatim study notes + 10-Mark Exam Structure (Definition → Diagram → Steps → Table → Example → Conclusion)</p>
+        </div>
+        <div class="flex flex-wrap gap-1.5" id="big-answer-pills"></div>
+      </div>
+
+      <div id="big-answer-viewer" class="space-y-4"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: PART 2 - SMALL TOPICS (EASY MARKS)  -->
+    <!-- ========================================== -->
+    <section id="tab-part2" class="hidden space-y-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold m-0">PART 2: SMALL TOPICS (EASY MARKS · 2.1 TO 2.9)</h2>
+          <p class="text-xs text-[var(--muted-foreground)] m-0">All 9 focused topics with tables, diagrams, mnemonics, and exam highlights</p>
+        </div>
+        <input type="text" id="part2-search" oninput="renderPart2()" placeholder="Search Part 2 topics..." class="text-xs px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)]" />
+      </div>
+      <div id="part2-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: PART 3 - 30 2-MARK ANSWERS          -->
+    <!-- ========================================== -->
+    <section id="tab-part3" class="hidden space-y-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold m-0">PART 3: 30 READY-TO-WRITE 2-MARK ANSWERS</h2>
+          <p class="text-xs text-[var(--muted-foreground)] m-0">Practice in Interactive Flashcard Deck mode or browse all 30 answers with Cloze Test mode</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="text" id="part3-search" oninput="renderPart3List()" placeholder="Filter 30 questions..." class="text-xs px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)]" />
+          <button onclick="togglePart3QuizMode()" id="part3-cloak-btn" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold cursor-pointer">
+            🙈 Hide Answers (Self-Test)
+          </button>
+        </div>
+      </div>
+
+      <!-- Interactive Flashcard Spotlight -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 text-center space-y-3">
+        <div class="flex items-center justify-between text-xs text-[var(--muted-foreground)]">
+          <span id="fc-counter">Flashcard 1 of 30</span>
+          <span id="fc-mastered-count" class="text-[var(--success)] font-semibold">0 / 30 Mastered</span>
+        </div>
+        <div onclick="flipFlashcard()" class="min-h-[130px] p-6 rounded-xl bg-[var(--background)] border-2 border-[var(--border)] hover:border-[var(--primary)] flex flex-col items-center justify-center cursor-pointer transition-all">
+          <div class="text-xs uppercase tracking-wider text-[var(--primary)] font-bold mb-1" id="fc-side-label">QUESTION (Click to Flip)</div>
+          <div class="text-base sm:text-lg font-bold max-w-2xl" id="fc-content">1. Define BCI.</div>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-2">
+          <button onclick="prevFlashcard()" class="text-xs px-3 py-1.5 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">⬅ Previous</button>
+          <button onclick="flipFlashcard()" class="text-xs px-4 py-1.5 rounded bg-[var(--card)] border border-[var(--primary)] font-semibold cursor-pointer">🔄 Flip Card</button>
+          <button onclick="markFlashcardMastered()" id="fc-master-btn" class="text-xs px-4 py-1.5 rounded bg-[var(--success)] text-white font-semibold cursor-pointer">✅ Mark Mastered</button>
+          <button onclick="nextFlashcard()" class="text-xs px-3 py-1.5 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">Next ➡</button>
+        </div>
+      </div>
+
+      <!-- Full List of 30 2-Mark Answers -->
+      <div id="part3-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 6: PART 4 - 47 1-MARK QUICK FACTS      -->
+    <!-- ========================================== -->
+    <section id="tab-part4" class="hidden space-y-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Interactive Rapid-Fire Quiz Box -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase text-[var(--primary)]">🎯 1-Mark Rapid-Fire Quiz</span>
+            <span id="quiz-score-badge" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)]">Score: 0 / 0</span>
+          </div>
+          <div class="p-4 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-3">
+            <div class="text-xs text-[var(--muted-foreground)]" id="quiz-q-number">Question #1 of 47</div>
+            <div class="text-sm font-bold" id="quiz-question-text">Loading question...</div>
+            <div id="quiz-options" class="space-y-1.5"></div>
+            <div id="quiz-feedback" class="text-xs font-semibold hidden p-2 rounded"></div>
+            <button onclick="nextQuizQuestion()" class="w-full py-2 rounded bg-[var(--primary)] text-[var(--primary-foreground)] text-xs font-bold cursor-pointer">Next Question ➔</button>
+          </div>
+        </div>
+
+        <!-- All 47 Quick Facts Table -->
+        <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="text-sm font-bold m-0">PART 4: ALL 47 1-MARK QUICK FACTS (PAGES 23–24)</h2>
+              <p class="text-xs text-[var(--muted-foreground)] m-0">Click any blurred answer in Self-Test mode to reveal it</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="text" id="part4-search" oninput="renderPart4Table()" placeholder="Search 47 facts..." class="text-xs px-2.5 py-1 rounded bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)]" />
+              <button onclick="togglePart4Cloak()" id="part4-cloak-btn" class="text-xs px-3 py-1 rounded bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold cursor-pointer">
+                🙈 Blur Answers
+              </button>
+            </div>
+          </div>
+          <div class="overflow-x-auto max-h-[520px] overflow-y-auto border border-[var(--border)] rounded-lg">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="sticky top-0 bg-[var(--sidebar)] border-b border-[var(--border)]">
+                <tr>
+                  <th class="p-2.5 w-10">#</th>
+                  <th class="p-2.5">Question</th>
+                  <th class="p-2.5">Answer</th>
+                </tr>
+              </thead>
+              <tbody id="part4-tbody" class="divide-y divide-[var(--border)]"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 7: LAST PAGE CHEAT SHEET               -->
+    <!-- ========================================== -->
+    <section id="tab-cheatsheet" class="hidden space-y-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <span class="text-xs font-bold uppercase text-[var(--warning)]">Page 25 · Read Before You Sleep & Before the Exam</span>
+          <h2 class="text-base font-bold m-0">LAST PAGE: INTERACTIVE CHEAT SHEET</h2>
+        </div>
+        <button onclick="toggleCheatSheetMemoryTest()" id="cs-memory-btn" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-bold cursor-pointer">
+          🧠 Toggle Active Recall Blank-Out Mode
+        </button>
+      </div>
+
+      <div id="cheatsheet-container" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+    </section>
+
+  </main>
+
+  <script>
+    // =========================================================================
+    // 1. COMPLETE VERBATIM DATASET FROM ALL 25 PAGES OF THE PDF
+    // =========================================================================
+
+    const VIDEO_SCENES = [
+      {
+        title: "1. The Whole Subject in 5 Lines (Closed-Loop BCI)",
+        badge: "Chapter 1 / 12 · Intro",
+        subtitle: "A Brain-Computer Interface (BCI) lets a person control an external device using ONLY brain signals—with zero muscles or peripheral nerves!",
+        keypoints: [
+          "1. Control a machine using ONLY brain signals, with no muscles.",
+          "2. Recorded usually with EEG (electrodes on the scalp).",
+          "3. Weak & noisy signal → clean it, filter it, and pick out features.",
+          "4. Machine learning model reads features and decides what the user wants.",
+          "5. Decision becomes a command (wheelchair, speller) + user sees feedback."
+        ],
+        memory: "💡 10-Mark Answer Formula: 1) Definition → 2) Diagram → 3) Steps → 4) One Table → 5) One Example → 6) Two-line Conclusion.",
+        type: "loop"
+      },
+      {
+        title: "2. Motor Imagery BCI: Opposite-Side Rule & ERD/ERS",
+        badge: "Chapter 2 / 12 · Big Answer #1 (★★★★★)",
+        subtitle: "Imagining moving a hand or foot makes the motor cortex busy, causing its resting Mu (8–12 Hz) and Beta (13–30 Hz) rhythms to drop in power (ERD)!",
+        keypoints: [
+          "Mu (8–12 Hz): Strong at rest; gets weaker when moving or imagining movement.",
+          "Beta (13–30 Hz): Drops during movement; gets stronger right after ('beta rebound' = ERS).",
+          "ERD% = ((A − R) / R) × 100. Negative answer = ERD (power down = active).",
+          "Cross-wired brain: Right hand → C3 (left), Left hand → C4 (right), Feet → Cz (middle)."
+        ],
+        memory: "💡 Memory Trick: C3 is odd, odd is left, left brain = right hand. Everything is 'opposite side'!",
+        type: "mi"
+      },
+      {
+        title: "3. The 7 Steps of Motor Imagery BCI Pipeline",
+        badge: "Chapter 3 / 12 · Big Answer #1 (★★★★★)",
+        subtitle: "From imagining movement for 4 seconds at C3/Cz/C4 to driving a wheelchair or opening a stroke patient's hand.",
+        keypoints: [
+          "1. Record EEG at C3, Cz, C4 (~4 sec) → 2. Clean (50 Hz notch + ICA for blinks).",
+          "3. Spectral filter: keep 8–30 Hz (where mu & beta live).",
+          "4. Spatial filter: CSP (Common Spatial Patterns) maximizes left vs right difference.",
+          "5. Features: Band power → 6. Classifier: LDA, SVM, or EEGNet → 7. Command & Feedback.",
+          "Why Time-Frequency (Spectrogram/Wavelet)? Shows BOTH 'which frequency' (8–30 Hz) and 'when' (after cue). Normal FFT loses time!"
+        ],
+        memory: "💡 Stroke Rehab Example: Patient imagines opening weak left hand → power drops at C4 → exoskeleton opens hand.",
+        type: "mipipeline"
+      },
+      {
+        title: "4. The 5 Types of BCI & Best Choice for Paralysed Patients",
+        badge: "Chapter 4 / 12 · Big Answer #2 (★★★★★)",
+        subtitle: "Invasive (inside brain), Semi-invasive (surface/vessel), Non-invasive (scalp), Stimulating (writes in), and Bidirectional (reads & writes).",
+        keypoints: [
+          "Invasive: Inside brain (Neuralink, BrainGate) — Best signal, but surgery & infection risk.",
+          "Semi-invasive: Brain surface (ECoG) or blood vessel (Synchron Stentrode).",
+          "Non-invasive: On scalp (EEG, MEG, fNIRS, fMRI) — Safe, cheap, portable, but noisy.",
+          "Stimulating: Sends signals IN (Cochlear implant, DBS). Bidirectional: Reads AND writes (robotic arm with touch feedback).",
+          "For severely motor-impaired patient: Start with Non-invasive EEG BCI first (Safe, Cheap/home use, Proven P300/MI; upgrade to implant later if needed)."
+        ],
+        memory: "💡 Memory Trick: invasive = inside, semi = surface, non = no surgery.",
+        type: "types"
+      },
+      {
+        title: "5. Recording Techniques: EEG, MEG, fNIRS, fMRI",
+        badge: "Chapter 5 / 12 · Big Answer #3 (★★★★)",
+        subtitle: "Two ways to see brain activity: Electricity/Magnetism directly (Fast: ms) vs Blood Oxygen flow (Slow: seconds).",
+        keypoints: [
+          "EEG: Scalp electrical activity · Very fast (ms) · Poor detail (~1 cm) · Portable · Low cost.",
+          "MEG: Magnetic fields (SQUID sensors) · Very fast (ms) · ~5 mm detail · Needs shielded room.",
+          "fNIRS: Near-infrared light measures blood oxygen · Slow (s) · ~1 cm outer brain · Portable.",
+          "fMRI: BOLD blood oxygen in MRI magnet · Slow (s) · Best detail (~1 mm) · Huge & costly.",
+          "Non-brain signals (EMG muscle, EOG eye, ECG heart): Either noise (artifacts) to remove, or extra switches in a Hybrid BCI."
+        ],
+        memory: "💡 Memory Trick: EEG & MEG = fast (electric/magnetic). fNIRS & fMRI = slow (both start with 'f' and measure blood).",
+        type: "recording"
+      },
+      {
+        title: "6. Signal Processing: Spectral vs Spatio-Temporal Filtering",
+        badge: "Chapter 6 / 12 · Big Answer #4 (★★★★)",
+        subtitle: "Raw EEG is like a weak radio station with static: Spectral filter tunes the frequency; Spatial filter points the antenna at the right place!",
+        keypoints: [
+          "Spectral Filtering (which frequency, 1 channel at a time): Low-pass (cuts muscle), High-pass (cuts drift), Band-pass (8–30 Hz), Notch (50 Hz).",
+          "Spatio-Temporal Filtering (which place, many channels together): CAR (subtract all-channel avg), Laplacian (subtract neighbours), CSP (left vs right class), ICA (independent sources).",
+          "Feature Extraction: Converts thousands of raw samples into a small feature vector (Time, Frequency, Time-frequency, Spatial)."
+        ],
+        memory: "💡 2-Mark Favourite: Spectral = selects frequencies (1 channel); Spatio-temporal = selects brain regions (many channels).",
+        type: "filters"
+      },
+      {
+        title: "7. Machine Learning vs Deep Learning in BCI",
+        badge: "Chapter 7 / 12 · Big Answer #5 (★★★★)",
+        subtitle: "Features are just numbers—Machine Learning is the translator that says 'this means left hand' after per-user calibration.",
+        keypoints: [
+          "ML (Hand-made features): LDA (straight line, fast, most common), SVM (widest gap), kNN (nearest vote), Random Forest (trees vote).",
+          "DL (Learns filters + features + classification automatically): CNN, EEGNet (compact CNN for small EEG data), LSTM/RNN (remembers time for speech).",
+          "Feature extraction is the bridge between signal processing and LDA/SVM.",
+          "In practice: Basic cleaning (50 Hz notch + band-pass) first, then EEGNet/DL."
+        ],
+        memory: "💡 Classic ML Pipeline = CSP + LDA (small data, seconds to train). Classic DL = EEGNet.",
+        type: "mldl"
+      },
+      {
+        title: "8. EEG Artifacts & How to Remove Them",
+        badge: "Chapter 8 / 12 · Big Answer #6 (★★★★)",
+        subtitle: "Artifacts are non-brain signals that are much larger than real EEG and can trigger false commands if not cleaned.",
+        keypoints: [
+          "Body Artifacts: Eye blink/EOG (big slow waves at Fp1/Fp2), Muscle/EMG (fast spiky noise), Heart/ECG (regular spikes ~1/s), Movement (large swings), Sweat (very slow drift).",
+          "Equipment Artifacts: 50 Hz Power-line hum (India), Electrode pop (loose/dry gel jump), Phone/motor interference.",
+          "5 Fixes: 1. Prevent (fresh gel, relax) → 2. Filter (Notch 50Hz, HP 0.5Hz, LP 40Hz) → 3. Reject (>±100 µV) → 4. EOG Regression → 5. ICA (best: removes blink/EMG with zero trials lost!)."
+        ],
+        memory: "💡 Quick Match: Eye blink → ICA · Muscle → Low-pass · Movement → High-pass/reject · 50 Hz → Notch.",
+        type: "artifacts"
+      },
+      {
+        title: "9. EEG's Five Questions: Morphology, Temporal, Frequency, Time-Freq, Spatial",
+        badge: "Chapter 9 / 12 · Big Answer #7 (★★★)",
+        subtitle: "To interpret any EEG signal systematically, ask 5 questions: What shape? When? Which frequency? How does it change? Where on the head?",
+        keypoints: [
+          "1. Morphology (What shape?): Smooth sinusoidal, spike (epilepsy), sharp wave (µV).",
+          "2. Temporal (When & how long?): Latency & duration (e.g., P300 at 300 ms).",
+          "3. Frequency-domain (Which frequency?): FFT band power (loses time).",
+          "4. Time-frequency (Which frequency & when?): Spectrogram/wavelet (Mu drop after cue).",
+          "5. Spatial (Where on head?): Head map — Alpha at back (O), Mu in middle (C), P300 at Pz."
+        ],
+        memory: "💡 Temporal tells WHEN (latency, P300 at 300ms); Spatial tells WHERE (location, ERD at C3 vs C4).",
+        type: "features5"
+      },
+      {
+        title: "10. P300 Speller, Neuroprosthetics, Robotics & 2026 Developments",
+        badge: "Chapter 10 / 12 · Big Answer #8 (★★★)",
+        subtitle: "From Farwell & Donchin's 1988 6×6 P300 matrix speller to shared-control robotics and 2026 clinical implants.",
+        keypoints: [
+          "P300 Speller: 6×6 grid flashes rows/cols; rare attended target triggers positive wave at ~300 ms at Pz (oddball effect).",
+          "Neuroprosthetics: Replace lost function — Movement (robotic arm, exoskeleton, FES), Senses (cochlear/retinal), Speech.",
+          "Robotics Shared Control: User gives high-level goal ('go to door'), robot avoids obstacles automatically.",
+          "2026 Case Study: Neuralink (coin-sized + robot threads, Jan 2024 human trial), Synchron (Stentrode in neck blood vessel), Precision Neuroscience (removable thin film), BrainGate, Paradromics."
+        ],
+        memory: "💡 All implants are still in clinical trials: challenges are surgical risk, reliability, cost, and neuro-ethics (privacy of thoughts).",
+        type: "apps"
+      },
+      {
+        title: "11. Frequency Bands (D-T-A-B-G), ERP, SCP & Neuronal Potentials",
+        badge: "Chapter 11 / 12 · Part 2 (2.1 – 2.4)",
+        subtitle: "Mastering oscillatory rhythms, time-locked ERPs (P300, N100), Slow Cortical Potentials (<1 Hz), and Action vs Postsynaptic potentials.",
+        keypoints: [
+          "Bands: Delta (0.5–4 Deep sleep), Theta (4–8 Tired), Alpha (8–13 At rest), Beta (13–30 Busy), Gamma (30+ Genius) + Mu (8–12 Motor).",
+          "ERP: Time-locked to event; averaging trials cancels random EEG so ERP remains.",
+          "SCP: Very slow shifts (<1 Hz, 0.3s to several s); Negative shift = cortex getting ready (active).",
+          "Potentials: Action potential (1ms spike, invasive only), LFP (local group), Postsynaptic potential (millions add up to form scalp EEG)."
+        ],
+        memory: "💡 Order to remember bands: D-T-A-B-G ('Do Take A Break, Guys').",
+        type: "part2a"
+      },
+      {
+        title: "12. 10–20 System, EEG Hardware, Nyquist Rule, Lobes & History",
+        badge: "Chapter 12 / 12 · Part 2 (2.5 – 2.9)",
+        subtitle: "How electrodes are placed (10% / 20% Nasion to Inion), amplified, sampled (Nyquist ≥ 2×f_max), and the historical milestones of BCI.",
+        keypoints: [
+          "10–20 System: Fp, F, C, T, P, O · Odd = left, Even = right, z = midline.",
+          "Recording chain: Electrodes (Ag/AgCl + gel) → Differential Amplifier → Filter → ADC (250–1000 Hz, Nyquist rule) → Computer.",
+          "Montage: Referential (vs ear reference) vs Bipolar (each electrode vs neighbour).",
+          "History: 1924 Hans Berger (first human EEG) → 1973 Jacques Vidal (coined 'BCI') → 1988 Farwell & Donchin (P300 speller) → 2024+ Neuralink trials."
+        ],
+        memory: "💡 Lobes: Frontal (thinking/movement), Parietal (touch), Temporal (hearing/memory), Occipital (vision).",
+        type: "part2b"
+      }
+    ];
+
+    const BIG_ANSWERS = [
+      {
+        id: 1,
+        title: "1. Motor Imagery BCI – from EEG to command",
+        stars: "★★★★★ (most important)",
+        simpleIdea: "The user only imagines moving a hand or foot. Imagining makes the movement area of the brain busy. When it gets busy, its normal resting rhythm becomes weaker. The computer notices where the rhythm became weaker, and so it knows which movement was imagined.",
+        diagram: ["Imagine movement", "1. Record EEG", "2. Clean", "3. Frequency filter", "4. Spatial filter", "5. Features", "6. Classifier", "7. Command", "Feedback to user"],
+        tables: [
+          {
+            caption: "Two rhythms to remember (sensorimotor rhythms)",
+            headers: ["Rhythm", "Frequency", "What it does"],
+            rows: [
+              ["Mu", "8–12 Hz", "Strong when resting. Gets weaker when you move or imagine moving."],
+              ["Beta", "13–30 Hz", "Gets weaker during movement. Gets stronger just after (“beta rebound”)."]
+            ]
+          },
+          {
+            caption: "Where to look (the brain is cross-wired: left brain controls right body)",
+            headers: ["You imagine", "Power drops at", "Side of brain"],
+            rows: [
+              ["Right hand", "C3", "Left"],
+              ["Left hand", "C4", "Right"],
+              ["Feet", "Cz", "Middle"]
+            ]
+          },
+          {
+            caption: "Good and bad",
+            headers: ["Good", "Bad"],
+            rows: [
+              ["No surgery, safe, cheap", "Some users (about 15–30%) cannot control it well"],
+              ["No flashing screen needed", "Only a few commands"],
+              ["Helps stroke patients recover", "Needs training; signal changes day to day"]
+            ]
+          }
+        ],
+        sections: [
+          {
+            heading: "ERD and ERS (must write)",
+            bullets: [
+              "ERD (Event-Related Desynchronization) = rhythm power goes down. It means that brain area is active.",
+              "ERS (Event-Related Synchronization) = rhythm power goes up. It means that brain area is resting.",
+              "Formula: ERD% = (A − R) / R × 100, where R = power at rest, A = power during the task. A negative answer means ERD."
+            ]
+          },
+          {
+            heading: "The 7 steps",
+            bullets: [
+              "1. Record EEG: electrodes at C3, Cz, C4 on the scalp. The user sees an arrow on the screen and imagines that movement for about 4 seconds.",
+              "2. Clean the signal: remove 50 Hz power-line noise (notch filter) and remove eye-blink and muscle noise (ICA).",
+              "3. Frequency (spectral) filter: keep only 8–30 Hz, because mu and beta live there.",
+              "4. Spatial filter: combine the channels so the difference between left and right becomes clear. The famous method is CSP (Common Spatial Patterns).",
+              "5. Feature extraction: measure the power of the filtered signal. This gives a few numbers for each trial.",
+              "6. Classification: a model such as LDA, SVM or EEGNet looks at the numbers and says “left”, “right” or “feet”.",
+              "7. Command and feedback: left = turn wheelchair left, and so on. The user sees the result and gets better with practice."
+            ]
+          },
+          {
+            heading: "Why time-frequency analysis is useful here",
+            bullets: [
+              "ERD happens in a particular band (8–30 Hz) at a particular time (just after the cue). Time-frequency methods (spectrogram, wavelet) show both “which frequency” and “when”. A normal FFT shows frequency only and loses the time."
+            ]
+          }
+        ],
+        memoryTrick: "C3 is odd, odd is left, left brain = right hand. So everything is “opposite side”.",
+        example: "A stroke patient imagines opening the weak left hand → power drops at C4 → the system detects “left hand” → a device opens the hand for them.",
+        conclusion: "Motor Imagery BCI reads the drop in mu and beta rhythm on the opposite side of the brain and turns it into commands through recording, filtering, features, classification and feedback."
+      },
+      {
+        id: 2,
+        title: "2. How a BCI works + types of BCI + which type suits a paralysed patient",
+        stars: "★★★★★",
+        simpleIdea: "Definition: A BCI is a system that measures brain activity and converts it into commands for an external device, without using nerves and muscles.",
+        diagram: ["Brain", "Signal acquisition", "Preprocessing", "Feature extraction", "Classification (translation)", "Device command", "Feedback", "back to Brain"],
+        tables: [
+          {
+            caption: "The 5 types of BCI",
+            headers: ["Type", "Where the sensor is", "Good", "Bad", "Example"],
+            rows: [
+              ["Invasive", "Inside the brain", "Best signal", "Brain surgery, infection risk, costly", "Neuralink, BrainGate"],
+              ["Semi-invasive", "On the brain surface, or inside a blood vessel", "Better than EEG, less damage", "Still needs an operation", "ECoG, Synchron Stentrode"],
+              ["Non-invasive", "On the scalp", "Safe, cheap, portable", "Weak and noisy signal", "EEG, MEG, fNIRS, fMRI"],
+              ["Stimulating", "Sends signals into the brain or nerves", "Restores senses, treats disease", "Mostly needs surgery", "Cochlear implant, deep brain stimulation"],
+              ["Bidirectional", "Reads and writes", "User can also feel (touch feedback)", "Complex", "Robotic arm that gives a sense of touch"]
+            ]
+          }
+        ],
+        sections: [
+          {
+            heading: "Working, step by step",
+            bullets: [
+              "1. Signal acquisition: record brain signals (usually EEG), amplify them and convert to digital.",
+              "2. Preprocessing: remove noise such as 50 Hz, eye blinks and muscle activity.",
+              "3. Feature extraction: pick out the useful part, for example mu power or the P300 wave.",
+              "4. Translation (classification): a machine learning model decides what the user wants.",
+              "5. Command: the decision controls a cursor, speller, wheelchair or robotic arm.",
+              "6. Feedback: the user sees what happened and adjusts."
+            ]
+          },
+          {
+            heading: "Which type for a severely motor-impaired patient? Write: non-invasive EEG BCI first.",
+            bullets: [
+              "1. Safe: no surgery for a weak patient.",
+              "2. Cheap and portable: a cap and amplifier can be used at home.",
+              "3. Proven: P300 speller for typing, Motor Imagery for wheelchair control.",
+              "4. Upgrade later: if EEG is not enough (for example a fully locked-in patient who needs fast speech), an implant can be considered."
+            ]
+          }
+        ],
+        memoryTrick: "invasive = inside, semi = surface, non = no surgery.",
+        example: "P300 speller for typing or Motor Imagery EEG cap for wheelchair control at home; upgrade to implant for locked-in fast speech.",
+        conclusion: "A BCI is a closed loop from brain signal to command to feedback. For a paralysed patient, a non-invasive EEG BCI is the safest first choice; implants give better performance but carry surgical risk."
+      },
+      {
+        id: 3,
+        title: "3. Recording techniques (EEG, MEG, fNIRS, fMRI) and brain vs non-brain signals",
+        stars: "★★★★",
+        simpleIdea: "There are two ways to “see” brain activity. One way measures the electricity of neurons directly (fast). The other measures blood flow, because active brain areas use more oxygen (slow).",
+        diagram: ["Brain Activity", "Fast: Direct Electricity / Magnetism (EEG, MEG)", "Slow: Blood Oxygen Flow (fNIRS, fMRI)"],
+        tables: [
+          {
+            caption: "Comparison of Recording Techniques",
+            headers: ["Technique", "What it measures", "Speed", "Detail (space)", "Portable?", "Cost"],
+            rows: [
+              ["EEG", "Electrical activity, from the scalp", "Very fast (ms)", "Poor (~1 cm)", "Yes", "Low"],
+              ["MEG", "Magnetic field of brain currents", "Very fast (ms)", "Better (~5 mm)", "No", "Very high"],
+              ["fNIRS", "Blood oxygen, using near-infrared light", "Slow (seconds)", "~1 cm, outer brain only", "Yes", "Medium"],
+              ["fMRI", "Blood oxygen (BOLD signal), in an MRI scanner", "Slow (seconds)", "Best (~1 mm)", "No", "Very high"]
+            ]
+          },
+          {
+            caption: "Brain signals vs non-brain signals",
+            headers: ["Feature", "Brain signals", "Non-brain signals"],
+            rows: [
+              ["Source", "Brain (EEG etc.)", "Muscles, eyes, heart"],
+              ["Needs muscle control?", "No", "Yes"],
+              ["Works for fully paralysed patient?", "Yes", "No"],
+              ["Role in BCI", "The main control signal", "Either noise to remove, or an extra helper"]
+            ]
+          }
+        ],
+        sections: [
+          {
+            heading: "One line each",
+            bullets: [
+              "EEG: electrodes on the scalp pick up tiny voltages. Fast, cheap, portable, so it is the most used for BCI. Weak point: noisy and blurry.",
+              "MEG: very sensitive sensors (SQUID) pick up magnetic fields. Needs a shielded room. Too costly for daily use.",
+              "fNIRS: shines light into the head and measures how much is absorbed by blood. Portable but slow.",
+              "fMRI: a big magnet measures the BOLD signal. Sharpest picture, but slow, huge and expensive."
+            ]
+          },
+          {
+            heading: "Non-brain signals: EMG (muscle), EOG (eye movement), ECG (heart), skin response",
+            bullets: [
+              "Why brain signals matter most: a fully paralysed (locked-in) patient cannot move any muscle, not even the eyes. Only brain signals are left.",
+              "How non-brain signals can help: if the patient still has some eye or muscle movement, it can be used as an extra switch. This is called a hybrid BCI.",
+              "How they can hurt: eye blinks and muscle activity mix into EEG as noise (artifacts) and must be removed."
+            ]
+          }
+        ],
+        memoryTrick: "EEG and MEG = fast (electric, magnetic). fNIRS and fMRI = slow (both start with “f” and both measure blood).",
+        example: "Hybrid BCI combining EEG with EOG eye movement switch if patient retains eye control.",
+        conclusion: "EEG is the most practical technique for an assistive BCI. Brain signals are essential because they work even when no muscle works; non-brain signals are either removed as noise or used as helpers."
+      },
+      {
+        id: 4,
+        title: "4. Signal processing, spectral filtering, spatio-temporal filtering, feature extraction",
+        stars: "★★★★",
+        simpleIdea: "Raw EEG is like a weak radio station with a lot of static. Signal processing tunes the radio. First choose the right frequency (spectral filter), then point the antenna at the right place (spatial filter), then write down the important numbers (features).",
+        diagram: ["Raw EEG", "Preprocessing", "Spectral filter", "Spatial filter", "Feature extraction", "Classifier"],
+        tables: [
+          {
+            caption: "Difference (2-mark favourite): Spectral vs Spatio-temporal filtering",
+            headers: ["Spectral filtering", "Spatio-temporal filtering"],
+            rows: [
+              ["Selects frequencies", "Selects brain regions / sources"],
+              ["One channel at a time", "Many channels together"],
+              ["Band-pass, notch, low-pass", "CSP, Laplacian, CAR, ICA"]
+            ]
+          },
+          {
+            caption: "Types of Features",
+            headers: ["Type of feature", "Example", "Used for"],
+            rows: [
+              ["Time", "Amplitude and latency of a peak", "P300"],
+              ["Frequency", "Band power (mu, beta)", "Motor Imagery"],
+              ["Time-frequency", "Wavelet values", "Motor Imagery timing"],
+              ["Spatial", "CSP power", "Motor Imagery"]
+            ]
+          }
+        ],
+        sections: [
+          {
+            heading: "Role of signal processing",
+            bullets: [
+              "1. Removes noise and artifacts.",
+              "2. Makes the useful signal stronger than the noise (improves SNR).",
+              "3. Picks the useful frequencies and brain regions.",
+              "4. Reduces a huge amount of data to a few numbers.",
+              "5. Does all this in real time."
+            ]
+          },
+          {
+            heading: "Spectral filtering (which frequency?)",
+            bullets: [
+              "Works on each channel separately and keeps or removes frequencies.",
+              "Low-pass: removes high-frequency muscle noise. High-pass: removes slow drift.",
+              "Band-pass: keeps a range, for example 8–30 Hz for Motor Imagery.",
+              "Notch: removes 50 Hz power-line noise."
+            ]
+          },
+          {
+            heading: "Spatio-temporal (spatial) filtering (which place?)",
+            bullets: [
+              "Combines many channels to make one brain area clearer.",
+              "CAR (Common Average Reference): subtract the average of all channels. Removes noise common to all.",
+              "Laplacian: subtract the average of neighbouring channels. Sharpens local activity.",
+              "CSP (Common Spatial Patterns): learns the best channel mix to separate two classes, such as left vs right hand.",
+              "ICA (Independent Component Analysis): separates the signal into independent sources; used to remove eye blinks."
+            ]
+          },
+          {
+            heading: "Feature extraction",
+            bullets: [
+              "Definition: converting the cleaned signal into a small set of numbers (a feature vector) that best shows the user’s intention.",
+              "Why: the classifier cannot handle thousands of raw samples; it needs a few meaningful numbers."
+            ]
+          }
+        ],
+        memoryTrick: "Spectral = Which Frequency (Band-pass 8–30 Hz, Notch 50 Hz). Spatial = Which Place (CSP, CAR, Laplacian, ICA).",
+        example: "Band-pass 8–30 Hz + CSP spatial filter + band power features for Motor Imagery.",
+        conclusion: "Spectral filters choose the right frequency, spatial filters choose the right place, and feature extraction turns the result into a few numbers the classifier can use."
+      },
+      {
+        id: 5,
+        title: "5. Machine Learning and Deep Learning in BCI",
+        stars: "★★★★",
+        simpleIdea: "Features are just numbers. Something has to look at those numbers and say “this means left hand”. That is the job of machine learning. It is the translator of the BCI. Why learning is needed: every person’s brain signals are different, and they change from day to day. So the system is first trained on that user’s own recorded data (called calibration).",
+        diagram: ["Raw EEG", "Filtering", "Features (by hand in ML / learned in DL)", "Classifier (LDA / SVM / EEGNet)", "Command"],
+        tables: [
+          {
+            caption: "Machine Learning (ML): we choose the features, the model classifies",
+            headers: ["Classifier", "Simple meaning", "Why used"],
+            rows: [
+              ["LDA", "Draws a straight line between two classes", "Fast, works with little data; most common in BCI"],
+              ["SVM", "Draws the line with the widest gap between classes", "Accurate with small data"],
+              ["kNN", "Looks at the nearest known examples and votes", "Very simple"],
+              ["Random Forest", "Many decision trees vote", "Robust"]
+            ]
+          },
+          {
+            caption: "Deep Learning (DL): the network learns the features by itself",
+            headers: ["Model", "Simple meaning", "Used for"],
+            rows: [
+              ["CNN", "Learns patterns across time and across channels", "Motor Imagery, P300"],
+              ["EEGNet", "A small CNN designed specially for EEG", "Works even with small EEG data"],
+              ["LSTM / RNN", "Remembers what came earlier in time", "Continuous and speech decoding"]
+            ]
+          },
+          {
+            caption: "ML vs DL Comparison",
+            headers: ["Aspect", "Machine Learning", "Deep Learning"],
+            rows: [
+              ["Features", "Made by hand", "Learned automatically"],
+              ["Data needed", "Small", "Large"],
+              ["Training time", "Seconds", "Longer, needs GPU"],
+              ["Easy to explain?", "Yes", "Less"],
+              ["Example", "CSP + LDA", "EEGNet"]
+            ]
+          }
+        ],
+        sections: [
+          {
+            heading: "How they join with signal processing and feature extraction (the key part)",
+            bullets: [
+              "1. Signal processing gives clean data. Clean data gives good features. Good features give correct classification.",
+              "2. Feature extraction is the bridge: its numbers are the input to LDA or SVM.",
+              "3. In deep learning, the first layers of the network do the filtering and feature extraction by themselves.",
+              "4. In practice a mix is used: basic cleaning (notch, band-pass) first, then a deep network."
+            ]
+          }
+        ],
+        memoryTrick: "ML = hand-made features + LDA/SVM · DL = learns features itself (CNN, EEGNet).",
+        example: "CSP + LDA for classic Motor Imagery; EEGNet for end-to-end deep learning on small EEG datasets.",
+        conclusion: "ML and DL translate brain features into commands. ML depends on good hand-made features; DL learns the features itself. Both work together with signal processing as one pipeline."
+      },
+      {
+        id: 6,
+        title: "6. EEG artifacts and how to remove them",
+        stars: "★★★★",
+        simpleIdea: "Definition: An artifact is any signal in the EEG recording that does not come from the brain. Artifacts can be much bigger than real EEG and can cause wrong commands.",
+        diagram: ["Prevent (Gel/Relax)", "Filter (Notch 50Hz / HP 0.5Hz / LP 40Hz)", "Reject (>±100 µV)", "Regression (EOG)", "ICA (Rebuild Clean EEG)"],
+        tables: [
+          {
+            caption: "Sources from the body",
+            headers: ["Artifact", "Cause", "How it looks", "Where"],
+            rows: [
+              ["Eye blink / eye movement (EOG)", "The eye acts like a small battery", "Big, slow waves", "Front (Fp1, Fp2)"],
+              ["Muscle (EMG)", "Jaw clenching, chewing, frowning", "Fast, spiky noise", "Sides and front"],
+              ["Heart (ECG)", "Heartbeat", "Regular spikes, about one per second", "Near ears and neck"],
+              ["Movement", "Head or body moving, cables shaking", "Large slow swings", "Any"],
+              ["Sweat", "Changes skin contact", "Very slow drift", "Any"]
+            ]
+          },
+          {
+            caption: "Sources from equipment",
+            headers: ["Artifact", "Cause", "How it looks"],
+            rows: [
+              ["Power line", "Mains electricity (50 Hz in India)", "Steady 50 Hz hum"],
+              ["Electrode pop", "Loose electrode or dried gel", "Sudden jump in one channel"],
+              ["Electrical interference", "Phones, motors, lights", "High-frequency noise"]
+            ]
+          },
+          {
+            caption: "Quick match",
+            headers: ["Artifact", "Best fix"],
+            rows: [
+              ["Eye blink", "ICA or regression"],
+              ["Muscle", "Low-pass filter, ICA, relax the user"],
+              ["Movement", "High-pass filter, reject trial"],
+              ["50 Hz power line", "Notch filter"]
+            ]
+          }
+        ],
+        sections: [
+          {
+            heading: "How to deal with them (preprocessing)",
+            bullets: [
+              "1. Prevent: fix electrodes well with fresh gel, keep the user relaxed, ask them not to blink or clench during the task, keep phones away.",
+              "2. Filter: notch at 50 Hz for power line; high-pass (about 0.5 Hz) for slow drift; low-pass (about 40 Hz) for muscle noise.",
+              "3. Reject: throw away trials or channels that are too noisy (for example, above ±100 µV). Simple, but data is lost.",
+              "4. Regression: record the eye signal on a separate EOG channel and subtract it from the EEG.",
+              "5. ICA (most important): split the EEG into independent parts, find the parts that are blink or muscle, remove them, and rebuild clean EEG. No trials are lost."
+            ]
+          }
+        ],
+        memoryTrick: "Eye blink → ICA · Muscle → low-pass · Movement → high-pass/reject · 50 Hz → notch.",
+        example: "Removing an eye blink at Fp1/Fp2 using ICA without throwing away the 4-second trial.",
+        conclusion: "Artifacts come from the body and from equipment. Using prevention, filtering and ICA together gives clean EEG, so that only real brain activity controls the device."
+      },
+      {
+        id: 7,
+        title: "7. EEG features: morphology, temporal, frequency, time-frequency, spatial",
+        stars: "★★★",
+        simpleIdea: "To understand an EEG signal, ask five questions: What shape? When and how long? Which frequency? Which frequency and when? Where on the head?",
+        diagram: ["1. Quality & Artifacts", "2. Background Rhythm", "3. Morphology (Shape)", "4. Temporal (When)", "5. Freq & Time-Freq", "6. Spatial (Where)", "7. Clinical/Task Conclusion"],
+        tables: [
+          {
+            caption: "The 5 Characteristics of EEG",
+            headers: ["Characteristic", "The question", "What we look at", "Example"],
+            rows: [
+              ["Morphology", "What shape?", "Wave shape and height: smooth wave, spike, sharp wave", "A spike can indicate epilepsy"],
+              ["Temporal", "When, and how long?", "Latency (delay after an event), duration, rhythm", "P300 appears about 300 ms after the stimulus"],
+              ["Frequency-domain", "Which frequency?", "Power in each band, using FFT", "More alpha = relaxed; less mu = movement"],
+              ["Time-frequency", "Which frequency, and when?", "Spectrogram or wavelet", "Mu power drops just after the cue in Motor Imagery"],
+              ["Spatial", "Where on the head?", "Electrode location, left vs right difference (lateralization)", "Right-hand imagery shows at C3 (left side)"]
+            ]
+          },
+          {
+            caption: "Temporal vs spatial (2-mark favourite)",
+            headers: ["Temporal", "Spatial"],
+            rows: [
+              ["Tells when and how long", "Tells where"],
+              ["Latency, duration, rhythm", "Location, lateralization, symmetry"],
+              ["Example: P300 at 300 ms", "Example: ERD at C3 vs C4"]
+            ]
+          }
+        ],
+        sections: [
+          {
+            heading: "A few more points to write",
+            bullets: [
+              "Morphology: waves can be sinusoidal (smooth), spikes (very short and sharp), or sharp waves. Amplitude is measured in microvolts (µV).",
+              "Temporal: also includes reactivity, for example alpha disappears when the eyes open.",
+              "Frequency-domain: good for steady states, but it loses time information.",
+              "Time-frequency: best for EEG because EEG keeps changing over time.",
+              "Spatial: shown as a coloured head map. Alpha is at the back, mu in the middle, P300 strongest at Pz."
+            ]
+          },
+          {
+            heading: "Analytic process of EEG interpretation (7 steps)",
+            bullets: [
+              "1. Check recording quality and remove artifacts.",
+              "2. Describe the background rhythm (frequency, amplitude, symmetry).",
+              "3. Identify special waveforms (morphology).",
+              "4. Note the timing (temporal).",
+              "5. Look at the frequency and time-frequency content.",
+              "6. Look at where it occurs (spatial).",
+              "7. Connect it with the task or the patient’s condition and conclude."
+            ]
+          }
+        ],
+        memoryTrick: "EEG’s five questions: Shape (morphology) · When (temporal) · Which frequency · Frequency over time (time-frequency) · Where (spatial).",
+        example: "Right-hand imagery shows a time-frequency Mu power drop right after the cue at spatial location C3.",
+        conclusion: "Morphology tells what the wave looks like, temporal tells when, frequency tells which rhythm, time-frequency tells how it changes, and spatial tells where. Together they let us interpret EEG and control a BCI."
+      },
+      {
+        id: 8,
+        title: "8. Applications: P300 speller, neuroprosthetics, robotics, healthcare, entertainment + recent developments",
+        stars: "★★★",
+        simpleIdea: "BCIs restore communication (P300 speller), movement/senses/speech (neuroprosthetics), and physical assistance (shared-control robotics), with major clinical implants advancing as of 2026.",
+        diagram: ["6×6 Grid Flash", "User Counts Target", "Oddball P300 at Pz (~300 ms)", "Row × Column Intersection", "Type Character"],
+        tables: [
+          {
+            caption: "D. Healthcare and entertainment",
+            headers: ["Area", "Uses"],
+            rows: [
+              ["Communication", "P300 speller, speech BCI"],
+              ["Mobility", "Wheelchair, exoskeleton"],
+              ["Rehabilitation", "Motor Imagery training after stroke"],
+              ["Monitoring", "Detecting seizures, sleep and attention monitoring"],
+              ["Entertainment", "Brain-controlled games, virtual reality, neurofeedback games"]
+            ]
+          },
+          {
+            caption: "E. Case study: recent developments (write “as of 2026”)",
+            headers: ["Company", "Type", "What to remember"],
+            rows: [
+              ["Neuralink", "Invasive", "Coin-sized implant with thin threads placed by a robot; first human in January 2024; users control a computer cursor by thought"],
+              ["Synchron", "Semi-invasive", "Stentrode: placed inside a blood vessel through the neck, so no open brain surgery"],
+              ["Precision Neuroscience", "Semi-invasive", "Very thin film that sits on the brain surface and can be removed"],
+              ["BrainGate", "Invasive", "Long-running university research; robotic arm control and speech decoding"],
+              ["Paradromics", "Invasive", "High-channel implant aimed at restoring speech"]
+            ]
+          }
+        ],
+        sections: [
+          {
+            heading: "A. P300 speller (typing with the brain)",
+            bullets: [
+              "P300 is a positive brain wave that appears about 300 ms after a person sees something rare that they are waiting for. This is called the oddball effect. It is strongest at Pz.",
+              "First built by Farwell and Donchin (1988).",
+              "How it works: 1) The screen shows a 6 × 6 grid of letters and symbols. 2) The user looks at the letter they want and silently counts when it flashes. 3) Rows and columns flash one by one in random order. 4) When the user’s row or column flashes, the brain produces a P300. 5) The computer finds which row and which column gave a P300. Where they cross is the letter. 6) Flashes are repeated several times and averaged to be sure.",
+              "Good: almost no training, high accuracy. Bad: slow (a few letters per minute), tiring for the eyes. Use: communication for paralysed (ALS, locked-in) patients."
+            ]
+          },
+          {
+            heading: "B. Neuroprosthetic devices (replace a lost function)",
+            bullets: [
+              "Movement: brain-controlled robotic arm, artificial hand, exoskeleton, or electrical stimulation of the patient’s own muscles (FES).",
+              "Senses: cochlear implant (hearing), retinal implant (vision).",
+              "Speech: implants that turn brain activity into spoken words for people who cannot speak."
+            ]
+          },
+          {
+            heading: "C. Robotics & Shared Control",
+            bullets: [
+              "Brain-controlled wheelchairs, robotic arms for eating and drinking, telepresence robots.",
+              "Shared control: the user gives the goal (“go to the door”), the robot handles the small details such as avoiding obstacles. This reduces the user’s effort."
+            ]
+          },
+          {
+            heading: "Points to add on 2026 Clinical Trials",
+            bullets: [
+              "These are still in clinical trials, not regular treatment. Challenges are surgical risk, long-term reliability, cost, and ethics (privacy of thoughts, consent)."
+            ]
+          }
+        ],
+        memoryTrick: "P300 = ~300 ms · oddball · Pz · 6×6 · Farwell & Donchin 1988. Stentrode = Synchron (neck blood vessel).",
+        example: "ALS patient typing messages with a 6×6 P300 speller or driving a wheelchair with shared obstacle-avoidance control.",
+        conclusion: "The P300 speller gives communication, neuroprosthetics restore movement, senses and speech, and robotics gives physical help. BCI is becoming real healthcare technology, though implants are still at the trial stage."
+      }
+    ];
+
+    const PART2_TOPICS = [
+      {
+        code: "2.1",
+        title: "EEG frequency bands (oscillatory activity)",
+        stars: "★★★",
+        summary: "Oscillatory activity means the rhythmic waves in EEG, produced when large groups of neurons fire together.",
+        table: {
+          headers: ["Band", "Frequency", "When it is seen", "Memory word"],
+          rows: [
+            ["Delta", "0.5–4 Hz", "Deep sleep", "Deep sleep"],
+            ["Theta", "4–8 Hz", "Drowsy, light sleep", "Tired"],
+            ["Alpha", "8–13 Hz", "Relaxed, eyes closed (back of head)", "At rest"],
+            ["Beta", "13–30 Hz", "Alert, thinking, active", "Busy"],
+            ["Gamma", "Above 30 Hz", "High attention, concentration", "Genius"]
+          ]
+        },
+        bullets: [
+          "Order to remember: D-T-A-B-G (“Do Take A Break, Guys”). Frequency goes up as you go down the list.",
+          "Mu (8–12 Hz) is in the alpha range but is found over the motor area."
+        ]
+      },
+      {
+        code: "2.2",
+        title: "Event-Related Potential (ERP)",
+        stars: "★★★",
+        summary: "A small voltage change in EEG that is time-locked to an event (a sound, a flash, a decision).",
+        bullets: [
+          "It is too small to see in one trial, so many trials are averaged. The random EEG cancels out and the ERP remains.",
+          "Two parameters: latency = how long after the event it appears; amplitude = how big it is.",
+          "Naming: P = positive, N = negative, number = time in ms. So P300 = positive peak at about 300 ms; N100 = negative peak at about 100 ms.",
+          "Significance: shows how the brain processes an event; it is the basis of the P300 speller."
+        ]
+      },
+      {
+        code: "2.3",
+        title: "Slow Cortical Potentials (SCP)",
+        stars: "★★",
+        summary: "Very slow voltage shifts in the cortex (below 1 Hz), lasting from about 0.3 seconds to several seconds.",
+        bullets: [
+          "Negative shift = the cortex is getting ready (more active). Positive shift = less active.",
+          "Users can learn to control them with feedback, and use them to select letters.",
+          "Good: works for fully paralysed patients. Bad: needs months of training and is very slow."
+        ]
+      },
+      {
+        code: "2.4",
+        title: "Neuronal potentials",
+        stars: "★★",
+        summary: "Electrical signals generated by individual neurons or local neuron groups.",
+        bullets: [
+          "Action potential (spike): the short electrical pulse a neuron fires (about 1 ms). Can only be recorded by electrodes placed inside the brain (invasive BCI).",
+          "Local field potential (LFP): combined activity of a small group of neurons near the electrode.",
+          "Postsynaptic potential: slower voltage change when a neuron receives a signal. Millions of these added together form the EEG."
+        ]
+      },
+      {
+        code: "2.5",
+        title: "The 10–20 electrode placement system",
+        stars: "★★★",
+        summary: "The international standard for where to place EEG electrodes on the scalp.",
+        table: {
+          headers: ["Letter", "Region"],
+          rows: [
+            ["Fp", "Frontal pole (forehead)"],
+            ["F", "Frontal"],
+            ["C", "Central"],
+            ["T", "Temporal"],
+            ["P", "Parietal"],
+            ["O", "Occipital"]
+          ]
+        },
+        bullets: [
+          "Why “10–20”: the distance between neighbouring electrodes is 10% or 20% of the total head distance. So it fits any head size.",
+          "Measured from two points: nasion (top of the nose, between the eyes) and inion (bump at the back of the head).",
+          "Odd numbers = left side. Even numbers = right side. z = midline (zero).",
+          "Examples: C3 = central, left. C4 = central, right. Cz = central, middle.",
+          "Motor Imagery: C3 (right hand), C4 (left hand), Cz (feet)."
+        ]
+      },
+      {
+        code: "2.6",
+        title: "Recording EEG: principles and techniques",
+        stars: "★★★",
+        summary: "Principle: EEG is the added-up electrical activity of millions of neurons firing together. On the scalp it is extremely small (microvolts), so it must be amplified.",
+        bullets: [
+          "Draw this: Electrodes → Amplifier → Filter → Analog-to-digital converter → Computer",
+          "1. Electrodes: small metal discs (silver/silver-chloride) with conductive gel, held by a cap in 10–20 positions.",
+          "2. Amplifier: a differential amplifier makes the signal thousands of times bigger and rejects common noise.",
+          "3. Filter: removes very slow drift, high-frequency noise and 50 Hz.",
+          "4. Sampling: converts to digital, commonly 250–1000 samples per second. Rule (Nyquist): sample at least twice the highest frequency.",
+          "5. Reference: every EEG channel is measured against a reference electrode (often the ear).",
+          "6. Montage: the way channels are paired and displayed. Referential = each electrode vs one common reference. Bipolar = each electrode vs its neighbour."
+        ]
+      },
+      {
+        code: "2.7",
+        title: "Basics of neuroscience",
+        stars: "★★",
+        summary: "Neuron (nerve cell): the basic unit of the brain (~86 billion neurons).",
+        table: {
+          headers: ["Lobe", "Where", "Job"],
+          rows: [
+            ["Frontal", "Front", "Thinking, planning, decisions, movement, speech"],
+            ["Parietal", "Top, behind frontal", "Touch, body position, spatial sense"],
+            ["Temporal", "Sides (near ears)", "Hearing, memory, understanding language"],
+            ["Occipital", "Back", "Vision"]
+          ]
+        },
+        bullets: [
+          "Dendrites receive signals. Cell body processes them. Axon sends the signal out. Synapse is the gap where one neuron passes the signal to the next, using chemicals called neurotransmitters.",
+          "A neuron at rest sits at about −70 mV. When it gets enough input it fires an action potential.",
+          "Also: cerebellum = balance and coordination; brainstem = breathing and heartbeat. The motor cortex (at the back of the frontal lobe) controls movement, and this is the area under C3, Cz and C4."
+        ]
+      },
+      {
+        code: "2.8",
+        title: "Brain signals used in BCI",
+        stars: "★★",
+        summary: "Overview of the five main control signals used across BCIs.",
+        table: {
+          headers: ["Signal", "How the user produces it"],
+          rows: [
+            ["Mu / beta rhythm (ERD/ERS)", "Imagining movement"],
+            ["P300", "Paying attention to a rare target"],
+            ["SSVEP", "Looking at a light flickering at a fixed rate; the brain’s visual area follows the same rate"],
+            ["SCP", "Learned self-control"],
+            ["Spikes", "Recorded from inside the brain (invasive)"]
+          ]
+        },
+        bullets: []
+      },
+      {
+        code: "2.9",
+        title: "Introduction and history",
+        stars: "★",
+        summary: "Key chronological milestones in EEG and Brain-Computer Interfaces.",
+        bullets: [
+          "1924: Hans Berger recorded the first human EEG.",
+          "1973: Jacques Vidal first used the term “brain-computer interface”.",
+          "1988: Farwell and Donchin built the P300 speller.",
+          "2024 onwards: human trials of implants such as Neuralink."
+        ]
+      }
+    ];
+
+    const PART3_2MARK = [
+      { id: 1, q: "Define BCI.", a: "A system that measures brain activity and converts it into commands for an external device, without using muscles." },
+      { id: 2, q: "Lobes of the brain.", a: "Frontal (thinking, movement), parietal (touch), temporal (hearing, memory), occipital (vision)." },
+      { id: 3, q: "EEG frequency bands.", a: "Delta 0.5–4 Hz, theta 4–8 Hz, alpha 8–13 Hz, beta 13–30 Hz, gamma above 30 Hz." },
+      { id: 4, q: "Role of signal processing.", a: "It removes noise and artifacts, improves signal quality, and prepares the EEG for feature extraction and classification." },
+      { id: 5, q: "Define feature extraction.", a: "Converting the cleaned EEG into a small set of meaningful numbers (features), such as band power, that represent the user’s intention." },
+      { id: 6, q: "Spectral vs spatio-temporal filtering.", a: "Spectral selects frequencies on each channel (band-pass, notch). Spatio-temporal combines many channels to highlight a brain region (CSP, Laplacian)." },
+      { id: 7, q: "Temporal vs spatial characteristics.", a: "Temporal tells when and how long (latency, duration), e.g. P300 at 300 ms. Spatial tells where (location, lateralization), e.g. ERD at C3." },
+      { id: 8, q: "Why time-frequency analysis in Motor Imagery?", a: "ERD/ERS happens in a specific band at a specific time; time-frequency analysis shows both together." },
+      { id: 9, q: "Define ERP and its significance.", a: "A voltage change time-locked to an event, seen by averaging trials. It shows how the brain processes the event and is the basis of the P300 speller." },
+      { id: 10, q: "Electrode locations for Motor Imagery.", a: "Right hand = C3, left hand = C4, feet = Cz, because each brain side controls the opposite body side." },
+      { id: 11, q: "BCI application for a motor-impaired patient.", a: "P300 speller to communicate, or a Motor Imagery BCI to drive a wheelchair or robotic arm." },
+      { id: 12, q: "ERD and ERS.", a: "ERD = decrease in mu/beta power during movement or imagery. ERS = increase in power, e.g. after movement ends." },
+      { id: 13, q: "P300.", a: "A positive ERP about 300 ms after a rare, attended stimulus; strongest at Pz." },
+      { id: 14, q: "Oddball paradigm.", a: "Many common stimuli with a few rare targets; the rare target produces a P300." },
+      { id: 15, q: "SCP.", a: "Very slow voltage shifts in the cortex (below 1 Hz) that a user can learn to control." },
+      { id: 16, q: "10–20 system.", a: "Standard electrode placement where electrodes are 10% or 20% of head distance apart; odd = left, even = right, z = midline." },
+      { id: 17, q: "Artifact.", a: "Any recorded signal not from the brain, e.g. eye blink, muscle activity, 50 Hz noise." },
+      { id: 18, q: "ICA.", a: "A method that splits EEG into independent sources so that artifact sources can be removed." },
+      { id: 19, q: "CSP.", a: "A spatial filter that combines channels to best separate two classes (e.g. left vs right hand)." },
+      { id: 20, q: "Invasive vs non-invasive BCI.", a: "Invasive: electrodes inside the brain, high quality, needs surgery. Non-invasive: on the scalp, safe and cheap, lower quality." },
+      { id: 21, q: "Semi-invasive BCI.", a: "Electrodes on the brain surface (ECoG) or in a blood vessel; better signal than EEG with less damage than invasive." },
+      { id: 22, q: "Bidirectional BCI.", a: "A BCI that both reads brain signals and sends signals back to the brain, e.g. to give a sense of touch." },
+      { id: 23, q: "Stimulating BCI.", a: "A BCI that sends signals into the nervous system, e.g. cochlear implant." },
+      { id: 24, q: "Non-brain signals.", a: "EMG (muscle), EOG (eye), ECG (heart); they are either artifacts or extra control signals." },
+      { id: 25, q: "Neuroprosthetic device.", a: "A device linked to the nervous system that replaces a lost function, e.g. a brain-controlled artificial arm." },
+      { id: 26, q: "fNIRS.", a: "Uses near-infrared light to measure blood oxygen changes in the brain; portable but slow." },
+      { id: 27, q: "EEG vs fMRI.", a: "EEG is electrical, fast, cheap, portable, low detail. fMRI measures blood oxygen, slow, costly, not portable, high detail." },
+      { id: 28, q: "Lateralization.", a: "Difference in activity between left and right sides of the brain." },
+      { id: 29, q: "Morphology.", a: "The shape and size of an EEG waveform." },
+      { id: 30, q: "Hybrid BCI.", a: "A BCI that combines two signals, e.g. EEG with eye movement, for better reliability." }
+    ];
+
+    const PART4_1MARK = [
+      { q: "Purpose of BCI", a: "Communication pathway between brain and external device" },
+      { q: "BCI with electrodes implanted in the brain", a: "Invasive" },
+      { q: "Most common non-invasive technique", a: "EEG" },
+      { q: "Records electrical activity from the scalp", a: "EEG" },
+      { q: "Records magnetic fields of the brain", a: "MEG" },
+      { q: "Uses near-infrared light", a: "fNIRS" },
+      { q: "Measures BOLD signal", a: "fMRI" },
+      { q: "Removes unwanted components from the signal", a: "Signal processing" },
+      { q: "Picks out meaningful characteristics", a: "Feature extraction" },
+      { q: "Filter based on frequency", a: "Spectral filter" },
+      { q: "ML/DL work on the extracted", a: "Features" },
+      { q: "Number of cycles per second", a: "Frequency" },
+      { q: "Difference between left and right sides", a: "Lateralization" },
+      { q: "Rhythm over the motor area", a: "Mu" },
+      { q: "Mu frequency", a: "8–12 Hz" },
+      { q: "Beta frequency", a: "13–30 Hz" },
+      { q: "Deep sleep band", a: "Delta" },
+      { q: "Relaxed, eyes closed band", a: "Alpha" },
+      { q: "ERP is ___ to an event", a: "Time-locked" },
+      { q: "Time of a response after an event", a: "Latency" },
+      { q: "SCP are", a: "Very slow shifts in cortical activity" },
+      { q: "“C” in the 10–20 system", a: "Central" },
+      { q: "“z” in the 10–20 system", a: "Midline" },
+      { q: "Odd numbers / even numbers", a: "Left / right" },
+      { q: "Right-hand motor imagery electrode", a: "C3" },
+      { q: "Left-hand motor imagery electrode", a: "C4" },
+      { q: "Feet motor imagery electrode", a: "Cz" },
+      { q: "Power decrease during imagery", a: "ERD" },
+      { q: "Power increase after movement", a: "ERS" },
+      { q: "P300 appears after about", a: "300 ms" },
+      { q: "P300 is strongest at", a: "Pz" },
+      { q: "P300 is produced by", a: "Oddball paradigm" },
+      { q: "Character selection using ERP", a: "P300 speller" },
+      { q: "P300 speller made by", a: "Farwell and Donchin" },
+      { q: "P300 speller grid", a: "6 × 6" },
+      { q: "BCI-controlled artificial limb", a: "Neuroprosthetic application" },
+      { q: "Power-line noise in India", a: "50 Hz" },
+      { q: "Filter for power-line noise", a: "Notch filter" },
+      { q: "Eye-blink artifact name", a: "EOG" },
+      { q: "Muscle artifact name", a: "EMG" },
+      { q: "Best method to remove eye blinks", a: "ICA" },
+      { q: "CSP is a", a: "Spatial filter" },
+      { q: "Common classifier with CSP", a: "LDA" },
+      { q: "EEGNet is a", a: "Compact CNN" },
+      { q: "First human EEG", a: "Hans Berger" },
+      { q: "Coined the term BCI", a: "Jacques Vidal" },
+      { q: "Implant placed through a blood vessel", a: "Stentrode (Synchron)" }
+    ];
+
+    const CHEATSHEET_ITEMS = [
+      { label: "BCI loop", text: "Brain → Acquire → Clean → Features → Classify → Command → Feedback", key: "Acquire → Clean → Features → Classify → Command → Feedback" },
+      { label: "Motor Imagery pipeline", text: "Record at C3/Cz/C4 → notch 50 Hz + ICA → band-pass 8–30 Hz → CSP → band power → LDA → command → feedback", key: "C3/Cz/C4 → notch 50 Hz + ICA → band-pass 8–30 Hz → CSP → band power → LDA" },
+      { label: "Opposite-side rule", text: "Right hand = C3 · Left hand = C4 · Feet = Cz", key: "Right hand = C3 · Left hand = C4 · Feet = Cz" },
+      { label: "ERD / ERS", text: "ERD = power down = active · ERS = power up = resting", key: "ERD = power down = active · ERS = power up = resting" },
+      { label: "Bands (D-T-A-B-G)", text: "Delta 0.5–4 · Theta 4–8 · Alpha 8–13 · Beta 13–30 · Gamma 30+ · Mu 8–12 (motor)", key: "Delta 0.5–4 · Theta 4–8 · Alpha 8–13 · Beta 13–30 · Gamma 30+ · Mu 8–12" },
+      { label: "10–20 system", text: "Fp, F, C, T, P, O · odd = left · even = right · z = midline", key: "odd = left · even = right · z = midline" },
+      { label: "P300", text: "positive wave at ~300 ms · rare target (oddball) · strongest at Pz · 6 × 6 speller · Farwell and Donchin 1988", key: "~300 ms · oddball · Pz · 6 × 6 · Farwell and Donchin 1988" },
+      { label: "BCI types", text: "Invasive (inside brain, best signal, surgery) · Semi-invasive (surface or vessel) · Non-invasive (scalp, safe) · Stimulating (writes in) · Bidirectional (reads and writes)", key: "Invasive · Semi-invasive · Non-invasive · Stimulating · Bidirectional" },
+      { label: "Recording", text: "EEG and MEG = fast, electrical/magnetic · fNIRS and fMRI = slow, blood oxygen · fMRI = best detail · EEG = cheapest and portable", key: "EEG/MEG = fast · fNIRS/fMRI = slow (blood oxygen)" },
+      { label: "Filters", text: "Spectral = which frequency (band-pass, notch) · Spatial = which place (CSP, Laplacian, CAR, ICA)", key: "Spectral = frequency · Spatial = place (CSP, Laplacian, CAR, ICA)" },
+      { label: "Artifacts", text: "Eye blink → ICA · Muscle → low-pass · Movement → high-pass/reject · 50 Hz → notch", key: "Eye blink → ICA · Muscle → low-pass · Movement → high-pass/reject · 50 Hz → notch" },
+      { label: "ML vs DL", text: "ML = hand-made features + LDA/SVM · DL = learns features itself (CNN, EEGNet)", key: "ML = hand-made + LDA/SVM · DL = learns features (CNN, EEGNet)" },
+      { label: "EEG’s five questions", text: "Shape (morphology) · When (temporal) · Which frequency · Frequency over time (time-frequency) · Where (spatial)", key: "Morphology · Temporal · Frequency · Time-frequency · Spatial" },
+      { label: "Names", text: "Berger (first EEG) · Vidal (term BCI) · Farwell and Donchin (P300 speller) · Neuralink, Synchron, Precision, BrainGate, Paradromics (recent, “as of 2026”)", key: "Berger (1924) · Vidal (1973) · Farwell & Donchin (1988) · Neuralink, Synchron, Precision, BrainGate, Paradromics" }
+    ];
+
+    // =========================================================================
+    // 2. STATE & NAVIGATION
+    // =========================================================================
+    let currentTab = 'video';
+    let currentSceneIdx = 0;
+    let videoPlaying = false;
+    let videoProgress = 0; // 0 to 100 within scene
+    let videoSpeed = 1;
+    let voiceEnabled = false;
+    let animTick = 0;
+    let masteredSet = new Set();
+
+    function updateGlobalProgress() {
+      // Total trackable items: 12 scenes + 8 big answers + 30 flashcards = 50 items
+      const pct = Math.min(100, Math.round((masteredSet.size / 50) * 100));
+      document.getElementById('global-progress-bar').style.width = pct + '%';
+      document.getElementById('global-progress-text').textContent = pct + '%';
+    }
+
+    function markItemSeen(key) {
+      masteredSet.add(key);
+      updateGlobalProgress();
+    }
+
+    function switchTab(tabId) {
+      currentTab = tabId;
+      ['video', 'labs', 'part1', 'part2', 'part3', 'part4', 'cheatsheet'].forEach(id => {
+        document.getElementById('tab-' + id).classList.toggle('hidden', id !== tabId);
+        document.getElementById('tab-btn-' + id).classList.toggle('active', id === tabId);
+      });
+      if (tabId === 'labs') {
+        drawCurrentLab();
+      }
+    }
+
+    function getThemeColors() {
+      const style = getComputedStyle(document.documentElement);
+      const isLight = document.documentElement.classList.contains('light');
+      return {
+        fg: style.getPropertyValue('--foreground').trim() || (isLight ? '#0f172a' : '#f8fafc'),
+        muted: style.getPropertyValue('--muted-foreground').trim() || (isLight ? '#64748b' : '#94a3b8'),
+        card: style.getPropertyValue('--card').trim() || (isLight ? '#ffffff' : '#1e293b'),
+        bg: style.getPropertyValue('--background').trim() || (isLight ? '#f8fafc' : '#0f172a'),
+        border: style.getPropertyValue('--border').trim() || (isLight ? '#cbd5e1' : '#334155'),
+        primary: style.getPropertyValue('--primary').trim() || '#3b82f6',
+        success: style.getPropertyValue('--success').trim() || '#10b981',
+        warning: style.getPropertyValue('--warning').trim() || '#f59e0b',
+        error: style.getPropertyValue('--error').trim() || '#ef4444'
+      };
+    }
+
+    // =========================================================================
+    // 3. INTERACTIVE ANIMATED VIDEO PLAYER
+    // =========================================================================
+    function renderPlaylist() {
+      const container = document.getElementById('video-playlist');
+      container.innerHTML = VIDEO_SCENES.map((s, idx) => `
+        <div onclick="jumpToScene(${idx})" class="p-2 rounded text-xs cursor-pointer flex items-center justify-between border ${idx === currentSceneIdx ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)] font-bold' : 'bg-[var(--background)] border-[var(--border)] hover:border-[var(--primary)]'}">
+          <span class="truncate">${s.title}</span>
+          <span>${masteredSet.has('scene-' + idx) ? '✓' : ''}</span>
+        </div>
+      `).join('');
+    }
+
+    function loadScene(idx) {
+      currentSceneIdx = (idx + VIDEO_SCENES.length) % VIDEO_SCENES.length;
+      videoProgress = 0;
+      markItemSeen('scene-' + currentSceneIdx);
+      const scene = VIDEO_SCENES[currentSceneIdx];
+      document.getElementById('video-chapter-badge').textContent = scene.badge;
+      document.getElementById('video-scene-title').textContent = scene.title;
+      document.getElementById('video-subtitle').textContent = scene.subtitle;
+      document.getElementById('video-keypoints').innerHTML = scene.keypoints.map(k => `<li>${k}</li>`).join('');
+      document.getElementById('video-memory-trick').innerHTML = `<strong>Exam Tip:</strong> ${scene.memory}`;
+      document.getElementById('scene-scrubber').value = 0;
+      renderPlaylist();
+      if (voiceEnabled && videoPlaying) {
+        speakCurrentScene();
+      }
+    }
+
+    function jumpToScene(idx) {
+      switchTab('video');
+      loadScene(idx);
+    }
+
+    function prevScene() { loadScene(currentSceneIdx - 1); }
+    function nextScene() { loadScene(currentSceneIdx + 1); }
+
+    function toggleVideoPlay() {
+      videoPlaying = !videoPlaying;
+      const btn = document.getElementById('video-play-btn');
+      btn.textContent = videoPlaying ? '⏸ Pause Lecture' : '▶ Play Lecture';
+      if (videoPlaying && voiceEnabled) {
+        speakCurrentScene();
+      } else if (!videoPlaying && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function toggleVoiceNarration() {
+      voiceEnabled = document.getElementById('voice-narration-toggle').checked;
+      if (voiceEnabled && videoPlaying) {
+        speakCurrentScene();
+      } else if (!voiceEnabled && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function updateVideoSpeed() {
+      videoSpeed = parseFloat(document.getElementById('video-speed-select').value) || 1;
+    }
+
+    function scrubScene(val) {
+      videoProgress = parseFloat(val);
+    }
+
+    function speakCurrentScene() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const s = VIDEO_SCENES[currentSceneIdx];
+      const text = `${s.title}. ${s.subtitle}. ${s.keypoints.join(' ')} ${s.memory}`;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = videoSpeed;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function drawVideoCanvas() {
+      const canvas = document.getElementById('video-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width;
+      const H = canvas.height;
+      const c = getThemeColors();
+      ctx.clearRect(0, 0, W, H);
+
+      const scene = VIDEO_SCENES[currentSceneIdx];
+      const t = animTick * 0.04;
+
+      // Subtle grid background
+      ctx.strokeStyle = c.border;
+      ctx.lineWidth = 0.5;
+      ctx.globalAlpha = 0.35;
+      for (let x = 0; x < W; x += 38) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+      }
+      for (let y = 0; y < H; y += 38) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+
+      // Header Banner inside Canvas
+      ctx.fillStyle = c.primary;
+      ctx.font = 'bold 15px sans-serif';
+      ctx.fillText(scene.title, 24, 32);
+
+      // Scene-specific interactive animations
+      if (scene.type === 'loop') {
+        const steps = ["1. Brain (EEG)", "2. Clean & Filter", "3. Features", "4. ML Classifier", "5. Command", "6. Feedback"];
+        const activeIdx = Math.floor((videoProgress / 100) * steps.length) % steps.length;
+        const cx = W / 2, cy = H / 2 + 12, rx = 240, ry = 110;
+
+        // Draw oval loop track
+        ctx.strokeStyle = c.border;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Moving pulse dot along loop
+        const pulseAngle = t * 1.4;
+        const px = cx + Math.cos(pulseAngle) * rx;
+        const py = cy + Math.sin(pulseAngle) * ry;
+        ctx.fillStyle = c.warning;
+        ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.fill();
+
+        steps.forEach((label, i) => {
+          const angle = -Math.PI / 2 + (i * Math.PI * 2) / steps.length;
+          const bx = cx + Math.cos(angle) * rx;
+          const by = cy + Math.sin(angle) * ry;
+          const isCurrent = i === activeIdx;
+          ctx.fillStyle = isCurrent ? c.primary : c.card;
+          ctx.strokeStyle = isCurrent ? c.warning : c.primary;
+          ctx.lineWidth = isCurrent ? 3 : 1.5;
+          ctx.beginPath();
+          ctx.roundRect(bx - 68, by - 22, 136, 44, 8);
+          ctx.fill(); ctx.stroke();
+
+          ctx.fillStyle = isCurrent ? '#ffffff' : c.fg;
+          ctx.font = 'bold 12px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(label, bx, by + 4);
+        });
+        ctx.textAlign = 'left';
+      } else if (scene.type === 'mi') {
+        // Draw Left/Middle/Right brain circles C3, Cz, C4 and live waves
+        const nodes = [
+          { name: "C3 (Left Brain)", sub: "Controls Right Hand", x: 150, y: 125, drop: true },
+          { name: "Cz (Midline)", sub: "Controls Feet", x: 380, y: 125, drop: false },
+          { name: "C4 (Right Brain)", sub: "Controls Left Hand", x: 610, y: 125, drop: false }
+        ];
+        nodes.forEach(n => {
+          ctx.fillStyle = n.drop ? c.warning : c.card;
+          ctx.strokeStyle = c.primary;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath(); ctx.arc(n.x, n.y, 48, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+          ctx.fillStyle = n.drop ? '#000' : c.fg;
+          ctx.font = 'bold 13px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(n.name, n.x, n.y - 4);
+          ctx.font = '11px sans-serif';
+          ctx.fillText(n.sub, n.x, n.y + 14);
+
+          // Draw Mu wave below each
+          ctx.strokeStyle = n.drop ? c.error : c.success;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          for (let dx = -65; dx <= 65; dx++) {
+            const amp = n.drop ? 7 : 24;
+            const wy = 240 + Math.sin((dx * 0.15) + t * 3) * amp;
+            if (dx === -65) ctx.moveTo(n.x + dx, wy);
+            else ctx.lineTo(n.x + dx, wy);
+          }
+          ctx.stroke();
+          ctx.fillStyle = c.fg;
+          ctx.font = 'bold 11px monospace';
+          ctx.fillText(n.drop ? "ERD: Power Drops (-60%)" : "Resting Mu (8–12 Hz)", n.x, 285);
+        });
+        ctx.textAlign = 'left';
+        ctx.fillStyle = c.fg;
+        ctx.font = 'bold 13px monospace';
+        ctx.fillText("Formula: ERD% = ((A - R) / R) × 100   |   Negative = ERD (Active)   |   Positive = ERS (Beta Rebound)", 55, 345);
+      } else if (scene.type === 'mipipeline') {
+        const boxes = ["1. Record\nC3,Cz,C4", "2. Clean\n50Hz+ICA", "3. Band-pass\n8–30 Hz", "4. Spatial\nCSP Filter", "5. Features\nBand Power", "6. Classify\nLDA/EEGNet", "7. Command\n& Feedback"];
+        const activeStep = Math.floor((t * 0.8) % boxes.length);
+        boxes.forEach((b, i) => {
+          const x = 22 + i * 104;
+          const y = 135;
+          const isAct = i === activeStep;
+          ctx.fillStyle = isAct ? c.primary : c.card;
+          ctx.strokeStyle = isAct ? c.warning : c.border;
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.roundRect(x, y, 92, 74, 8); ctx.fill(); ctx.stroke();
+
+          ctx.fillStyle = isAct ? '#fff' : c.fg;
+          ctx.font = 'bold 11px sans-serif';
+          ctx.textAlign = 'center';
+          const lines = b.split('\n');
+          ctx.fillText(lines[0], x + 46, y + 32);
+          ctx.font = '11px sans-serif';
+          ctx.fillText(lines[1], x + 46, y + 50);
+
+          if (i < boxes.length - 1) {
+            ctx.fillStyle = c.primary;
+            ctx.fillText("→", x + 98, y + 40);
+          }
+        });
+        ctx.textAlign = 'center';
+        ctx.fillStyle = c.success;
+        ctx.font = 'bold 13px sans-serif';
+        ctx.fillText("Time-Frequency (Spectrogram / Wavelet) shows BOTH 'Which Frequency (8–30 Hz)' AND 'When (After Cue)'!", W / 2, 285);
+        ctx.textAlign = 'left';
+      } else {
+        // Universal animated diagram for Chapters 4–12 showing key structured cards + live EEG wave
+        const items = scene.keypoints;
+        items.forEach((kp, idx) => {
+          const y = 55 + idx * 54;
+          const highlight = idx === Math.floor((t * 0.6) % items.length);
+          ctx.fillStyle = highlight ? c.primary : c.card;
+          ctx.strokeStyle = highlight ? c.warning : c.border;
+          ctx.lineWidth = highlight ? 2 : 1;
+          ctx.beginPath(); ctx.roundRect(24, y, W - 48, 44, 6); ctx.fill(); ctx.stroke();
+
+          ctx.fillStyle = highlight ? '#ffffff' : c.fg;
+          ctx.font = highlight ? 'bold 12px sans-serif' : '12px sans-serif';
+          const clipped = kp.length > 98 ? kp.slice(0, 98) + '...' : kp;
+          ctx.fillText(clipped, 38, y + 26);
+        });
+
+        // Bottom live neural wave bar
+        ctx.strokeStyle = c.success;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let x = 24; x < W - 24; x += 2) {
+          const y = H - 24 + Math.sin(x * 0.05 + t * 2.5) * 10 * Math.cos(x * 0.01 - t);
+          if (x === 24) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+    }
+
+    // =========================================================================
+    // 4. HANDS-ON LABS (5 INTERACTIVE SIMULATORS)
+    // =========================================================================
+    let currentLab = 'mi';
+    function switchLab(labId) {
+      currentLab = labId;
+      ['mi', 'p300', 'filter', 'bands', 'headmap'].forEach(id => {
+        document.getElementById('lab-panel-' + id).classList.toggle('hidden', id !== labId);
+        document.getElementById('lab-btn-' + id).classList.toggle('active', id === labId);
+      });
+      drawCurrentLab();
+    }
+
+    function drawCurrentLab() {
+      if (currentLab === 'mi') drawMILab();
+      else if (currentLab === 'p300') drawP300Canvas();
+      else if (currentLab === 'filter') drawFilterStudio();
+      else if (currentLab === 'bands') drawBandCanvas();
+      else if (currentLab === 'headmap') drawHeadmapCanvas();
+    }
+
+    // --- LAB 1: MOTOR IMAGERY & ERD/ERS ---
+    let miMode = 'right';
+    function setMIMode(mode) {
+      miMode = mode;
+      const labels = {
+        right: { pill: "Imagining: Right Hand → Power Drops at C3 (Left)", cmd: "Move Right", r: 50, a: 18 },
+        left: { pill: "Imagining: Left Hand → Power Drops at C4 (Right)", cmd: "Move Left", r: 50, a: 18 },
+        feet: { pill: "Imagining: Feet → Power Drops at Cz (Middle)", cmd: "Move Forward", r: 50, a: 20 },
+        rest: { pill: "Resting / Post-Movement → Beta Rebound (ERS +50%)", cmd: "Idle / Stop", r: 50, a: 75 }
+      };
+      document.getElementById('mi-status-pill').textContent = labels[mode].pill;
+      document.getElementById('mi-cmd-text').textContent = labels[mode].cmd;
+      document.getElementById('erd-r-slider').value = labels[mode].r;
+      document.getElementById('erd-a-slider').value = labels[mode].a;
+      calcERD();
+    }
+
+    function calcERD() {
+      const R = parseFloat(document.getElementById('erd-r-slider').value);
+      const A = parseFloat(document.getElementById('erd-a-slider').value);
+      document.getElementById('erd-r-val').textContent = R + ' µV²';
+      document.getElementById('erd-a-val').textContent = A + ' µV²';
+      const erd = (((A - R) / R) * 100).toFixed(1);
+      const box = document.getElementById('erd-result-box');
+      if (erd < 0) {
+        box.className = "p-2 rounded text-xs font-semibold bg-[var(--background)] border border-[var(--warning)] text-[var(--warning)]";
+        box.textContent = `ERD% = (${A} − ${R}) / ${R} × 100 = ${erd}% → Negative = ERD (Rhythm power goes DOWN, brain area is ACTIVE!)`;
+      } else if (erd > 0) {
+        box.className = "p-2 rounded text-xs font-semibold bg-[var(--background)] border border-[var(--success)] text-[var(--success)]";
+        box.textContent = `ERD% = (${A} − ${R}) / ${R} × 100 = +${erd}% → Positive = ERS (Rhythm power goes UP, resting / Beta Rebound!)`;
+      } else {
+        box.className = "p-2 rounded text-xs font-semibold bg-[var(--background)] border border-[var(--border)]";
+        box.textContent = `ERD% = 0.0% (No change from rest baseline)`;
+      }
+    }
+
+    function drawMILab() {
+      const canvas = document.getElementById('mi-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      const c = getThemeColors();
+      ctx.clearRect(0, 0, W, H);
+      const t = animTick * 0.06;
+
+      const channels = [
+        { id: "C3 (Left Scalp)", sub: "Right Hand Area", x: 125, drop: miMode === 'right' },
+        { id: "Cz (Midline Scalp)", sub: "Feet Area", x: 350, drop: miMode === 'feet' },
+        { id: "C4 (Right Scalp)", sub: "Left Hand Area", x: 575, drop: miMode === 'left' }
+      ];
+
+      channels.forEach(ch => {
+        // Draw Electrode Circle
+        ctx.fillStyle = ch.drop ? c.warning : c.card;
+        ctx.strokeStyle = ch.drop ? c.warning : c.primary;
+        ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(ch.x, 75, 42, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = ch.drop ? '#000' : c.fg;
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(ch.id, ch.x, 72);
+        ctx.font = '10px sans-serif';
+        ctx.fillText(ch.sub, ch.x, 88);
+
+        // Draw Live Mu/Beta Wave
+        const amp = ch.drop ? 7 : (miMode === 'rest' ? 32 : 22);
+        ctx.strokeStyle = ch.drop ? c.error : c.success;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let dx = -85; dx <= 85; dx += 2) {
+          const y = 195 + Math.sin(dx * 0.14 + t * 3) * amp + Math.cos(dx * 0.25 - t * 2) * (amp * 0.35);
+          if (dx === -85) ctx.moveTo(ch.x + dx, y);
+          else ctx.lineTo(ch.x + dx, y);
+        }
+        ctx.stroke();
+
+        // Status tag
+        ctx.fillStyle = ch.drop ? c.warning : c.muted;
+        ctx.font = 'bold 11px monospace';
+        ctx.fillText(ch.drop ? "⚡ ERD: Power Drops! (Active)" : (miMode === 'rest' ? "ERS: Strong Mu + Beta Rebound" : "Normal Resting Mu (8-12 Hz)"), ch.x, 265);
+      });
+      ctx.textAlign = 'left';
+    }
+
+    // --- LAB 2: P300 SPELLER ---
+    const P300_CHARS = [
+      'A','B','C','D','E','F',
+      'G','H','I','J','K','L',
+      'M','N','O','P','Q','R',
+      'S','T','U','V','W','X',
+      'Y','Z','1','2','3','4',
+      '5','6','7','8','9','_'
+    ];
+    let p300TargetIdx = 1; // 'B'
+    let p300Flashing = false;
+    let p300HitWave = false;
+
+    function initP300Grid() {
+      const grid = document.getElementById('p300-grid');
+      grid.innerHTML = P300_CHARS.map((ch, idx) => {
+        const r = Math.floor(idx / 6);
+        const col = idx % 6;
+        return `<div onclick="selectP300Target(${idx})" id="p300-cell-${r}-${col}" class="p300-cell h-11 rounded border ${idx === p300TargetIdx ? 'border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] font-bold' : 'border-[var(--border)] bg-[var(--background)]'} flex items-center justify-center text-sm cursor-pointer">${ch}</div>`;
+      }).join('');
+    }
+
+    function selectP300Target(idx) {
+      if (p300Flashing) return;
+      p300TargetIdx = idx;
+      const ch = P300_CHARS[idx];
+      const r = Math.floor(idx / 6) + 1;
+      const col = (idx % 6) + 1;
+      document.getElementById('p300-target-display').textContent = ch;
+      document.getElementById('p300-intersection-display').textContent = `Row ${r} × Col ${col}`;
+      initP300Grid();
+    }
+
+    function clearP300Word() {
+      document.getElementById('p300-spelled-word').textContent = '';
+    }
+
+    function startP300Trial() {
+      if (p300Flashing) return;
+      p300Flashing = true;
+      const targetRow = Math.floor(p300TargetIdx / 6);
+      const targetCol = p300TargetIdx % 6;
+      const sequence = [
+        { type: 'row', index: 0 }, { type: 'col', index: 3 },
+        { type: 'row', index: targetRow }, { type: 'col', index: 1 },
+        { type: 'row', index: 4 }, { type: 'col', index: targetCol }
+      ];
+      let step = 0;
+      const interval = setInterval(() => {
+        // Clear previous flash
+        document.querySelectorAll('.p300-cell').forEach(el => el.classList.remove('p300-flash'));
+        if (step >= sequence.length) {
+          clearInterval(interval);
+          p300Flashing = false;
+          p300HitWave = true;
+          const ch = P300_CHARS[p300TargetIdx];
+          document.getElementById('p300-spelled-word').textContent += ch;
+          document.getElementById('p300-log-msg').innerHTML = `✅ <strong>P300 Detected at ~300 ms at Pz!</strong> Row ${targetRow + 1} and Column ${targetCol + 1} both produced a P300 oddball peak → Selected character: <strong>${ch}</strong>!`;
+          drawP300Canvas();
+          return;
+        }
+        const item = sequence[step];
+        const isHit = (item.type === 'row' && item.index === targetRow) || (item.type === 'col' && item.index === targetCol);
+        p300HitWave = isHit;
+        for (let i = 0; i < 6; i++) {
+          const r = item.type === 'row' ? item.index : i;
+          const col = item.type === 'col' ? item.index : i;
+          const cell = document.getElementById(`p300-cell-${r}-${col}`);
+          if (cell) cell.classList.add('p300-flash');
+        }
+        document.getElementById('p300-log-msg').innerHTML = isHit
+          ? `⚡ <strong>TARGET FLASHED!</strong> User sees rare attended flash → Positive <strong>P300 peak at 300 ms</strong> at electrode <strong>Pz</strong>!`
+          : `Flashing non-target ${item.type} ${item.index + 1} → Flat baseline EEG (no P300).`;
+        drawP300Canvas();
+        step++;
+      }, 360);
+    }
+
+    function drawP300Canvas() {
+      const canvas = document.getElementById('p300-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      const c = getThemeColors();
+      ctx.clearRect(0, 0, W, H);
+
+      // Axes
+      const baseY = H * 0.62;
+      ctx.strokeStyle = c.border;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(35, baseY); ctx.lineTo(W - 15, baseY);
+      ctx.moveTo(60, 20); ctx.lineTo(60, H - 25);
+      ctx.stroke();
+
+      // Time markers (0 ms, 100 ms, 300 ms, 600 ms)
+      ctx.fillStyle = c.muted;
+      ctx.font = '10px monospace';
+      ctx.fillText("0ms (Flash)", 42, H - 10);
+      ctx.fillText("100ms", 112, H - 10);
+      ctx.fillText("300ms (P300)", 188, H - 10);
+      ctx.fillText("600ms", 305, H - 10);
+
+      // Non-target dashed wave
+      ctx.strokeStyle = c.muted;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      for (let x = 60; x < W - 20; x++) {
+        const y = baseY + Math.sin(x * 0.08) * 5;
+        if (x === 60) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Target ERP wave (with N100 negative dip at 100ms and huge P300 positive peak at 300ms)
+      ctx.strokeStyle = p300HitWave ? c.warning : c.primary;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let x = 60; x < W - 20; x++) {
+        const ms = ((x - 60) / (W - 80)) * 600;
+        const n100 = -18 * Math.exp(-Math.pow((ms - 100) / 30, 2)); // negative peak (downward in canvas is +y)
+        const p300 = p300HitWave ? 88 * Math.exp(-Math.pow((ms - 300) / 55, 2)) : 12 * Math.exp(-Math.pow((ms - 300) / 55, 2));
+        const y = baseY - p300 - n100 + Math.sin(x * 0.2) * 2;
+        if (x === 60) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Peak label
+      ctx.fillStyle = p300HitWave ? c.warning : c.fg;
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText(p300HitWave ? "★ P300 Peak (+10 µV at ~300 ms, Pz)" : "Target P300 Peak (~300 ms)", 140, 46);
+    }
+
+    // --- LAB 3: ARTIFACT & FILTER STUDIO ---
+    function cleanAllSignal() {
+      document.getElementById('fix-ica').checked = true;
+      document.getElementById('fix-notch').checked = true;
+      document.getElementById('fix-lowpass').checked = true;
+      document.getElementById('fix-highpass').checked = true;
+      drawFilterStudio();
+    }
+
+    function drawFilterStudio() {
+      const canvas = document.getElementById('filter-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      const c = getThemeColors();
+      ctx.clearRect(0, 0, W, H);
+
+      const hasBlink = document.getElementById('art-blink')?.checked;
+      const hasEMG = document.getElementById('art-emg')?.checked;
+      const has50Hz = document.getElementById('art-50hz')?.checked;
+      const hasDrift = document.getElementById('art-drift')?.checked;
+
+      const fixICA = document.getElementById('fix-ica')?.checked;
+      const fixNotch = document.getElementById('fix-notch')?.checked;
+      const fixLP = document.getElementById('fix-lowpass')?.checked;
+      const fixHP = document.getElementById('fix-highpass')?.checked;
+
+      const t = animTick * 0.05;
+
+      // Top trace: Raw EEG + Active Artifacts
+      ctx.fillStyle = c.error;
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText("1. RAW RECORDED EEG (With Unwanted Body & Equipment Artifacts)", 18, 22);
+
+      ctx.strokeStyle = c.error;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      for (let x = 18; x < W - 18; x++) {
+        const cleanBrain = Math.sin(x * 0.07 + t * 2) * 14;
+        const blink = hasBlink ? Math.exp(-Math.pow(((x - 220) % 280) / 22, 2)) * 52 : 0;
+        const emg = hasEMG ? Math.sin(x * 1.9 + t * 9) * 16 : 0;
+        const hum50 = has50Hz ? Math.sin(x * 0.85) * 11 : 0;
+        const drift = hasDrift ? Math.sin(x * 0.009 + t * 0.4) * 32 : 0;
+        const y = 92 - (cleanBrain + blink + emg + hum50 + drift);
+        if (x === 18) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Divider
+      ctx.strokeStyle = c.border;
+      ctx.beginPath(); ctx.moveTo(18, 165); ctx.lineTo(W - 18, 165); ctx.stroke();
+
+      // Bottom trace: Processed EEG after selected filters
+      ctx.fillStyle = c.success;
+      ctx.fillText("2. PREPROCESSED & FILTERED EEG (Ready for Feature Extraction & Classifier)", 18, 188);
+
+      ctx.strokeStyle = c.success;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      let remNoiseCount = 0;
+      if (hasBlink && !fixICA) remNoiseCount++;
+      if (hasEMG && !(fixLP || fixICA)) remNoiseCount++;
+      if (has50Hz && !fixNotch) remNoiseCount++;
+      if (hasDrift && !fixHP) remNoiseCount++;
+
+      for (let x = 18; x < W - 18; x++) {
+        const cleanBrain = Math.sin(x * 0.07 + t * 2) * 16;
+        const blink = (hasBlink && !fixICA) ? Math.exp(-Math.pow(((x - 220) % 280) / 22, 2)) * 52 : 0;
+        const emg = (hasEMG && !(fixLP || fixICA)) ? Math.sin(x * 1.9 + t * 9) * 16 : 0;
+        const hum50 = (has50Hz && !fixNotch) ? Math.sin(x * 0.85) * 11 : 0;
+        const drift = (hasDrift && !fixHP) ? Math.sin(x * 0.009 + t * 0.4) * 32 : 0;
+        const y = 255 - (cleanBrain + blink + emg + hum50 + drift);
+        if (x === 18) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      const snrEl = document.getElementById('snr-readout');
+      if (snrEl) {
+        snrEl.textContent = remNoiseCount === 0
+          ? "✅ High SNR: Clean Brain Signal Isolated!"
+          : `⚠️ ${remNoiseCount} Artifact Source(s) Still Contaminating EEG`;
+      }
+    }
+
+    // --- LAB 4: FREQUENCY BANDS SYNTHESIZER ---
+    const BANDS_DATA = [
+      { name: "Delta", range: "0.5–4 Hz", freq: 2, amp: 48, state: "Deep sleep", memory: "Deep sleep" },
+      { name: "Theta", range: "4–8 Hz", freq: 6, amp: 36, state: "Drowsy, light sleep", memory: "Tired" },
+      { name: "Alpha", range: "8–13 Hz", freq: 10, amp: 28, state: "Relaxed, eyes closed (back of head)", memory: "At rest" },
+      { name: "Mu (Motor)", range: "8–12 Hz", freq: 10, amp: 26, state: "Motor cortex (C3, Cz, C4) — drops during movement/MI", memory: "Motor area" },
+      { name: "Beta", range: "13–30 Hz", freq: 20, amp: 18, state: "Alert, thinking, active", memory: "Busy" },
+      { name: "Gamma", range: "Above 30 Hz", freq: 38, amp: 11, state: "High attention, concentration", memory: "Genius" }
+    ];
+    let selectedBandIdx = 2;
+
+    function initBandSelector() {
+      const list = document.getElementById('band-selector-list');
+      list.innerHTML = BANDS_DATA.map((b, i) => `
+        <div onclick="selectBand(${i})" class="p-2.5 rounded-lg border cursor-pointer flex items-center justify-between text-xs ${i === selectedBandIdx ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)] font-bold' : 'bg-[var(--background)] border-[var(--border)] hover:border-[var(--primary)]'}">
+          <div>
+            <div>${b.name} (${b.range})</div>
+            <div class="text-[11px] opacity-80">${b.state}</div>
+          </div>
+          <span class="px-2 py-0.5 rounded bg-black/20 font-mono">${b.memory}</span>
+        </div>
+      `).join('');
+    }
+
+    function selectBand(idx) {
+      selectedBandIdx = idx;
+      const b = BANDS_DATA[idx];
+      document.getElementById('band-title-readout').textContent = `${b.name} (${b.range}) — ${b.state}`;
+      document.getElementById('band-memory-badge').textContent = `Memory Word: ${b.memory}`;
+      initBandSelector();
+      drawBandCanvas();
+    }
+
+    function drawBandCanvas() {
+      const canvas = document.getElementById('band-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      const c = getThemeColors();
+      ctx.clearRect(0, 0, W, H);
+
+      const b = BANDS_DATA[selectedBandIdx];
+      const t = animTick * 0.05;
+
+      // Center line
+      ctx.strokeStyle = c.border;
+      ctx.beginPath(); ctx.moveTo(20, H / 2); ctx.lineTo(W - 20, H / 2); ctx.stroke();
+
+      // Sine Wave
+      ctx.strokeStyle = c.primary;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let x = 20; x < W - 20; x++) {
+        const normX = (x - 20) / (W - 40);
+        const y = H / 2 - Math.sin(normX * Math.PI * 2 * (b.freq * 0.6) + t * (b.freq * 0.25)) * b.amp;
+        if (x === 20) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = c.fg;
+      ctx.font = 'bold 12px monospace';
+      ctx.fillText(`Oscillation Rate: ${b.range}   |   When seen: ${b.state}`, 24, H - 18);
+    }
+
+    // --- LAB 5: 10-20 HEADMAP EXPLORER ---
+    const ELECTRODES_1020 = [
+      { id: "Fp1", x: 125, y: 62, region: "Frontal pole (Left · Odd)", role: "Forehead. Picks up strong eye-blink (EOG) artifacts." },
+      { id: "Fp2", x: 215, y: 62, region: "Frontal pole (Right · Even)", role: "Forehead. Picks up strong eye-blink (EOG) artifacts." },
+      { id: "F3", x: 112, y: 112, region: "Frontal (Left · Odd)", role: "Thinking, planning, decisions, speech." },
+      { id: "Fz", x: 170, y: 112, region: "Frontal (Midline · z=zero)", role: "Frontal midline cognitive activity." },
+      { id: "F4", x: 228, y: 112, region: "Frontal (Right · Even)", role: "Thinking, planning, decisions." },
+      { id: "T3", x: 58, y: 170, region: "Temporal (Left · Odd)", role: "Sides near ears: Hearing, memory, language. Can pick up EMG jaw noise." },
+      { id: "C3", x: 115, y: 170, region: "Central (Left · Odd)", role: "Motor Cortex! Power drops (ERD) when imagining RIGHT HAND movement." },
+      { id: "Cz", x: 170, y: 170, region: "Central (Midline · z=zero)", role: "Motor Cortex! Power drops (ERD) when imagining FEET movement." },
+      { id: "C4", x: 225, y: 170, region: "Central (Right · Even)", role: "Motor Cortex! Power drops (ERD) when imagining LEFT HAND movement." },
+      { id: "T4", x: 282, y: 170, region: "Temporal (Right · Even)", role: "Sides near ears: Hearing, memory. Near neck/ears can pick up ECG." },
+      { id: "P3", x: 118, y: 228, region: "Parietal (Left · Odd)", role: "Touch, body position, spatial sense." },
+      { id: "Pz", x: 170, y: 228, region: "Parietal (Midline · z=zero)", role: "P300 wave (~300 ms oddball response) is STRONGEST here!" },
+      { id: "P4", x: 222, y: 228, region: "Parietal (Right · Even)", role: "Touch, body position, spatial sense." },
+      { id: "O1", x: 132, y: 280, region: "Occipital (Left · Odd)", role: "Back of head: Vision, Alpha rhythm (8–13 Hz eyes closed), SSVEP." },
+      { id: "O2", x: 208, y: 280, region: "Occipital (Right · Even)", role: "Back of head: Vision, Alpha rhythm (8–13 Hz eyes closed), SSVEP." }
+    ];
+    let selectedElectrodeId = "C3";
+
+    function initHeadmapEvents() {
+      const canvas = document.getElementById('headmap-canvas');
+      if (!canvas) return;
+      canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const mx = (e.clientX - rect.left) * scaleX;
+        const my = (e.clientY - rect.top) * scaleY;
+        for (const el of ELECTRODES_1020) {
+          if (Math.hypot(mx - el.x, my - el.y) <= 20) {
+            selectedElectrodeId = el.id;
+            document.getElementById('hm-selected-title').textContent = `${el.id} — 10–20 Electrode`;
+            document.getElementById('hm-selected-Region').innerHTML = `<strong>Region:</strong> ${el.region}`;
+            document.getElementById('hm-selected-role').innerHTML = `<strong>BCI Role:</strong> ${el.role}`;
+            drawHeadmapCanvas();
+            break;
+          }
+        }
+      });
+    }
+
+    function selectLobe(lobe) {
+      const map = {
+        Frontal: "C3",
+        Parietal: "Pz",
+        Temporal: "T3",
+        Occipital: "O1"
+      };
+      selectedElectrodeId = map[lobe] || "C3";
+      const el = ELECTRODES_1020.find(x => x.id === selectedElectrodeId);
+      if (el) {
+        document.getElementById('hm-selected-title').textContent = `${lobe} Lobe (Example Electrode: ${el.id})`;
+        document.getElementById('hm-selected-Region').innerHTML = `<strong>Region:</strong> ${el.region}`;
+        document.getElementById('hm-selected-role').innerHTML = `<strong>BCI Role:</strong> ${el.role}`;
+      }
+      drawHeadmapCanvas();
+    }
+
+    function drawHeadmapCanvas() {
+      const canvas = document.getElementById('headmap-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      const c = getThemeColors();
+      ctx.clearRect(0, 0, W, H);
+
+      const cx = 170, cy = 172, r = 132;
+
+      // Nose (Nasion) at top & Inion at bottom
+      ctx.fillStyle = c.muted;
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText("▲ NASION (Top of Nose)", cx, 18);
+      ctx.fillText("▼ INION (Bump at Back of Head)", cx, H - 8);
+
+      // Head circle
+      ctx.strokeStyle = c.primary;
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+
+      // Crosshairs (10-20 measurement lines)
+      ctx.strokeStyle = c.border;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - r); ctx.lineTo(cx, cy + r);
+      ctx.moveTo(cx - r, cy); ctx.lineTo(cx + r, cy);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw Electrodes
+      ELECTRODES_1020.forEach(el => {
+        const isSel = el.id === selectedElectrodeId;
+        ctx.fillStyle = isSel ? c.warning : c.card;
+        ctx.strokeStyle = isSel ? c.warning : c.primary;
+        ctx.lineWidth = isSel ? 3 : 2;
+        ctx.beginPath(); ctx.arc(el.x, el.y, 17, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = isSel ? '#000' : c.fg;
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(el.id, el.x, el.y + 4);
+      });
+      ctx.textAlign = 'left';
+    }
+
+    // =========================================================================
+    // 5. PART 1: THE 8 BIG ANSWERS (10-MARK) RENDERER
+    // =========================================================================
+    let currentBigAnswerIdx = 0;
+
+    function initBigAnswers() {
+      const pills = document.getElementById('big-answer-pills');
+      pills.innerHTML = BIG_ANSWERS.map((ba, idx) => `
+        <button onclick="selectBigAnswer(${idx})" id="ba-pill-${idx}" class="text-xs px-2.5 py-1.5 rounded-lg border cursor-pointer ${idx === currentBigAnswerIdx ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)] font-bold' : 'bg-[var(--background)] border-[var(--border)] hover:border-[var(--primary)]'}">
+          #${ba.id} ${ba.stars.slice(0, 5)}
+        </button>
+      `).join('');
+      renderBigAnswer(currentBigAnswerIdx);
+    }
+
+    function selectBigAnswer(idx) {
+      currentBigAnswerIdx = idx;
+      markItemSeen('ba-' + idx);
+      initBigAnswers();
+    }
+
+    function renderBigAnswer(idx) {
+      const ba = BIG_ANSWERS[idx];
+      const viewer = document.getElementById('big-answer-viewer');
+      viewer.innerHTML = `
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
+            <div>
+              <span class="text-xs font-bold px-2.5 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)]">${ba.stars}</span>
+              <h3 class="text-lg font-bold mt-1 m-0">${ba.title}</h3>
+            </div>
+            <button onclick="markItemSeen('ba-${idx}'); initBigAnswers();" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--success)] text-white font-semibold cursor-pointer">
+              ✅ Mark Big Answer #${ba.id} Reviewed
+            </button>
+          </div>
+
+          <!-- Step 1: Simple Idea / Definition -->
+          <div class="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)]">
+            <div class="text-xs font-bold uppercase text-[var(--primary)] mb-1">1) Simple Idea / Definition</div>
+            <p class="text-xs sm:text-sm leading-relaxed m-0">${ba.simpleIdea}</p>
+          </div>
+
+          <!-- Step 2: Diagram to Draw -->
+          <div class="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-2">
+            <div class="text-xs font-bold uppercase text-[var(--primary)]">2) Diagram to Draw in the Exam</div>
+            <div class="flex flex-wrap items-center gap-1.5 pt-1">
+              ${ba.diagram.map((d, i) => `
+                <span class="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--primary)] text-xs font-semibold">${d}</span>
+                ${i < ba.diagram.length - 1 ? '<span class="text-[var(--primary)] font-bold">→</span>' : ''}
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Step 3: Steps & Bullet Points -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${ba.sections.map(sec => `
+              <div class="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-2">
+                <div class="text-xs font-bold uppercase text-[var(--primary)]">3) ${sec.heading}</div>
+                <ul class="text-xs space-y-1.5 pl-4 m-0 leading-relaxed">
+                  ${sec.bullets.map(b => `<li>${b}</li>`).join('')}
+                </ul>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Step 4: Tables -->
+          <div class="space-y-4">
+            ${ba.tables.map(tbl => `
+              <div class="space-y-1.5">
+                <div class="text-xs font-bold uppercase text-[var(--primary)]">4) Table: ${tbl.caption}</div>
+                <div class="overflow-x-auto border border-[var(--border)] rounded-lg">
+                  <table class="w-full text-left border-collapse text-xs">
+                    <thead class="bg-[var(--sidebar)] border-b border-[var(--border)]">
+                      <tr>
+                        ${tbl.headers.map(h => `<th class="p-2.5 font-bold">${h}</th>`).join('')}
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[var(--border)]">
+                      ${tbl.rows.map(r => `
+                        <tr class="bg-[var(--background)]">
+                          ${r.map((cell, ci) => `<td class="p-2.5 ${ci === 0 ? 'font-bold' : ''}">${cell}</td>`).join('')}
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Step 5 & 6: Memory Trick, Example & Two-Line Conclusion -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+              <div class="font-bold text-[var(--warning)] mb-1">💡 Memory Trick</div>
+              <div>${ba.memoryTrick}</div>
+            </div>
+            <div class="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] text-xs">
+              <div class="font-bold text-[var(--primary)] mb-1">5) One Example</div>
+              <div>${ba.example}</div>
+            </div>
+            <div class="p-3 rounded-lg bg-[var(--background)] border border-[var(--success)] text-xs">
+              <div class="font-bold text-[var(--success)] mb-1">6) Two-Line Conclusion</div>
+              <div>${ba.conclusion}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 6. PART 2: SMALL TOPICS (2.1 TO 2.9) RENDERER
+    // =========================================================================
+    function renderPart2() {
+      const q = (document.getElementById('part2-search')?.value || '').toLowerCase();
+      const grid = document.getElementById('part2-grid');
+      const filtered = PART2_TOPICS.filter(t =>
+        t.title.toLowerCase().includes(q) ||
+        t.summary.toLowerCase().includes(q) ||
+        t.bullets.some(b => b.toLowerCase().includes(q))
+      );
+      grid.innerHTML = filtered.map(t => `
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+            <h3 class="text-sm font-bold m-0">${t.code} ${t.title}</h3>
+            <span class="text-xs px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)] text-[var(--warning)]">${t.stars}</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)] m-0">${t.summary}</p>
+          ${t.table ? `
+            <div class="overflow-x-auto border border-[var(--border)] rounded-lg">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead class="bg-[var(--sidebar)] border-b border-[var(--border)]">
+                  <tr>${t.table.headers.map(h => `<th class="p-2">${h}</th>`).join('')}</tr>
+                </thead>
+                <tbody class="divide-y divide-[var(--border)]">
+                  ${t.table.rows.map(r => `<tr class="bg-[var(--background)]">${r.map((c, ci) => `<td class="p-2 ${ci === 0 ? 'font-bold' : ''}">${c}</td>`).join('')}</tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+          ` : ''}
+          ${t.bullets.length ? `
+            <ul class="text-xs space-y-1.5 pl-4 m-0 leading-relaxed">
+              ${t.bullets.map(b => `<li>${b}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 7. PART 3: 30 2-MARK ANSWERS & FLASHCARDS
+    // =========================================================================
+    let fcIndex = 0;
+    let fcFlipped = false;
+    let part3Cloaked = false;
+
+    function renderFlashcard() {
+      const item = PART3_2MARK[fcIndex];
+      document.getElementById('fc-counter').textContent = `Flashcard ${fcIndex + 1} of ${PART3_2MARK.length}`;
+      const masteredCount = PART3_2MARK.filter((_, i) => masteredSet.has('fc-' + i)).length;
+      document.getElementById('fc-mastered-count').textContent = `${masteredCount} / 30 Mastered`;
+      document.getElementById('fc-side-label').textContent = fcFlipped ? "ANSWER (2-Mark Ready-to-Write)" : "QUESTION (Click Card to Flip)";
+      document.getElementById('fc-content').textContent = fcFlipped ? item.a : `${item.id}. ${item.q}`;
+    }
+
+    function flipFlashcard() {
+      fcFlipped = !fcFlipped;
+      renderFlashcard();
+    }
+
+    function prevFlashcard() {
+      fcIndex = (fcIndex - 1 + PART3_2MARK.length) % PART3_2MARK.length;
+      fcFlipped = false;
+      renderFlashcard();
+    }
+
+    function nextFlashcard() {
+      fcIndex = (fcIndex + 1) % PART3_2MARK.length;
+      fcFlipped = false;
+      renderFlashcard();
+    }
+
+    function markFlashcardMastered() {
+      markItemSeen('fc-' + fcIndex);
+      renderFlashcard();
+      nextFlashcard();
+    }
+
+    function togglePart3QuizMode() {
+      part3Cloaked = !part3Cloaked;
+      document.getElementById('part3-cloak-btn').textContent = part3Cloaked ? '👀 Show All Answers' : '🙈 Hide Answers (Self-Test)';
+      renderPart3List();
+    }
+
+    function renderPart3List() {
+      const q = (document.getElementById('part3-search')?.value || '').toLowerCase();
+      const list = document.getElementById('part3-list');
+      list.innerHTML = PART3_2MARK.filter(item =>
+        item.q.toLowerCase().includes(q) || item.a.toLowerCase().includes(q)
+      ).map(item => `
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-lg p-3.5 space-y-1">
+          <div class="text-xs font-bold text-[var(--primary)]">${item.id}. ${item.q}</div>
+          <div onclick="this.classList.add('revealed')" class="text-xs leading-relaxed ${part3Cloaked ? 'cloak-blur' : ''}">${item.a}</div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 8. PART 4: 47 1-MARK QUICK FACTS & QUIZ DRILL
+    // =========================================================================
+    let part4Cloaked = false;
+    let quizIdx = 0;
+    let quizCorrect = 0;
+    let quizTotal = 0;
+
+    function togglePart4Cloak() {
+      part4Cloaked = !part4Cloaked;
+      document.getElementById('part4-cloak-btn').textContent = part4Cloaked ? '👀 Unblur Answers' : '🙈 Blur Answers';
+      renderPart4Table();
+    }
+
+    function renderPart4Table() {
+      const q = (document.getElementById('part4-search')?.value || '').toLowerCase();
+      const tbody = document.getElementById('part4-tbody');
+      tbody.innerHTML = PART4_1MARK.map((item, idx) => ({ ...item, idx: idx + 1 }))
+        .filter(item => item.q.toLowerCase().includes(q) || item.a.toLowerCase().includes(q))
+        .map(item => `
+          <tr class="bg-[var(--background)] hover:bg-[var(--card)]">
+            <td class="p-2.5 font-mono text-[var(--muted-foreground)]">${item.idx}</td>
+            <td class="p-2.5 font-medium">${item.q}</td>
+            <td onclick="this.classList.add('revealed')" class="p-2.5 font-bold text-[var(--primary)] ${part4Cloaked ? 'cloak-blur' : ''}">${item.a}</td>
+          </tr>
+        `).join('');
+    }
+
+    function loadQuizQuestion() {
+      const item = PART4_1MARK[quizIdx];
+      document.getElementById('quiz-q-number').textContent = `Question #${quizIdx + 1} of ${PART4_1MARK.length}`;
+      document.getElementById('quiz-question-text').textContent = item.q;
+      const fb = document.getElementById('quiz-feedback');
+      fb.classList.add('hidden');
+
+      // Pick 3 distractors
+      const others = PART4_1MARK.filter((_, i) => i !== quizIdx).map(x => x.a);
+      const shuffledDistractors = others.sort(() => 0.5 - Math.random()).slice(0, 3);
+      const choices = [item.a, ...shuffledDistractors].sort(() => 0.5 - Math.random());
+
+      document.getElementById('quiz-options').innerHTML = choices.map(ch => `
+        <button onclick="checkQuizAnswer(this, '${ch.replace(/'/g, "\\'")}')" class="w-full text-left p-2.5 rounded bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)] text-xs cursor-pointer block">
+          ${ch}
+        </button>
+      `).join('');
+    }
+
+    function checkQuizAnswer(btn, chosen) {
+      const correct = PART4_1MARK[quizIdx].a;
+      const fb = document.getElementById('quiz-feedback');
+      fb.classList.remove('hidden');
+      quizTotal++;
+      if (chosen === correct) {
+        quizCorrect++;
+        btn.style.borderColor = 'var(--success)';
+        fb.className = "text-xs font-semibold p-2 rounded bg-[var(--card)] text-[var(--success)] border border-[var(--success)]";
+        fb.textContent = `✅ Correct! ${correct}`;
+      } else {
+        btn.style.borderColor = 'var(--error)';
+        fb.className = "text-xs font-semibold p-2 rounded bg-[var(--card)] text-[var(--error)] border border-[var(--error)]";
+        fb.textContent = `❌ Not quite! Correct answer: ${correct}`;
+      }
+      document.getElementById('quiz-score-badge').textContent = `Score: ${quizCorrect} / ${quizTotal}`;
+    }
+
+    function nextQuizQuestion() {
+      quizIdx = (quizIdx + 1) % PART4_1MARK.length;
+      loadQuizQuestion();
+    }
+
+    // =========================================================================
+    // 9. LAST PAGE CHEAT SHEET
+    // =========================================================================
+    let csBlankMode = false;
+    function toggleCheatSheetMemoryTest() {
+      csBlankMode = !csBlankMode;
+      renderCheatSheet();
+    }
+
+    function renderCheatSheet() {
+      const container = document.getElementById('cheatsheet-container');
+      container.innerHTML = CHEATSHEET_ITEMS.map(item => `
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5 space-y-1">
+          <div class="text-xs font-bold text-[var(--primary)] uppercase tracking-wide">${item.label}</div>
+          <div onclick="this.classList.add('revealed')" class="text-xs sm:text-sm leading-relaxed ${csBlankMode ? 'cloak-blur' : ''}">
+            ${item.text}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 10. ANIMATION LOOP & INITIALIZATION
+    // =========================================================================
+    function animate() {
+      animTick++;
+      if (currentTab === 'video') {
+        if (videoPlaying) {
+          videoProgress += 0.14 * videoSpeed;
+          if (videoProgress >= 100) {
+            loadScene(currentSceneIdx + 1);
+          }
+          document.getElementById('scene-scrubber').value = videoProgress;
+          const sec = Math.floor((videoProgress / 100) * 12);
+          document.getElementById('scene-timer-label').textContent = `00:${sec < 10 ? '0' + sec : sec} / 00:12`;
+        }
+        drawVideoCanvas();
+      } else if (currentTab === 'labs') {
+        if (currentLab === 'mi') drawMILab();
+        else if (currentLab === 'filter') drawFilterStudio();
+        else if (currentLab === 'bands') drawBandCanvas();
+      }
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('themechange', () => {
+      drawVideoCanvas();
+      drawCurrentLab();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadScene(0);
+      calcERD();
+      initP300Grid();
+      initBandSelector();
+      initHeadmapEvents();
+      initBigAnswers();
+      renderPart2();
+      renderFlashcard();
+      renderPart3List();
+      renderPart4Table();
+      loadQuizQuestion();
+      renderCheatSheet();
+      requestAnimationFrame(animate);
+    });
+  </script>
+</body>
+</html>
