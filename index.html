@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>20CS2E03 BCI Interactive Academy & Video Studio</title>
+  <title>20CS2E03 Brain-Computer Interface (BCI) Interactive Academy</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     :root {
@@ -68,6 +68,123 @@
       filter: none;
       user-select: auto;
     }
+
+    /* ===== New: MCQ test, full forms, games ===== */
+    .tab-btn-new:not(.active) { border-color: color-mix(in srgb, var(--primary) 60%, transparent); }
+    @media (max-width: 767px) {
+      #main-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
+      #main-tabs::-webkit-scrollbar { display: none; }
+      #main-tabs .tab-btn { flex: none; white-space: nowrap; }
+    }
+    .cloak-blur.revealed { filter: none; user-select: auto; cursor: auto; }
+    .x-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .x-stack > * + * { margin-top: 12px; }
+    .x-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+    .x-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--primary); }
+    .x-title { font-size: 17px; font-weight: 700; margin: 2px 0 0; line-height: 1.3; }
+    .x-muted { color: var(--muted-foreground); font-size: 12.5px; line-height: 1.5; margin: 2px 0 0; }
+    .x-num { font-variant-numeric: tabular-nums; }
+    .x-btn { font: inherit; font-size: 12.5px; font-weight: 600; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--background); color: var(--foreground); cursor: pointer; transition: border-color 0.12s ease, transform 0.08s ease; }
+    .x-btn:hover:not(:disabled) { border-color: var(--primary); }
+    .x-btn:active:not(:disabled) { transform: scale(0.98); }
+    .x-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .x-btn-primary { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+    .x-btn-danger { background: var(--error); color: #fff; border-color: var(--error); }
+    .x-btn-lg { font-size: 14px; padding: 11px 18px; }
+    .x-input { font: inherit; font-size: 12.5px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--background); color: var(--foreground); min-width: 220px; }
+    .x-input:focus-visible, .x-btn:focus-visible, .x-opt:focus-visible, .x-chip:focus-visible, .x-match-item:focus-visible, .x-mode:focus-visible, .x-start:focus-visible, .x-dot:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .x-grid { display: grid; gap: 10px; }
+    .x-grid-stats { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .x-grid-2 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .x-grid-3 { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+    .x-stat { background: var(--background); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+    .x-stat b { display: block; font-size: 22px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+    .x-stat span { display: block; font-size: 12px; color: var(--muted-foreground); margin-top: 2px; }
+    .x-stat .x-progress { margin-top: 8px; }
+    .x-progress { height: 8px; border-radius: 99px; background: var(--border); overflow: hidden; }
+    .x-progress > div { height: 100%; background: var(--success); transition: width 0.3s ease; }
+    .x-progress-lg { height: 12px; }
+    .x-pill { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--border); background: var(--background); font-variant-numeric: tabular-nums; }
+    .x-pill.is-good { border-color: var(--success); color: var(--success); }
+    .x-pill.is-bad { border-color: var(--error); color: var(--error); }
+    .x-mode, .x-start { font: inherit; text-align: left; display: block; width: 100%; padding: 14px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--background); color: var(--foreground); cursor: pointer; transition: border-color 0.12s ease, transform 0.08s ease; }
+    .x-mode strong, .x-start strong { display: block; font-size: 14px; }
+    .x-mode span, .x-start span { display: block; font-size: 12.5px; color: var(--muted-foreground); margin-top: 4px; line-height: 1.45; }
+    .x-mode:hover, .x-start:hover:not(:disabled) { border-color: var(--primary); }
+    .x-start:active:not(:disabled) { transform: scale(0.99); }
+    .x-start:disabled { opacity: 0.5; cursor: not-allowed; }
+    .x-mode.is-on { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 14%, var(--background)); }
+    .x-topic { background: var(--background); border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .x-topic-head { display: flex; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+    .x-topic-name { font-size: 13.5px; font-weight: 600; line-height: 1.4; flex: 1; }
+    .x-topic-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .x-question { font-size: 16.5px; font-weight: 700; line-height: 1.45; }
+    .x-options { display: grid; gap: 8px; }
+    .x-opt { font: inherit; display: flex; gap: 10px; align-items: flex-start; width: 100%; text-align: left; padding: 12px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--background); color: var(--foreground); font-size: 14px; line-height: 1.45; cursor: pointer; transition: border-color 0.12s ease, background-color 0.12s ease, transform 0.08s ease; }
+    .x-opt:hover:not(:disabled) { border-color: var(--primary); }
+    .x-opt:active:not(:disabled) { transform: scale(0.99); }
+    .x-opt:disabled { cursor: default; }
+    .x-opt-key { flex: none; width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--muted-foreground); }
+    .x-opt.is-selected { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 16%, var(--background)); }
+    .x-opt.is-selected .x-opt-key { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+    .x-opt.is-correct { border-color: var(--success); background: color-mix(in srgb, var(--success) 18%, var(--background)); }
+    .x-opt.is-wrong { border-color: var(--error); background: color-mix(in srgb, var(--error) 16%, var(--background)); }
+    .x-opt.is-dim { opacity: 0.55; }
+    .x-explain { border-radius: 10px; padding: 12px; font-size: 13.5px; line-height: 1.5; border: 1px solid var(--border); background: var(--background); }
+    .x-explain.good { border-color: var(--success); }
+    .x-explain.bad { border-color: var(--error); }
+    .x-dots { display: flex; flex-wrap: wrap; gap: 4px; }
+    .x-dot { font: inherit; min-width: 28px; height: 26px; border-radius: 6px; border: 1px solid var(--border); background: var(--background); color: var(--muted-foreground); font-size: 10.5px; cursor: pointer; padding: 0 2px; font-variant-numeric: tabular-nums; }
+    .x-dot.ok { background: color-mix(in srgb, var(--success) 32%, var(--background)); border-color: var(--success); color: var(--foreground); }
+    .x-dot.no { background: color-mix(in srgb, var(--error) 30%, var(--background)); border-color: var(--error); color: var(--foreground); }
+    .x-dot.cur { outline: 2px solid var(--primary); outline-offset: 1px; color: var(--foreground); font-weight: 700; }
+    .x-kbd { display: inline-block; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; padding: 1px 6px; border-radius: 5px; border: 1px solid var(--border); background: var(--background); color: var(--foreground); }
+    .x-submitbar { position: sticky; bottom: 10px; z-index: 20; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--primary); background: var(--sidebar); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); font-size: 13px; }
+    .x-submitbar > div { flex: 1; min-width: 180px; }
+    .x-warn { margin-top: 6px; font-size: 12.5px; color: var(--warning); font-weight: 600; }
+    .x-score { display: flex; align-items: baseline; gap: 12px; margin-top: 2px; }
+    .x-score b { font-size: 34px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .x-score span { font-size: 20px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; }
+    .x-topicrows { display: grid; gap: 8px; }
+    .x-topicrow { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px; border-radius: 10px; background: var(--background); border: 1px solid var(--border); font-size: 13px; }
+    .x-topicrow-bar { display: flex; align-items: center; gap: 8px; }
+    .x-topicrow-bar .x-progress { flex: 1; }
+    @media (max-width: 767px) { .x-topicrow { grid-template-columns: 1fr; } }
+    .x-review { padding: 12px; border-radius: 10px; background: var(--background); border: 1px solid var(--border); border-left-width: 4px; font-size: 13.5px; line-height: 1.5; }
+    .x-review.good { border-left-color: var(--success); }
+    .x-review.bad { border-left-color: var(--error); }
+    .x-review-q { font-weight: 700; margin: 2px 0 4px; }
+    .x-flash { animation: x-flash 1.8s ease; }
+    @keyframes x-flash { 0%, 60% { box-shadow: 0 0 0 3px var(--warning); } 100% { box-shadow: 0 0 0 3px transparent; } }
+    .x-shake { animation: x-shake 0.32s ease; border-color: var(--error) !important; }
+    @keyframes x-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    .x-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .x-chip { font: inherit; font-size: 12.5px; padding: 7px 11px; border-radius: 99px; border: 1px solid var(--border); background: var(--background); color: var(--foreground); cursor: pointer; text-align: left; transition: border-color 0.12s ease, transform 0.08s ease; }
+    .x-chip:hover { border-color: var(--primary); }
+    .x-chip:active { transform: scale(0.98); }
+    .x-chip.is-on { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); font-weight: 700; }
+    .x-chip-step { border-radius: 10px; padding: 10px 12px; font-size: 13.5px; border-width: 1.5px; }
+    .x-orderlist { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
+    .x-orderlist li { display: flex; gap: 10px; align-items: center; padding: 9px 12px; border-radius: 10px; border: 1px dashed var(--border); font-size: 13.5px; color: var(--muted-foreground); }
+    .x-orderlist li .x-num { flex: none; width: 22px; height: 22px; border-radius: 99px; border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+    .x-orderlist li.is-placed { border-style: solid; border-color: var(--success); background: color-mix(in srgb, var(--success) 14%, var(--background)); color: var(--foreground); font-weight: 600; }
+    .x-orderlist li.is-placed .x-num { background: var(--success); border-color: var(--success); color: #fff; }
+    .x-match { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .x-match-col { display: grid; gap: 6px; align-content: start; }
+    .x-match-item { font: inherit; text-align: left; padding: 11px 12px; min-height: 44px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--background); color: var(--foreground); font-size: 13.5px; line-height: 1.4; cursor: pointer; transition: border-color 0.12s ease, background-color 0.12s ease, transform 0.08s ease; }
+    .x-match-item:hover:not(:disabled) { border-color: var(--primary); }
+    .x-match-item:active:not(:disabled) { transform: scale(0.99); }
+    .x-match-item.is-sel { border-color: var(--warning); background: color-mix(in srgb, var(--warning) 20%, var(--background)); font-weight: 600; }
+    .x-match-item.is-done { border-color: var(--success); background: color-mix(in srgb, var(--success) 14%, var(--background)); opacity: 0.75; cursor: default; }
+    .x-gloss { display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+    .x-gloss-row { display: grid; grid-template-columns: 78px 1fr; gap: 10px; padding: 10px; border-radius: 10px; background: var(--background); border: 1px solid var(--border); }
+    .x-gloss-abbr { font-weight: 800; font-size: 14px; color: var(--primary); overflow-wrap: anywhere; }
+    .x-gloss-full { font-weight: 700; font-size: 13.5px; }
+    .x-bigabbr { font-size: 40px; font-weight: 800; letter-spacing: 0.02em; color: var(--primary); text-align: center; padding: 14px 0; background: var(--background); border: 1px solid var(--border); border-radius: 12px; }
+    @media (prefers-reduced-motion: reduce) {
+      .x-flash, .x-shake { animation: none; }
+      .x-btn, .x-opt, .x-chip, .x-match-item, .x-progress > div { transition: none; }
+    }
   </style>
 </head>
 <body class="bg-[var(--background)] text-[var(--foreground)] antialiased m-0 p-0 min-h-screen">
@@ -84,7 +201,7 @@
             <h1 class="text-sm font-bold tracking-tight m-0">20CS2E03 Brain Computer Interface</h1>
             <span class="text-xs px-2 py-0.5 rounded-full bg-[var(--card)] border border-[var(--border)] text-[var(--muted-foreground)]">SREC · B.E. CSE · Sem VII</span>
           </div>
-          <p class="text-xs text-[var(--muted-foreground)] m-0">Complete 25-Page Interactive Study Hub, Video Player & Virtual BCI Labs</p>
+          <p class="text-xs text-[var(--muted-foreground)] m-0">Interactive Study Hub: Video Lecture, Virtual Labs, 164-Question MCQ Test & Games</p>
         </div>
       </div>
 
@@ -120,6 +237,12 @@
       </button>
       <button onclick="switchTab('cheatsheet')" id="tab-btn-cheatsheet" class="tab-btn text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
         🔥 <span>7. Last-Page Cheat Sheet</span>
+      </button>
+      <button onclick="switchTab('mcq')" id="tab-btn-mcq" class="tab-btn tab-btn-new text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
+        📝 <span>8. MCQ Test (164 Questions)</span>
+      </button>
+      <button onclick="switchTab('games')" id="tab-btn-games" class="tab-btn tab-btn-new text-xs px-3 py-1.5 rounded-md bg-[var(--card)] border border-[var(--border)] cursor-pointer flex items-center gap-1.5">
+        🎮 <span>9. Full Forms &amp; Games</span>
       </button>
     </nav>
   </header>
@@ -171,7 +294,7 @@
             </div>
             <div onclick="jumpToScene(1)" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
               <div class="text-xs font-bold text-[var(--primary)]">2. Record EEG</div>
-              <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">The brain signal is usually recorded with <strong>EEG</strong> (electrodes on the scalp).</p>
+              <p class="text-xs text-[var(--muted-foreground)] mt-1 m-0">The brain signal is usually recorded with <strong>EEG</strong> — electrodes on the scalp.</p>
             </div>
             <div onclick="jumpToScene(4)" class="p-2.5 rounded-lg bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
               <div class="text-xs font-bold text-[var(--primary)]">3. Clean & Filter</div>
@@ -311,6 +434,7 @@
             <div class="text-xs font-mono bg-[var(--card)] p-2 rounded border border-[var(--border)]">
               ERD% = ((A − R) / R) × 100
             </div>
+            <div class="text-xs text-[var(--muted-foreground)]">ERD% = Event-Related Desynchronization percentage · R = power at rest · A = power during the task</div>
             <div class="space-y-1 text-xs">
               <div class="flex justify-between">
                 <span>Rest Power (R):</span>
@@ -337,13 +461,13 @@
             <span id="mi-status-pill" class="text-xs px-2.5 py-0.5 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold">Imagining: Right Hand → C3 ERD</span>
           </div>
           <canvas id="mi-canvas" width="700" height="320" class="w-full h-auto bg-[var(--background)] rounded-lg border border-[var(--border)]"></canvas>
-          <div class="grid grid-cols-7 gap-1 text-center text-xs">
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-1 text-center text-xs">
             <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>1. Record</strong><br><span class="text-[var(--muted-foreground)]">C3, Cz, C4</span></div>
-            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>2. Clean</strong><br><span class="text-[var(--muted-foreground)]">50Hz + ICA</span></div>
+            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>2. Clean</strong><br><span class="text-[var(--muted-foreground)]">50 Hz notch + ICA</span></div>
             <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>3. Spectral</strong><br><span class="text-[var(--muted-foreground)]">8–30 Hz</span></div>
             <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>4. Spatial</strong><br><span class="text-[var(--muted-foreground)]">CSP filter</span></div>
             <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>5. Features</strong><br><span class="text-[var(--muted-foreground)]">Band power</span></div>
-            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>6. Classify</strong><br><span class="text-[var(--muted-foreground)]">LDA/EEGNet</span></div>
+            <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>6. Classify</strong><br><span class="text-[var(--muted-foreground)]">LDA or EEGNet</span></div>
             <div class="p-1.5 rounded bg-[var(--background)] border border-[var(--border)]"><strong>7. Command</strong><br><span class="text-[var(--muted-foreground)]" id="mi-cmd-text">Turn Right</span></div>
           </div>
         </div>
@@ -373,7 +497,7 @@
             </div>
             <div class="flex justify-between items-center">
               <span>Spelled Output Word:</span>
-              <span id="p300-spelled-word" class="font-mono font-bold text-sm text-[var(--success)]">BCI_</span>
+              <span id="p300-spelled-word" data-noexpand class="font-mono font-bold text-sm text-[var(--success)]">BCI_</span>
             </div>
           </div>
 
@@ -423,11 +547,11 @@
           <div class="space-y-1.5">
             <div class="text-xs font-bold text-[var(--error)]">1. Inject Artifacts (Noise Sources):</div>
             <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
-              <span>👀 Eye Blink (EOG · Big slow waves at Fp1/Fp2)</span>
+              <span>👀 Eye Blink — EOG · big slow waves at Fp1/Fp2</span>
               <input type="checkbox" id="art-blink" checked onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
             </label>
             <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
-              <span>😬 Jaw/Muscle (EMG · Fast spiky noise &gt;40 Hz)</span>
+              <span>😬 Jaw/Muscle — EMG · fast spiky noise &gt;40 Hz</span>
               <input type="checkbox" id="art-emg" checked onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
             </label>
             <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
@@ -443,7 +567,7 @@
           <div class="space-y-1.5 pt-2 border-t border-[var(--border)]">
             <div class="text-xs font-bold text-[var(--success)]">2. Apply Preprocessing & Filters:</div>
             <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
-              <span>🛡️ <strong>ICA</strong> (Removes Eye Blink / Muscle without losing trials)</span>
+              <span>🛡️ <strong>ICA</strong> — removes eye blink / muscle noise without losing trials</span>
               <input type="checkbox" id="fix-ica" onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
             </label>
             <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
@@ -451,7 +575,7 @@
               <input type="checkbox" id="fix-notch" onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
             </label>
             <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
-              <span>📉 <strong>Low-Pass (~40 Hz)</strong> (Removes high-freq EMG muscle)</span>
+              <span>📉 <strong>Low-Pass (~40 Hz)</strong> — removes high-frequency EMG muscle noise</span>
               <input type="checkbox" id="fix-lowpass" onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
             </label>
             <label class="flex items-center justify-between text-xs p-2 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">
@@ -459,7 +583,7 @@
               <input type="checkbox" id="fix-highpass" onchange="drawFilterStudio()" class="accent-[var(--primary)]" />
             </label>
           </div>
-          <button onclick="cleanAllSignal()" class="w-full py-2 rounded-lg bg-[var(--success)] text-white font-bold text-xs cursor-pointer">✨ Auto-Apply Full Clean Pipeline (Notch + Band-Pass + ICA)</button>
+          <button onclick="cleanAllSignal()" class="w-full py-2 rounded-lg bg-[var(--success)] text-white font-bold text-xs cursor-pointer">✨ Auto-Apply Full Clean Pipeline: Notch + Band-Pass + ICA</button>
         </div>
 
         <div class="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
@@ -552,7 +676,7 @@
                 <strong>Temporal Lobe (Sides near ears · T):</strong> <strong>Hearing</strong>, memory, understanding language.
               </div>
               <div onclick="selectLobe('Occipital')" class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)] card-hover cursor-pointer">
-                <strong>Occipital Lobe (Back · O):</strong> <strong>Vision</strong> (SSVEP & Alpha rhythm with eyes closed).
+                <strong>Occipital Lobe (Back · O):</strong> <strong>Vision</strong> — SSVEP and Alpha rhythm with eyes closed.
               </div>
               <div class="p-2.5 rounded bg-[var(--background)] border border-[var(--border)]">
                 <strong>Cerebellum:</strong> Balance and coordination · <strong>Brainstem:</strong> Breathing and heartbeat.
@@ -624,7 +748,9 @@
           <button onclick="flipFlashcard()" class="text-xs px-4 py-1.5 rounded bg-[var(--card)] border border-[var(--primary)] font-semibold cursor-pointer">🔄 Flip Card</button>
           <button onclick="markFlashcardMastered()" id="fc-master-btn" class="text-xs px-4 py-1.5 rounded bg-[var(--success)] text-white font-semibold cursor-pointer">✅ Mark Mastered</button>
           <button onclick="nextFlashcard()" class="text-xs px-3 py-1.5 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">Next ➡</button>
+          <button onclick="shuffleFlashcards()" class="text-xs px-3 py-1.5 rounded bg-[var(--background)] border border-[var(--border)] cursor-pointer">🔀 Shuffle</button>
         </div>
+        <div class="text-xs text-[var(--muted-foreground)]">Keyboard: <span class="x-kbd">Space</span> flip · <span class="x-kbd">←</span> <span class="x-kbd">→</span> previous / next · <span class="x-kbd">M</span> mark mastered</div>
       </div>
 
       <!-- Full List of 30 2-Mark Answers -->
@@ -696,6 +822,29 @@
       </div>
 
       <div id="cheatsheet-container" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 8: MCQ TEST (ALL 17 TOPICS)            -->
+    <!-- ========================================== -->
+    <section id="tab-mcq" class="hidden space-y-4">
+      <div id="mcq-root" class="space-y-4"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 9: FULL FORMS & GAMES                  -->
+    <!-- ========================================== -->
+    <section id="tab-games" class="hidden space-y-4">
+      <div class="flex flex-wrap gap-2 border-b border-[var(--border)] pb-2">
+        <button onclick="switchGame('glossary')" id="game-btn-glossary" class="subtab-btn active text-xs px-3 py-2 cursor-pointer bg-transparent border-0">📖 All Full Forms</button>
+        <button onclick="switchGame('ffquiz')" id="game-btn-ffquiz" class="subtab-btn text-xs px-3 py-2 cursor-pointer bg-transparent border-0">🔡 Full-Form Quiz</button>
+        <button onclick="switchGame('order')" id="game-btn-order" class="subtab-btn text-xs px-3 py-2 cursor-pointer bg-transparent border-0">🔢 Put the Steps in Order</button>
+        <button onclick="switchGame('match')" id="game-btn-match" class="subtab-btn text-xs px-3 py-2 cursor-pointer bg-transparent border-0">🔗 Match the Pairs</button>
+      </div>
+      <div id="game-panel-glossary" class="space-y-3" data-noexpand></div>
+      <div id="game-panel-ffquiz" class="hidden space-y-3" data-noexpand></div>
+      <div id="game-panel-order" class="hidden space-y-3"></div>
+      <div id="game-panel-match" class="hidden space-y-3"></div>
     </section>
 
   </main>
@@ -813,7 +962,7 @@
         type: "artifacts"
       },
       {
-        title: "9. EEG's Five Questions: Morphology, Temporal, Frequency, Time-Freq, Spatial",
+        title: "9. The Five Questions of EEG: Morphology, Temporal, Frequency, Time-Frequency, Spatial",
         badge: "Chapter 9 / 12 · Big Answer #7 (★★★)",
         subtitle: "To interpret any EEG signal systematically, ask 5 questions: What shape? When? Which frequency? How does it change? Where on the head?",
         keypoints: [
@@ -1211,7 +1360,7 @@
         title: "7. EEG features: morphology, temporal, frequency, time-frequency, spatial",
         stars: "★★★",
         simpleIdea: "To understand an EEG signal, ask five questions: What shape? When and how long? Which frequency? Which frequency and when? Where on the head?",
-        diagram: ["1. Quality & Artifacts", "2. Background Rhythm", "3. Morphology (Shape)", "4. Temporal (When)", "5. Freq & Time-Freq", "6. Spatial (Where)", "7. Clinical/Task Conclusion"],
+        diagram: ["1. Quality & Artifacts", "2. Background Rhythm", "3. Morphology (Shape)", "4. Temporal (When)", "5. Frequency & Time-Frequency", "6. Spatial (Where)", "7. Clinical/Task Conclusion"],
         tables: [
           {
             caption: "The 5 Characteristics of EEG",
@@ -1258,7 +1407,7 @@
             ]
           }
         ],
-        memoryTrick: "EEG’s five questions: Shape (morphology) · When (temporal) · Which frequency · Frequency over time (time-frequency) · Where (spatial).",
+        memoryTrick: "The five questions of EEG: Shape (morphology) · When (temporal) · Which frequency · Frequency over time (time-frequency) · Where (spatial).",
         example: "Right-hand imagery shows a time-frequency Mu power drop right after the cue at spatial location C3.",
         conclusion: "Morphology tells what the wave looks like, temporal tells when, frequency tells which rhythm, time-frequency tells how it changes, and spatial tells where. Together they let us interpret EEG and control a BCI."
       },
@@ -1544,7 +1693,7 @@
       { q: "Character selection using ERP", a: "P300 speller" },
       { q: "P300 speller made by", a: "Farwell and Donchin" },
       { q: "P300 speller grid", a: "6 × 6" },
-      { q: "BCI-controlled artificial limb", a: "Neuroprosthetic application" },
+      { q: "Artificial limb controlled by a BCI", a: "Neuroprosthetic application" },
       { q: "Power-line noise in India", a: "50 Hz" },
       { q: "Filter for power-line noise", a: "Notch filter" },
       { q: "Eye-blink artifact name", a: "EOG" },
@@ -1571,7 +1720,7 @@
       { label: "Filters", text: "Spectral = which frequency (band-pass, notch) · Spatial = which place (CSP, Laplacian, CAR, ICA)", key: "Spectral = frequency · Spatial = place (CSP, Laplacian, CAR, ICA)" },
       { label: "Artifacts", text: "Eye blink → ICA · Muscle → low-pass · Movement → high-pass/reject · 50 Hz → notch", key: "Eye blink → ICA · Muscle → low-pass · Movement → high-pass/reject · 50 Hz → notch" },
       { label: "ML vs DL", text: "ML = hand-made features + LDA/SVM · DL = learns features itself (CNN, EEGNet)", key: "ML = hand-made + LDA/SVM · DL = learns features (CNN, EEGNet)" },
-      { label: "EEG’s five questions", text: "Shape (morphology) · When (temporal) · Which frequency · Frequency over time (time-frequency) · Where (spatial)", key: "Morphology · Temporal · Frequency · Time-frequency · Spatial" },
+      { label: "The five questions of EEG", text: "Shape (morphology) · When (temporal) · Which frequency · Frequency over time (time-frequency) · Where (spatial)", key: "Morphology · Temporal · Frequency · Time-frequency · Spatial" },
       { label: "Names", text: "Berger (first EEG) · Vidal (term BCI) · Farwell and Donchin (P300 speller) · Neuralink, Synchron, Precision, BrainGate, Paradromics (recent, “as of 2026”)", key: "Berger (1924) · Vidal (1973) · Farwell & Donchin (1988) · Neuralink, Synchron, Precision, BrainGate, Paradromics" }
     ];
 
@@ -1588,26 +1737,32 @@
     let masteredSet = new Set();
 
     function updateGlobalProgress() {
-      // Total trackable items: 12 scenes + 8 big answers + 30 flashcards = 50 items
-      const pct = Math.min(100, Math.round((masteredSet.size / 50) * 100));
+      // Trackable items: 12 scenes + 8 big answers + 30 flashcards + 17 MCQ topics passed = 67 items
+      const pct = Math.min(100, Math.round((masteredSet.size / 67) * 100));
       document.getElementById('global-progress-bar').style.width = pct + '%';
       document.getElementById('global-progress-text').textContent = pct + '%';
     }
 
     function markItemSeen(key) {
+      if (masteredSet.has(key)) return;
       masteredSet.add(key);
       updateGlobalProgress();
+      saveProgress();
     }
 
+    const ALL_TABS = ['video', 'labs', 'part1', 'part2', 'part3', 'part4', 'cheatsheet', 'mcq', 'games'];
     function switchTab(tabId) {
       currentTab = tabId;
-      ['video', 'labs', 'part1', 'part2', 'part3', 'part4', 'cheatsheet'].forEach(id => {
+      ALL_TABS.forEach(id => {
         document.getElementById('tab-' + id).classList.toggle('hidden', id !== tabId);
         document.getElementById('tab-btn-' + id).classList.toggle('active', id === tabId);
       });
       if (tabId === 'labs') {
         drawCurrentLab();
       }
+      const activeBtn = document.getElementById('tab-btn-' + tabId);
+      if (activeBtn && activeBtn.scrollIntoView) activeBtn.scrollIntoView({ inline: 'center', block: 'nearest' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function getThemeColors() {
@@ -1728,12 +1883,12 @@
 
       // Header Banner inside Canvas
       ctx.fillStyle = c.primary;
-      ctx.font = 'bold 15px sans-serif';
-      ctx.fillText(scene.title, 24, 32);
+      ctx.font = 'bold 13px sans-serif';
+      wrapCanvasText(ctx, scene.title, 24, 24, W - 48, 16, 2);
 
       // Scene-specific interactive animations
       if (scene.type === 'loop') {
-        const steps = ["1. Brain (EEG)", "2. Clean & Filter", "3. Features", "4. ML Classifier", "5. Command", "6. Feedback"];
+        const steps = ["1. Brain signals", "2. Clean & Filter", "3. Features", "4. Machine Learning", "5. Command", "6. Feedback"];
         const activeIdx = Math.floor((videoProgress / 100) * steps.length) % steps.length;
         const cx = W / 2, cy = H / 2 + 12, rx = 240, ry = 110;
 
@@ -1802,36 +1957,48 @@
           ctx.stroke();
           ctx.fillStyle = c.fg;
           ctx.font = 'bold 11px monospace';
-          ctx.fillText(n.drop ? "ERD: Power Drops (-60%)" : "Resting Mu (8–12 Hz)", n.x, 285);
+          if (n.drop) {
+            ctx.fillText("Event-Related Desynchronization", n.x, 282);
+            ctx.fillText("(ERD): power drops −60%", n.x, 297);
+          } else {
+            ctx.fillText("Resting Mu rhythm (8–12 Hz)", n.x, 285);
+          }
         });
-        ctx.textAlign = 'left';
+        ctx.textAlign = 'center';
         ctx.fillStyle = c.fg;
-        ctx.font = 'bold 13px monospace';
-        ctx.fillText("Formula: ERD% = ((A - R) / R) × 100   |   Negative = ERD (Active)   |   Positive = ERS (Beta Rebound)", 55, 345);
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText("Formula: ERD% = ((A − R) / R) × 100      R = power at rest, A = power during the task", W / 2, 330);
+        ctx.fillText("Negative = Event-Related Desynchronization (active)   |   Positive = Event-Related Synchronization (beta rebound)", W / 2, 350);
+        ctx.textAlign = 'left';
       } else if (scene.type === 'mipipeline') {
-        const boxes = ["1. Record\nC3,Cz,C4", "2. Clean\n50Hz+ICA", "3. Band-pass\n8–30 Hz", "4. Spatial\nCSP Filter", "5. Features\nBand Power", "6. Classify\nLDA/EEGNet", "7. Command\n& Feedback"];
+        const boxes = [
+          ["1. Record", "Electroencephalogram at C3, Cz, C4"],
+          ["2. Clean", "50 Hz notch + Independent Component Analysis"],
+          ["3. Band-pass filter", "Keep 8–30 Hz (mu and beta)"],
+          ["4. Spatial filter", "Common Spatial Patterns"],
+          ["5. Features", "Band power"],
+          ["6. Classify", "Linear Discriminant Analysis or EEGNet"],
+          ["7. Command", "and feedback to the user"]
+        ];
         const activeStep = Math.floor((t * 0.8) % boxes.length);
+        const bw = 172, bh = 82, gap = 10;
         boxes.forEach((b, i) => {
-          const x = 22 + i * 104;
-          const y = 135;
+          const row = i < 4 ? 0 : 1;
+          const col = row === 0 ? i : i - 4;
+          const x = (row === 0 ? 24 : 24 + (bw + gap) / 2) + col * (bw + gap);
+          const y = 62 + row * (bh + 16);
           const isAct = i === activeStep;
           ctx.fillStyle = isAct ? c.primary : c.card;
           ctx.strokeStyle = isAct ? c.warning : c.border;
           ctx.lineWidth = 2;
-          ctx.beginPath(); ctx.roundRect(x, y, 92, 74, 8); ctx.fill(); ctx.stroke();
+          ctx.beginPath(); ctx.roundRect(x, y, bw, bh, 8); ctx.fill(); ctx.stroke();
 
           ctx.fillStyle = isAct ? '#fff' : c.fg;
-          ctx.font = 'bold 11px sans-serif';
           ctx.textAlign = 'center';
-          const lines = b.split('\n');
-          ctx.fillText(lines[0], x + 46, y + 32);
+          ctx.font = 'bold 13px sans-serif';
+          ctx.fillText(b[0], x + bw / 2, y + 24);
           ctx.font = '11px sans-serif';
-          ctx.fillText(lines[1], x + 46, y + 50);
-
-          if (i < boxes.length - 1) {
-            ctx.fillStyle = c.primary;
-            ctx.fillText("→", x + 98, y + 40);
-          }
+          wrapCanvasText(ctx, b[1], x + bw / 2, y + 44, bw - 14, 14, 3);
         });
         ctx.textAlign = 'center';
         ctx.fillStyle = c.success;
@@ -1850,9 +2017,8 @@
           ctx.beginPath(); ctx.roundRect(24, y, W - 48, 44, 6); ctx.fill(); ctx.stroke();
 
           ctx.fillStyle = highlight ? '#ffffff' : c.fg;
-          ctx.font = highlight ? 'bold 12px sans-serif' : '12px sans-serif';
-          const clipped = kp.length > 98 ? kp.slice(0, 98) + '...' : kp;
-          ctx.fillText(clipped, 38, y + 26);
+          ctx.font = highlight ? 'bold 11px sans-serif' : '11px sans-serif';
+          wrapCanvasText(ctx, kp, 34, y + 14, W - 68, 12.5, 3);
         });
 
         // Bottom live neural wave bar
@@ -1897,7 +2063,7 @@
         right: { pill: "Imagining: Right Hand → Power Drops at C3 (Left)", cmd: "Move Right", r: 50, a: 18 },
         left: { pill: "Imagining: Left Hand → Power Drops at C4 (Right)", cmd: "Move Left", r: 50, a: 18 },
         feet: { pill: "Imagining: Feet → Power Drops at Cz (Middle)", cmd: "Move Forward", r: 50, a: 20 },
-        rest: { pill: "Resting / Post-Movement → Beta Rebound (ERS +50%)", cmd: "Idle / Stop", r: 50, a: 75 }
+        rest: { pill: "Resting / Post-Movement → Beta Rebound (Event-Related Synchronization, +50%)", cmd: "Idle / Stop", r: 50, a: 75 }
       };
       document.getElementById('mi-status-pill').textContent = labels[mode].pill;
       document.getElementById('mi-cmd-text').textContent = labels[mode].cmd;
@@ -1915,10 +2081,10 @@
       const box = document.getElementById('erd-result-box');
       if (erd < 0) {
         box.className = "p-2 rounded text-xs font-semibold bg-[var(--background)] border border-[var(--warning)] text-[var(--warning)]";
-        box.textContent = `ERD% = (${A} − ${R}) / ${R} × 100 = ${erd}% → Negative = ERD (Rhythm power goes DOWN, brain area is ACTIVE!)`;
+        box.textContent = `ERD% = (${A} − ${R}) / ${R} × 100 = ${erd}% → Negative = Event-Related Desynchronization (ERD): rhythm power goes DOWN, brain area is ACTIVE!`;
       } else if (erd > 0) {
         box.className = "p-2 rounded text-xs font-semibold bg-[var(--background)] border border-[var(--success)] text-[var(--success)]";
-        box.textContent = `ERD% = (${A} − ${R}) / ${R} × 100 = +${erd}% → Positive = ERS (Rhythm power goes UP, resting / Beta Rebound!)`;
+        box.textContent = `ERD% = (${A} − ${R}) / ${R} × 100 = +${erd}% → Positive = Event-Related Synchronization (ERS): rhythm power goes UP, resting / Beta Rebound!`;
       } else {
         box.className = "p-2 rounded text-xs font-semibold bg-[var(--background)] border border-[var(--border)]";
         box.textContent = `ERD% = 0.0% (No change from rest baseline)`;
@@ -1969,7 +2135,15 @@
         // Status tag
         ctx.fillStyle = ch.drop ? c.warning : c.muted;
         ctx.font = 'bold 11px monospace';
-        ctx.fillText(ch.drop ? "⚡ ERD: Power Drops! (Active)" : (miMode === 'rest' ? "ERS: Strong Mu + Beta Rebound" : "Normal Resting Mu (8-12 Hz)"), ch.x, 265);
+        if (ch.drop) {
+          ctx.fillText("⚡ Event-Related Desynchronization", ch.x, 260);
+          ctx.fillText("(ERD): power drops — active", ch.x, 276);
+        } else if (miMode === 'rest') {
+          ctx.fillText("Event-Related Synchronization", ch.x, 260);
+          ctx.fillText("(ERS): strong Mu + Beta rebound", ch.x, 276);
+        } else {
+          ctx.fillText("Normal resting Mu (8–12 Hz)", ch.x, 265);
+        }
       });
       ctx.textAlign = 'left';
     }
@@ -2046,7 +2220,7 @@
         }
         document.getElementById('p300-log-msg').innerHTML = isHit
           ? `⚡ <strong>TARGET FLASHED!</strong> User sees rare attended flash → Positive <strong>P300 peak at 300 ms</strong> at electrode <strong>Pz</strong>!`
-          : `Flashing non-target ${item.type} ${item.index + 1} → Flat baseline EEG (no P300).`;
+          : `Flashing non-target ${item.type === 'col' ? 'column' : 'row'} ${item.index + 1} → Flat baseline Electroencephalogram (EEG), no P300.`;
         drawP300Canvas();
         step++;
       }, 360);
@@ -2139,7 +2313,7 @@
       // Top trace: Raw EEG + Active Artifacts
       ctx.fillStyle = c.error;
       ctx.font = 'bold 11px sans-serif';
-      ctx.fillText("1. RAW RECORDED EEG (With Unwanted Body & Equipment Artifacts)", 18, 22);
+      ctx.fillText("1. RAW RECORDED ELECTROENCEPHALOGRAM (EEG) — with unwanted body & equipment artifacts", 18, 22);
 
       ctx.strokeStyle = c.error;
       ctx.lineWidth = 1.8;
@@ -2161,7 +2335,7 @@
 
       // Bottom trace: Processed EEG after selected filters
       ctx.fillStyle = c.success;
-      ctx.fillText("2. PREPROCESSED & FILTERED EEG (Ready for Feature Extraction & Classifier)", 18, 188);
+      ctx.fillText("2. PREPROCESSED & FILTERED ELECTROENCEPHALOGRAM (EEG) — ready for feature extraction & classifier", 18, 188);
 
       ctx.strokeStyle = c.success;
       ctx.lineWidth = 2.2;
@@ -2186,8 +2360,8 @@
       const snrEl = document.getElementById('snr-readout');
       if (snrEl) {
         snrEl.textContent = remNoiseCount === 0
-          ? "✅ High SNR: Clean Brain Signal Isolated!"
-          : `⚠️ ${remNoiseCount} Artifact Source(s) Still Contaminating EEG`;
+          ? "✅ High Signal-to-Noise Ratio (SNR): Clean Brain Signal Isolated!"
+          : `⚠️ ${remNoiseCount} Artifact Source(s) Still Contaminating the Electroencephalogram (EEG)`;
       }
     }
 
@@ -2251,8 +2425,8 @@
       ctx.stroke();
 
       ctx.fillStyle = c.fg;
-      ctx.font = 'bold 12px monospace';
-      ctx.fillText(`Oscillation Rate: ${b.range}   |   When seen: ${b.state}`, 24, H - 18);
+      ctx.font = 'bold 11px monospace';
+      wrapCanvasText(ctx, `Oscillation Rate: ${b.range}   |   When seen: ${b.state}`, 24, H - 26, W - 48, 14, 2);
     }
 
     // --- LAB 5: 10-20 HEADMAP EXPLORER ---
@@ -2289,7 +2463,7 @@
             selectedElectrodeId = el.id;
             document.getElementById('hm-selected-title').textContent = `${el.id} — 10–20 Electrode`;
             document.getElementById('hm-selected-Region').innerHTML = `<strong>Region:</strong> ${el.region}`;
-            document.getElementById('hm-selected-role').innerHTML = `<strong>BCI Role:</strong> ${el.role}`;
+            document.getElementById('hm-selected-role').innerHTML = `<strong>Brain-Computer Interface (BCI) Role:</strong> ${el.role}`;
             drawHeadmapCanvas();
             break;
           }
@@ -2309,7 +2483,7 @@
       if (el) {
         document.getElementById('hm-selected-title').textContent = `${lobe} Lobe (Example Electrode: ${el.id})`;
         document.getElementById('hm-selected-Region').innerHTML = `<strong>Region:</strong> ${el.region}`;
-        document.getElementById('hm-selected-role').innerHTML = `<strong>BCI Role:</strong> ${el.role}`;
+        document.getElementById('hm-selected-role').innerHTML = `<strong>Brain-Computer Interface (BCI) Role:</strong> ${el.role}`;
       }
       drawHeadmapCanvas();
     }
@@ -2365,6 +2539,11 @@
     // 5. PART 1: THE 8 BIG ANSWERS (10-MARK) RENDERER
     // =========================================================================
     let currentBigAnswerIdx = 0;
+    let baRecallMode = false;
+    function toggleBigAnswerRecall() {
+      baRecallMode = !baRecallMode;
+      renderBigAnswer(currentBigAnswerIdx);
+    }
 
     function initBigAnswers() {
       const pills = document.getElementById('big-answer-pills');
@@ -2392,9 +2571,17 @@
               <span class="text-xs font-bold px-2.5 py-0.5 rounded bg-[var(--primary)] text-[var(--primary-foreground)]">${ba.stars}</span>
               <h3 class="text-lg font-bold mt-1 m-0">${ba.title}</h3>
             </div>
-            <button onclick="markItemSeen('ba-${idx}'); initBigAnswers();" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--success)] text-white font-semibold cursor-pointer">
-              ✅ Mark Big Answer #${ba.id} Reviewed
-            </button>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="startMcqTopic(${idx})" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold cursor-pointer">
+                📝 Test Me on This Topic (${mcqCountForTopic(idx)} MCQs)
+              </button>
+              <button onclick="toggleBigAnswerRecall()" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] font-semibold cursor-pointer">
+                ${baRecallMode ? '👀 Show Everything' : '🙈 Recall Mode (Hide Points)'}
+              </button>
+              <button onclick="markItemSeen('ba-${idx}'); initBigAnswers();" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--success)] text-white font-semibold cursor-pointer">
+                ✅ Mark Big Answer #${ba.id} Reviewed
+              </button>
+            </div>
           </div>
 
           <!-- Step 1: Simple Idea / Definition -->
@@ -2408,7 +2595,7 @@
             <div class="text-xs font-bold uppercase text-[var(--primary)]">2) Diagram to Draw in the Exam</div>
             <div class="flex flex-wrap items-center gap-1.5 pt-1">
               ${ba.diagram.map((d, i) => `
-                <span class="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--primary)] text-xs font-semibold">${d}</span>
+                <span onclick="this.classList.add('revealed')" class="px-3 py-1.5 rounded-lg bg-[var(--card)] border border-[var(--primary)] text-xs font-semibold ${baRecallMode && i > 0 ? 'cloak-blur' : ''}">${d}</span>
                 ${i < ba.diagram.length - 1 ? '<span class="text-[var(--primary)] font-bold">→</span>' : ''}
               `).join('')}
             </div>
@@ -2420,7 +2607,7 @@
               <div class="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-2">
                 <div class="text-xs font-bold uppercase text-[var(--primary)]">3) ${sec.heading}</div>
                 <ul class="text-xs space-y-1.5 pl-4 m-0 leading-relaxed">
-                  ${sec.bullets.map(b => `<li>${b}</li>`).join('')}
+                  ${sec.bullets.map(b => `<li onclick="this.classList.add('revealed')" class="${baRecallMode ? 'cloak-blur' : ''}">${b}</li>`).join('')}
                 </ul>
               </div>
             `).join('')}
@@ -2441,7 +2628,7 @@
                     <tbody class="divide-y divide-[var(--border)]">
                       ${tbl.rows.map(r => `
                         <tr class="bg-[var(--background)]">
-                          ${r.map((cell, ci) => `<td class="p-2.5 ${ci === 0 ? 'font-bold' : ''}">${cell}</td>`).join('')}
+                          ${r.map((cell, ci) => `<td onclick="this.classList.add('revealed')" class="p-2.5 ${ci === 0 ? 'font-bold' : (baRecallMode ? 'cloak-blur' : '')}">${cell}</td>`).join('')}
                         </tr>
                       `).join('')}
                     </tbody>
@@ -2482,7 +2669,7 @@
         t.bullets.some(b => b.toLowerCase().includes(q))
       );
       grid.innerHTML = filtered.map(t => `
-        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
+        <div id="p2-card-${t.code.replace('.', '-')}" class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-3">
           <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
             <h3 class="text-sm font-bold m-0">${t.code} ${t.title}</h3>
             <span class="text-xs px-2 py-0.5 rounded bg-[var(--background)] border border-[var(--border)] text-[var(--warning)]">${t.stars}</span>
@@ -2505,6 +2692,9 @@
               ${t.bullets.map(b => `<li>${b}</li>`).join('')}
             </ul>
           ` : ''}
+          <button onclick="startMcqTopic(${8 + PART2_TOPICS.indexOf(t)})" class="text-xs px-3 py-1.5 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold cursor-pointer">
+            📝 Test Me on This Topic (${mcqCountForTopic(8 + PART2_TOPICS.indexOf(t))} MCQs)
+          </button>
         </div>
       `).join('');
     }
@@ -2520,7 +2710,9 @@
       const item = PART3_2MARK[fcIndex];
       document.getElementById('fc-counter').textContent = `Flashcard ${fcIndex + 1} of ${PART3_2MARK.length}`;
       const masteredCount = PART3_2MARK.filter((_, i) => masteredSet.has('fc-' + i)).length;
-      document.getElementById('fc-mastered-count').textContent = `${masteredCount} / 30 Mastered`;
+document.getElementById('fc-mastered-count').textContent = `${masteredCount} / 30 Mastered`;
+      const fcBtn = document.getElementById('fc-master-btn');
+      if (fcBtn) fcBtn.textContent = masteredSet.has('fc-' + fcIndex) ? '✅ Mastered' : '✅ Mark Mastered';
       document.getElementById('fc-side-label').textContent = fcFlipped ? "ANSWER (2-Mark Ready-to-Write)" : "QUESTION (Click Card to Flip)";
       document.getElementById('fc-content').textContent = fcFlipped ? item.a : `${item.id}. ${item.q}`;
     }
@@ -2546,6 +2738,12 @@
       markItemSeen('fc-' + fcIndex);
       renderFlashcard();
       nextFlashcard();
+    }
+
+    function shuffleFlashcards() {
+      fcIndex = Math.floor(Math.random() * PART3_2MARK.length);
+      fcFlipped = false;
+      renderFlashcard();
     }
 
     function togglePart3QuizMode() {
@@ -2659,6 +2857,1282 @@
     }
 
     // =========================================================================
+    // 9B. FULL FORMS — every abbreviation is written out everywhere on the page
+    // =========================================================================
+    // a = abbreviation, f = full form, m = plain meaning, g = group
+    // x: false  -> listed in the glossary but not auto-expanded in running text
+    // r: true   -> replaced by the full form only (no bracket kept)
+    const GLOSSARY = [
+      { a: "BCI", f: "Brain-Computer Interface", m: "A system that turns brain activity into commands for a device, without using muscles.", g: "Basics" },
+      { a: "EEG", f: "Electroencephalogram", alt: ["Electroencephalography"], m: "Recording of the brain's electrical activity from electrodes on the scalp. The method is called Electroencephalography.", g: "Recording techniques" },
+      { a: "MEG", f: "Magnetoencephalography", m: "Records the tiny magnetic fields made by brain currents. Fast, but needs a shielded room.", g: "Recording techniques" },
+      { a: "fNIRS", f: "Functional Near-Infrared Spectroscopy", m: "Shines near-infrared light into the head to measure blood oxygen. Portable but slow.", g: "Recording techniques" },
+      { a: "fMRI", f: "Functional Magnetic Resonance Imaging", m: "Measures blood oxygen in a scanner. Best detail (about 1 mm), but slow, huge and costly.", g: "Recording techniques" },
+      { a: "MRI", f: "Magnetic Resonance Imaging", m: "The big-magnet scanner that functional Magnetic Resonance Imaging uses.", g: "Recording techniques" },
+      { a: "ECoG", f: "Electrocorticography", m: "Electrodes placed on the surface of the brain. Semi-invasive.", g: "Recording techniques" },
+      { a: "BOLD", f: "Blood-Oxygen-Level-Dependent", m: "The blood-oxygen signal that functional Magnetic Resonance Imaging measures.", g: "Recording techniques" },
+      { a: "SQUID", f: "Superconducting Quantum Interference Device", m: "The very sensitive magnetic sensor used in Magnetoencephalography.", g: "Recording techniques" },
+      { a: "ADC", f: "Analog-to-Digital Converter", m: "Turns the amplified voltage into numbers (samples) for the computer.", g: "Recording techniques" },
+      { a: "Ag/AgCl", f: "Silver/Silver-Chloride", m: "The material of standard scalp electrodes, used with conductive gel.", g: "Recording techniques" },
+      { a: "SNR", f: "Signal-to-Noise Ratio", m: "How strong the useful signal is compared with the noise. Higher is better.", g: "Signal processing" },
+
+      { a: "EMG", f: "Electromyogram", alt: ["Electromyography"], m: "Electrical activity of muscles. In brain recordings it is fast, spiky noise.", g: "Non-brain signals" },
+      { a: "EOG", f: "Electrooculogram", alt: ["Electrooculography"], m: "Electrical activity from eye movement and blinks. Big slow waves at the front of the head.", g: "Non-brain signals" },
+      { a: "ECG", f: "Electrocardiogram", alt: ["Electrocardiography"], m: "Electrical activity of the heart. Regular spikes, about one per second.", g: "Non-brain signals" },
+
+      { a: "ERD", f: "Event-Related Desynchronization", m: "Rhythm power goes DOWN. That brain area is active.", g: "Brain signals" },
+      { a: "ERS", f: "Event-Related Synchronization", m: "Rhythm power goes UP. That brain area is resting (beta rebound).", g: "Brain signals" },
+      { a: "ERP", f: "Event-Related Potential", m: "A small voltage change time-locked to an event, seen by averaging many trials.", g: "Brain signals" },
+      { a: "SCP", f: "Slow Cortical Potentials", alt: ["Slow Cortical Potential"], m: "Very slow voltage shifts in the cortex (below 1 Hz) that a user can learn to control.", g: "Brain signals" },
+      { a: "SSVEP", f: "Steady-State Visual Evoked Potential", m: "The visual area follows the rate of a flickering light the user looks at.", g: "Brain signals" },
+      { a: "LFP", f: "Local Field Potential", m: "Combined activity of a small group of neurons near an electrode inside the brain.", g: "Brain signals" },
+      { a: "MI", f: "Motor Imagery", m: "Imagining a movement without actually moving.", g: "Brain signals" },
+      { a: "P300", f: "Positive wave at about 300 milliseconds", m: "P = positive, 300 = about 300 milliseconds after a rare target. Strongest at Pz.", g: "Brain signals", x: false },
+      { a: "N100", f: "Negative wave at about 100 milliseconds", m: "N = negative, 100 = about 100 milliseconds after the event.", g: "Brain signals", x: false },
+
+      { a: "CSP", f: "Common Spatial Patterns", m: "Spatial filter that learns the best channel mix to separate two classes (left versus right hand).", g: "Signal processing" },
+      { a: "ICA", f: "Independent Component Analysis", m: "Splits the recording into independent sources so that blink and muscle sources can be removed.", g: "Signal processing" },
+      { a: "CAR", f: "Common Average Reference", m: "Spatial filter: subtract the average of all channels. Removes noise common to all.", g: "Signal processing" },
+      { a: "FFT", f: "Fast Fourier Transform", m: "Shows how much power is in each frequency. It loses the time information.", g: "Signal processing" },
+      { a: "HP", f: "High-pass", m: "A high-pass filter removes slow drift.", g: "Signal processing", r: true, x: true, hide: true },
+      { a: "LP", f: "Low-pass", m: "A low-pass filter removes fast muscle noise.", g: "Signal processing", r: true, x: true, hide: true },
+
+      { a: "ML", f: "Machine Learning", m: "We choose the features by hand; the model classifies them.", g: "Machine learning" },
+      { a: "DL", f: "Deep Learning", m: "The network learns the features by itself.", g: "Machine learning" },
+      { a: "LDA", f: "Linear Discriminant Analysis", m: "Classifier that draws a straight line between two classes. Fast; most common in Brain-Computer Interfaces.", g: "Machine learning" },
+      { a: "SVM", f: "Support Vector Machine", m: "Classifier that draws the line with the widest gap between classes.", g: "Machine learning" },
+      { a: "kNN", f: "k-Nearest Neighbours", m: "Classifier that looks at the nearest known examples and votes.", g: "Machine learning" },
+      { a: "CNN", f: "Convolutional Neural Network", m: "Deep network that learns patterns across time and across channels.", g: "Machine learning" },
+      { a: "RNN", f: "Recurrent Neural Network", m: "Deep network that remembers what came earlier in time.", g: "Machine learning" },
+      { a: "LSTM", f: "Long Short-Term Memory", m: "A kind of Recurrent Neural Network; used for continuous and speech decoding.", g: "Machine learning" },
+      { a: "GPU", f: "Graphics Processing Unit", m: "Fast hardware needed to train deep networks.", g: "Machine learning" },
+      { a: "EEGNet", f: "Electroencephalogram Network (a model name)", m: "A small (compact) Convolutional Neural Network designed specially for brain recordings.", g: "Machine learning", x: false },
+
+      { a: "FES", f: "Functional Electrical Stimulation", m: "Electrical stimulation of the patient's own muscles to make them move.", g: "Applications" },
+      { a: "DBS", f: "Deep Brain Stimulation", m: "An implant that sends electrical pulses deep into the brain to treat disease.", g: "Applications" },
+      { a: "ALS", f: "Amyotrophic Lateral Sclerosis", m: "A disease that paralyses the muscles; patients use spellers to communicate.", g: "Applications" },
+      { a: "TTS", f: "Text-to-Speech", m: "The computer reads text aloud (used by the voice narration on this page).", g: "Applications" },
+
+      { a: "Hz", f: "Hertz", m: "Cycles per second — the unit of frequency.", g: "Units", x: false },
+      { a: "ms", f: "Millisecond", m: "One thousandth of a second.", g: "Units", x: false },
+      { a: "µV", f: "Microvolt", m: "One millionth of a volt — the size of scalp brain signals.", g: "Units", x: false },
+      { a: "mV", f: "Millivolt", m: "One thousandth of a volt — a resting neuron sits at about −70 mV.", g: "Units", x: false },
+
+      { a: "Fp", f: "Frontal pole", m: "Forehead electrodes (Fp1, Fp2). Eye blinks are strongest here.", g: "10–20 electrode names", x: false },
+      { a: "F", f: "Frontal", m: "Electrodes over the frontal lobe.", g: "10–20 electrode names", x: false },
+      { a: "C", f: "Central", m: "Electrodes over the motor area (C3, Cz, C4).", g: "10–20 electrode names", x: false },
+      { a: "T", f: "Temporal", m: "Electrodes on the sides, near the ears.", g: "10–20 electrode names", x: false },
+      { a: "P", f: "Parietal", m: "Electrodes behind the central line. P300 is strongest at Pz.", g: "10–20 electrode names", x: false },
+      { a: "O", f: "Occipital", m: "Electrodes at the back of the head (vision).", g: "10–20 electrode names", x: false },
+      { a: "z", f: "Zero (midline)", m: "Midline electrodes: Fz, Cz, Pz. Odd numbers = left, even numbers = right.", g: "10–20 electrode names", x: false }
+    ];
+
+    const FF_ESC = s => s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&');
+    const FF_FUZZY = s => FF_ESC(s).replace(/[-\s]+/g, '[-\\s]');
+    const FF_LIST = GLOSSARY.filter(g => g.x !== false);
+    const FF_MAP = {};
+    FF_LIST.forEach(g => {
+      FF_MAP[g.a] = g;
+      const fulls = [g.f].concat(g.alt || []).map(FF_FUZZY).join('|');
+      // "Full Form (ABBR" or "Full Form, ABBR" already written just before the abbreviation
+      g.beforeRe = new RegExp('(?:' + fulls + ')s?\\s*[(,\\[]\\s*$', 'i');
+      // "ABBR (Full Form)" -> "Full Form (ABBR)"
+      g.swapRe = new RegExp('(^|[^A-Za-z0-9_])' + FF_ESC(g.a) + '\\s*\\(\\s*((?:' + fulls + ')s?)\\s*\\)', 'gi');
+    });
+    const FF_RE = new RegExp(
+      '(^|[^A-Za-z0-9_])([Aa]n? )?(' + FF_LIST.map(g => FF_ESC(g.a)).sort((a, b) => b.length - a.length).join('|') + ')(s?)(?![A-Za-z0-9_%])( \\()?',
+      'g'
+    );
+
+    // "CSP" -> "Common Spatial Patterns (CSP)". Safe to run twice on the same text.
+    //   inside brackets already        -> "Common Spatial Patterns [CSP]"
+    //   "(CSP)"                        -> "(Common Spatial Patterns, CSP)"
+    //   "CSP (left vs right)"          -> "Common Spatial Patterns (CSP — left vs right)"
+    function expandFullForms(text) {
+      if (typeof text !== 'string' || text.length < 2) return text;
+      let out = text;
+      FF_LIST.forEach(g => {
+        if (!g.r && out.indexOf(g.a) !== -1) out = out.replace(g.swapRe, (m, pre, full) => pre + full + ' (' + g.a + ')');
+      });
+      return out.replace(FF_RE, (m, pre, art, abbr, plural, par, offset, str) => {
+        const g = FF_MAP[abbr];
+        if (!g) return m;
+        art = art || '';
+        par = par || '';
+        if (g.r) return pre + art + g.f + par;
+        const start = offset + pre.length + art.length;
+        const before = str.slice(0, start);
+        const after = str.slice(start + abbr.length + plural.length);
+        if (g.beforeRe.test(before)) return m;
+        const full = (plural && !/s$/.test(g.f)) ? g.f + 's' : g.f;
+        if (art) {
+          // "an MRI scanner" -> "a Magnetic Resonance Imaging (MRI) scanner"
+          const vowel = /^[AEIOU]/i.test(full);
+          art = art.charAt(0) + (vowel ? 'n ' : ' ');
+        }
+        const depth = (before.match(/\(/g) || []).length - (before.match(/\)/g) || []).length;
+        if (pre === '(' && !art && after.charAt(0) === ')') return pre + full + ', ' + abbr + plural;
+        if (depth > 0) return pre + art + full + ' [' + abbr + plural + ']' + par;
+        if (par) return pre + art + full + ' (' + abbr + plural + ' — ';
+        return pre + art + full + ' (' + abbr + plural + ')';
+      });
+    }
+
+    function expandDeep(v) {
+      if (typeof v === 'string') return expandFullForms(v);
+      if (Array.isArray(v)) { for (let i = 0; i < v.length; i++) v[i] = expandDeep(v[i]); return v; }
+      if (v && typeof v === 'object') { for (const k in v) v[k] = expandDeep(v[k]); }
+      return v;
+    }
+
+    function expandDom(root) {
+      if (!root) return;
+      if (root.nodeType === 3) {
+        if (root.parentElement && root.parentElement.closest('script,style,[data-noexpand]')) return;
+        const v = expandFullForms(root.nodeValue);
+        if (v !== root.nodeValue) root.nodeValue = v;
+        return;
+      }
+      if (root.nodeType !== 1) return;
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(n => {
+        if (n.parentElement && n.parentElement.closest('script,style,[data-noexpand]')) return;
+        const v = expandFullForms(n.nodeValue);
+        if (v !== n.nodeValue) n.nodeValue = v;
+      });
+    }
+
+    // Safety net: any text added to the page later is expanded too.
+    function watchForNewText() {
+      if (!('MutationObserver' in window)) return;
+      new MutationObserver(muts => {
+        muts.forEach(mu => {
+          if (mu.type === 'characterData') expandDom(mu.target);
+          else mu.addedNodes.forEach(expandDom);
+        });
+      }).observe(document.body, { childList: true, characterData: true, subtree: true });
+    }
+
+    // Draws text on a canvas, wrapping it inside maxW. Returns the number of lines drawn.
+    function wrapCanvasText(ctx, text, x, y, maxW, lineH, maxLines) {
+      const words = String(text).split(' ');
+      const lines = [];
+      let line = '';
+      words.forEach(w => {
+        const test = line ? line + ' ' + w : w;
+        if (line && ctx.measureText(test).width > maxW) { lines.push(line); line = w; }
+        else line = test;
+      });
+      if (line) lines.push(line);
+      let out = lines;
+      if (maxLines && lines.length > maxLines) {
+        out = lines.slice(0, maxLines);
+        let last = out[maxLines - 1];
+        while (last.length && ctx.measureText(last + '…').width > maxW) last = last.slice(0, -1);
+        out[maxLines - 1] = last + '…';
+      }
+      out.forEach((l, i) => ctx.fillText(l, x, y + i * lineH));
+      return out.length;
+    }
+
+    // =========================================================================
+    // 9C. SAVED PROGRESS (kept in this browser only)
+    // =========================================================================
+    const STORE_KEY = 'bciAcademyProgressV2';
+    let store = { mastered: [], topicBest: {}, fullBest: null, wrong: [], everCorrect: [], gamesDone: [] };
+
+    function loadProgress() {
+      try {
+        const raw = window.localStorage.getItem(STORE_KEY);
+        if (raw) {
+          const saved = JSON.parse(raw);
+          if (saved && typeof saved === 'object') store = Object.assign(store, saved);
+        }
+      } catch (e) { /* storage unavailable: progress simply is not kept */ }
+      (store.mastered || []).forEach(k => masteredSet.add(k));
+    }
+
+    function saveProgress() {
+      store.mastered = Array.from(masteredSet);
+      try { window.localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) { /* ignore */ }
+    }
+
+    function resetProgress() {
+      store = { mastered: [], topicBest: {}, fullBest: null, wrong: [], everCorrect: [], gamesDone: [] };
+      masteredSet.clear();
+      saveProgress();
+      updateGlobalProgress();
+      renderPlaylist();
+      renderFlashcard();
+      mcq.view = 'home';
+      renderMcq();
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function shuffled(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+      }
+      return a;
+    }
+    // =========================================================================
+    // 9D. MCQ TEST — question bank covering all 17 topics
+    //     In every question the FIRST option is the correct one; options are
+    //     shuffled each time a test starts.
+    // =========================================================================
+    const MCQ_TOPICS = [
+      { name: "Motor Imagery BCI", short: "Big Answer 1", ref: { tab: 'part1', idx: 0 } },
+      { name: "How a BCI works, and its five types", short: "Big Answer 2", ref: { tab: 'part1', idx: 1 } },
+      { name: "Recording techniques and non-brain signals", short: "Big Answer 3", ref: { tab: 'part1', idx: 2 } },
+      { name: "Signal processing, filtering and features", short: "Big Answer 4", ref: { tab: 'part1', idx: 3 } },
+      { name: "Machine Learning and Deep Learning", short: "Big Answer 5", ref: { tab: 'part1', idx: 4 } },
+      { name: "EEG artifacts and how to remove them", short: "Big Answer 6", ref: { tab: 'part1', idx: 5 } },
+      { name: "The five characteristics of EEG", short: "Big Answer 7", ref: { tab: 'part1', idx: 6 } },
+      { name: "Applications and recent developments", short: "Big Answer 8", ref: { tab: 'part1', idx: 7 } },
+      { name: "Frequency bands", short: "Topic 2.1", ref: { tab: 'part2', code: '2-1' } },
+      { name: "Event-Related Potential", short: "Topic 2.2", ref: { tab: 'part2', code: '2-2' } },
+      { name: "Slow Cortical Potentials", short: "Topic 2.3", ref: { tab: 'part2', code: '2-3' } },
+      { name: "Neuronal potentials", short: "Topic 2.4", ref: { tab: 'part2', code: '2-4' } },
+      { name: "The 10–20 electrode placement system", short: "Topic 2.5", ref: { tab: 'part2', code: '2-5' } },
+      { name: "Recording EEG: hardware and sampling", short: "Topic 2.6", ref: { tab: 'part2', code: '2-6' } },
+      { name: "Basics of neuroscience", short: "Topic 2.7", ref: { tab: 'part2', code: '2-7' } },
+      { name: "Brain signals used in BCI", short: "Topic 2.8", ref: { tab: 'part2', code: '2-8' } },
+      { name: "Introduction and history", short: "Topic 2.9", ref: { tab: 'part2', code: '2-9' } }
+    ];
+
+    const MCQ_BANK = [
+      // ---------- 0. Motor Imagery ----------
+      { t: 0, q: "In a Motor Imagery BCI, how does the user give a command?", o: ["By only imagining a movement of a hand or foot", "By looking at a flashing letter on the screen", "By blinking the eyes twice", "By clenching the jaw"], e: "The user only imagines the movement. Imagining makes the movement area of the brain busy, and the computer detects that." },
+      { t: 0, q: "Which two rhythms are the sensorimotor rhythms used in Motor Imagery?", o: ["Mu (8–12 Hz) and Beta (13–30 Hz)", "Delta (0.5–4 Hz) and Theta (4–8 Hz)", "Theta (4–8 Hz) and Gamma (above 30 Hz)", "Delta (0.5–4 Hz) and Gamma (above 30 Hz)"], e: "Mu and Beta live over the motor area. Both get weaker during movement or imagined movement." },
+      { t: 0, q: "A user imagines moving the RIGHT hand. At which electrode does the rhythm power drop?", o: ["C3", "C4", "Cz", "Pz"], e: "The brain is cross-wired: the left side (C3, odd number) controls the right hand." },
+      { t: 0, q: "A user imagines moving the LEFT hand. At which electrode does the rhythm power drop?", o: ["C4", "C3", "Cz", "Fp1"], e: "Left hand is controlled by the right side of the brain, and C4 (even number) is on the right." },
+      { t: 0, q: "A user imagines moving both FEET. At which electrode does the rhythm power drop?", o: ["Cz", "C3", "C4", "O1"], e: "The feet area is in the middle of the motor cortex, under Cz (z = midline)." },
+      { t: 0, q: "What does ERD tell us?", o: ["Rhythm power goes down, which means that brain area is active", "Rhythm power goes up, which means that brain area is resting", "A positive wave appears about 300 ms after a flash", "The electrode has come loose"], e: "Desynchronization = the resting rhythm breaks up, so power drops. A busy area shows this drop." },
+      { t: 0, q: "What does ERS (the ‘beta rebound’) tell us?", o: ["Rhythm power goes up, usually just after the movement ends", "Rhythm power goes down while the movement is imagined", "The signal is time-locked to a flashing row", "The amplifier is saturated"], e: "Synchronization = power rises again. Beta gets stronger just after movement, so the area is resting." },
+      { t: 0, q: "Power at rest R = 50 and power during the task A = 20. Using ERD% = (A − R) / R × 100, what is the answer?", o: ["−60%, which means desynchronization (active)", "+60%, which means synchronization (resting)", "−40%, which means desynchronization (active)", "+150%, which means synchronization (resting)"], e: "(20 − 50) / 50 × 100 = −60%. A negative answer means the power dropped." },
+      { t: 0, q: "Which frequency range does the band-pass filter keep in a Motor Imagery pipeline?", o: ["8–30 Hz", "0.5–4 Hz", "30–100 Hz", "Only 50 Hz"], e: "Mu (8–12 Hz) and Beta (13–30 Hz) both sit inside 8–30 Hz." },
+      { t: 0, q: "Which is the correct order of the Motor Imagery pipeline?", o: ["Record → Clean → Frequency filter → Spatial filter → Features → Classifier → Command", "Record → Classifier → Clean → Features → Spatial filter → Command → Frequency filter", "Clean → Record → Features → Frequency filter → Classifier → Spatial filter → Command", "Record → Features → Clean → Classifier → Frequency filter → Spatial filter → Command"], e: "First get the signal, clean it, pick the frequency, pick the place, measure the power, classify, then send the command." },
+      { t: 0, q: "Why is time-frequency analysis (spectrogram, wavelet) useful in Motor Imagery?", o: ["It shows both which frequency changes and when it changes", "It removes the need for electrodes", "It shows the frequency only and ignores time", "It increases the sampling rate"], e: "The power drop happens in a particular band (8–30 Hz) at a particular time (just after the cue)." },
+      { t: 0, q: "Which of these is a real weakness of Motor Imagery BCI?", o: ["About 15–30% of users cannot control it well", "It needs brain surgery", "It needs a flashing screen", "It only works while the user sleeps"], e: "It also gives only a few commands and needs training, but it needs no surgery and no flashing screen." },
+
+      // ---------- 1. How a BCI works + types ----------
+      { t: 1, q: "Which is the best definition of a BCI?", o: ["A system that measures brain activity and converts it into commands for an external device, without using nerves and muscles", "A device that measures muscle activity to move a cursor", "A scanner that takes pictures of the brain for surgeons", "A hearing aid that makes sounds louder"], e: "The key words are: measures brain activity, converts to commands, external device, no muscles." },
+      { t: 1, q: "Which is the correct order of the BCI loop?", o: ["Signal acquisition → Preprocessing → Feature extraction → Classification → Device command → Feedback", "Preprocessing → Signal acquisition → Classification → Feature extraction → Feedback → Device command", "Signal acquisition → Classification → Preprocessing → Device command → Feature extraction → Feedback", "Feature extraction → Signal acquisition → Preprocessing → Feedback → Classification → Device command"], e: "Acquire, clean, pick features, classify, command, feedback — then back to the brain." },
+      { t: 1, q: "Which step makes a BCI a ‘closed loop’?", o: ["Feedback to the user", "Signal acquisition", "Notch filtering", "Amplification"], e: "The user sees what happened and adjusts, which closes the loop back to the brain." },
+      { t: 1, q: "Where is the sensor placed in an invasive BCI?", o: ["Inside the brain", "On the scalp", "On the brain surface or inside a blood vessel", "On the forearm muscles"], e: "Invasive = inside. It gives the best signal but needs brain surgery." },
+      { t: 1, q: "ECoG and the Synchron Stentrode are examples of which type of BCI?", o: ["Semi-invasive", "Invasive", "Non-invasive", "Stimulating"], e: "Semi-invasive sensors sit on the brain surface or inside a blood vessel — better signal than the scalp, less damage than going inside the brain." },
+      { t: 1, q: "A cochlear implant belongs to which type of BCI?", o: ["Stimulating", "Non-invasive", "Semi-invasive recording", "Motor Imagery"], e: "A stimulating BCI sends signals INTO the nervous system to restore a sense." },
+      { t: 1, q: "What makes a BCI ‘bidirectional’?", o: ["It both reads brain signals and sends signals back, for example a sense of touch", "It uses two caps at the same time", "It works for both the left and the right hand", "It records two kinds of signals from the scalp"], e: "Bidirectional = reads and writes. Example: a robotic arm that gives touch feedback." },
+      { t: 1, q: "What is the main advantage of an invasive BCI?", o: ["Best signal quality", "No surgery is needed", "It is the cheapest type", "It is the most portable type"], e: "Electrodes inside the brain give the best signal, but with surgery, infection risk and cost." },
+      { t: 1, q: "What is the main weakness of a non-invasive EEG BCI?", o: ["The signal is weak and noisy", "It carries a risk of infection", "It needs open brain surgery", "It cannot be used at home"], e: "It is safe, cheap and portable, but the scalp signal is weak and noisy." },
+      { t: 1, q: "Which type should be chosen FIRST for a severely motor-impaired patient?", o: ["A non-invasive EEG BCI", "An invasive implant straight away", "A BCI that uses fMRI at home", "A stimulating implant"], e: "It is safe (no surgery), cheap and portable, and proven (speller, wheelchair). An implant can be considered later if needed." },
+      { t: 1, q: "Which of these is NOT a non-invasive technique?", o: ["ECoG", "EEG", "MEG", "fNIRS"], e: "This one places electrodes on the brain surface, so it needs an operation (semi-invasive)." },
+
+      // ---------- 2. Recording techniques ----------
+      { t: 2, q: "Which technique records electrical activity from the scalp?", o: ["EEG", "MEG", "fNIRS", "fMRI"], e: "Electrodes on the scalp pick up tiny voltages. It is fast, cheap and portable." },
+      { t: 2, q: "Which technique records the magnetic fields of brain currents?", o: ["MEG", "EEG", "fNIRS", "fMRI"], e: "It uses very sensitive sensors and needs a shielded room." },
+      { t: 2, q: "Which technique uses near-infrared light to measure blood oxygen?", o: ["fNIRS", "MEG", "EEG", "ECoG"], e: "It shines light into the head and measures how much is absorbed by blood. Portable but slow." },
+      { t: 2, q: "Which signal does fMRI measure?", o: ["The blood-oxygen (BOLD) signal", "The magnetic field of neurons", "The voltage on the scalp", "The current in muscles"], e: "Active brain areas use more oxygen, and the scanner measures that change." },
+      { t: 2, q: "Which technique gives the best spatial detail (about 1 mm)?", o: ["fMRI", "EEG", "MEG", "fNIRS"], e: "It gives the sharpest picture, but it is slow, huge and expensive." },
+      { t: 2, q: "Which pair of techniques is fast (milliseconds)?", o: ["EEG and MEG", "fNIRS and fMRI", "fNIRS and MEG", "fMRI and EEG"], e: "The electric and magnetic methods are fast. The two blood-oxygen methods are slow (seconds)." },
+      { t: 2, q: "Why is EEG the most used technique for BCI?", o: ["It is fast, cheap and portable", "It has the best spatial detail", "It needs a shielded room", "It measures blood oxygen directly"], e: "Its weak point is that the signal is noisy and blurry (about 1 cm detail)." },
+      { t: 2, q: "What does MEG need that makes it impractical for daily use?", o: ["A magnetically shielded room", "Conductive gel inside the ears", "A near-infrared lamp", "An operation on the skull"], e: "Its sensors are so sensitive that outside magnetic noise must be blocked. It is also very costly." },
+      { t: 2, q: "Which of these is a NON-brain signal?", o: ["EMG", "P300", "Mu rhythm", "SCP"], e: "It comes from muscles. The other three come from the brain." },
+      { t: 2, q: "What does EOG record?", o: ["Eye movement and blinks", "Heartbeat", "Muscle activity of the jaw", "Skin temperature"], e: "The eye acts like a small battery, so moving it changes the voltage at the front of the head." },
+      { t: 2, q: "Why are brain signals essential for a fully locked-in patient?", o: ["The patient cannot move any muscle, not even the eyes, so only brain signals are left", "Brain signals are bigger than muscle signals", "Muscle signals are slower than brain signals", "Brain signals do not need any electrodes"], e: "Non-brain signals need some muscle control, which a fully paralysed patient does not have." },
+      { t: 2, q: "What is a hybrid BCI?", o: ["A BCI that combines a brain signal with another signal, such as eye movement", "A BCI that uses two classifiers", "A BCI that uses both gel and dry electrodes", "A BCI shared by two patients"], e: "If the patient still has some eye or muscle movement, it can be used as an extra switch." },
+
+      // ---------- 3. Signal processing ----------
+      { t: 3, q: "Which of these is NOT a role of signal processing?", o: ["Increasing the number of electrodes on the scalp", "Removing noise and artifacts", "Making the useful signal stronger than the noise", "Reducing a huge amount of data to a few numbers"], e: "Signal processing works on the recorded data. It cannot add electrodes." },
+      { t: 3, q: "What does spectral filtering select?", o: ["Frequencies, working on one channel at a time", "Brain regions, by combining many channels", "Letters in the speller grid", "The reference electrode"], e: "Spectral = which frequency? Examples: band-pass, notch, low-pass, high-pass." },
+      { t: 3, q: "What does spatial (spatio-temporal) filtering do?", o: ["Combines many channels to make one brain area clearer", "Keeps only one frequency on each channel", "Converts the signal from analog to digital", "Counts the number of eye blinks"], e: "Spatial = which place? Examples: CAR, Laplacian, CSP and ICA." },
+      { t: 3, q: "Which filter removes 50 Hz power-line noise?", o: ["Notch filter", "High-pass filter", "Laplacian filter", "CAR"], e: "A notch filter cuts out one narrow frequency and keeps everything else." },
+      { t: 3, q: "What does a low-pass filter remove?", o: ["High-frequency muscle noise", "Slow drift", "Only the 50 Hz hum", "Only eye blinks"], e: "Low-pass lets low frequencies pass and blocks the fast, spiky muscle noise (above about 40 Hz)." },
+      { t: 3, q: "What does a high-pass filter remove?", o: ["Slow drift", "High-frequency muscle noise", "Only the 50 Hz hum", "The mu rhythm"], e: "High-pass lets high frequencies pass and blocks very slow changes such as sweat drift (below about 0.5 Hz)." },
+      { t: 3, q: "How does the CAR spatial filter work?", o: ["It subtracts the average of all channels", "It subtracts the average of the neighbouring channels", "It learns the best channel mix to separate two classes", "It splits the signal into independent sources"], e: "Subtracting the all-channel average removes noise that is common to every channel." },
+      { t: 3, q: "How does the Laplacian spatial filter work?", o: ["It subtracts the average of the neighbouring channels", "It subtracts the average of all channels", "It learns the best channel mix to separate two classes", "It removes exactly 50 Hz"], e: "Subtracting the neighbours sharpens the local activity under one electrode." },
+      { t: 3, q: "What is CSP used for?", o: ["Learning the best channel mix to separate two classes, such as left versus right hand", "Removing the 50 Hz hum from each channel", "Measuring blood oxygen", "Converting voltage into digital samples"], e: "It is the famous spatial filter of Motor Imagery, usually followed by a simple classifier." },
+      { t: 3, q: "What is ICA mainly used for?", o: ["Separating the signal into independent sources so that eye blinks can be removed", "Keeping only 8–30 Hz", "Drawing a straight line between two classes", "Placing electrodes at 10% and 20% distances"], e: "The blink and muscle sources are found, removed, and the clean signal is rebuilt. No trials are lost." },
+      { t: 3, q: "What is feature extraction?", o: ["Converting the cleaned signal into a small set of numbers that best shows the user’s intention", "Amplifying the scalp voltage thousands of times", "Fixing electrodes on the scalp with gel", "Showing the result to the user"], e: "The classifier cannot handle thousands of raw samples. It needs a few meaningful numbers (a feature vector)." },
+      { t: 3, q: "Which of these is a spectral filter, not a spatial filter?", o: ["Band-pass filter", "CSP", "CAR", "Laplacian filter"], e: "Band-pass selects a frequency range on each channel. The other three combine channels." },
+      { t: 3, q: "Which kind of feature is used for the P300?", o: ["A time feature: the amplitude and latency of a peak", "A frequency feature: mu band power", "A spatial feature: channel-mix power", "A blood-oxygen feature"], e: "The P300 is a peak at a known time, so its height and delay are the features. Band power is used for Motor Imagery." },
+
+      // ---------- 4. Machine Learning and Deep Learning ----------
+      { t: 4, q: "What is the job of machine learning in a BCI?", o: ["It is the translator: it reads the feature numbers and decides what the user wants", "It amplifies the scalp voltage", "It removes the 50 Hz hum", "It places the electrodes"], e: "Features are just numbers. The model turns them into ‘left’, ‘right’ or ‘feet’." },
+      { t: 4, q: "What is ‘calibration’?", o: ["Training the system on that user’s own recorded data", "Cleaning the electrodes with gel", "Measuring the size of the head", "Setting the brightness of the screen"], e: "The system must first learn what this user’s signals look like." },
+      { t: 4, q: "Why is learning (calibration) needed for every user?", o: ["Every person’s brain signals are different and they change from day to day", "The amplifier must warm up", "The electrodes must dry", "The screen must be tested"], e: "No single fixed rule fits all brains, so the model is trained per user." },
+      { t: 4, q: "How does LDA separate two classes?", o: ["It draws a straight line between them", "It draws the line with the widest gap between them", "It looks at the nearest known examples and votes", "It lets many decision trees vote"], e: "It is fast, works with little data, and is the most common classifier in this subject." },
+      { t: 4, q: "How does SVM separate two classes?", o: ["It draws the line with the widest gap between the classes", "It draws any straight line between the classes", "It looks at the nearest known examples and votes", "It lets many decision trees vote"], e: "The widest gap makes it accurate even with small data." },
+      { t: 4, q: "How does kNN classify a new example?", o: ["It looks at the nearest known examples and lets them vote", "It draws a straight line between two classes", "It learns filters in many layers", "It lets many decision trees vote"], e: "It is the simplest classifier: your neighbours decide your class." },
+      { t: 4, q: "How does a Random Forest classify?", o: ["Many decision trees vote", "One straight line separates the classes", "The nearest examples vote", "A network remembers what came earlier in time"], e: "Many trees voting together make it robust." },
+      { t: 4, q: "What is EEGNet?", o: ["A small (compact) CNN designed specially for EEG", "A spatial filter that subtracts neighbours", "A brand of electrode cap", "A notch filter for 50 Hz"], e: "It works even with small data sets, which is why it is the classic deep-learning example." },
+      { t: 4, q: "What are LSTM and RNN models good at?", o: ["Remembering what came earlier in time, for continuous and speech decoding", "Removing eye blinks", "Placing electrodes correctly", "Measuring blood oxygen"], e: "They have memory, so they suit signals that unfold over time, such as speech." },
+      { t: 4, q: "What is the key difference between Machine Learning and Deep Learning?", o: ["In Machine Learning the features are made by hand; in Deep Learning the network learns them itself", "Machine Learning needs a graphics card; Deep Learning does not", "Machine Learning needs large data; Deep Learning needs small data", "Deep Learning is easier to explain than Machine Learning"], e: "Hand-made features plus a simple classifier versus a network that learns filters, features and classification together." },
+      { t: 4, q: "Which is the classic Machine Learning pipeline for Motor Imagery?", o: ["CSP + LDA", "ICA + EEGNet", "FFT + kNN", "CAR + LSTM"], e: "A spatial filter gives the features, and a straight-line classifier decides. It trains in seconds on small data." },
+      { t: 4, q: "Which statement about Deep Learning is true?", o: ["It needs large data and longer training, often on a graphics card", "It trains in seconds on very small data", "Its features are made by hand", "It cannot be used for brain signals"], e: "It learns features automatically but pays for it with data and training time, and it is harder to explain." },
+
+      // ---------- 5. Artifacts ----------
+      { t: 5, q: "What is an artifact?", o: ["Any signal in the EEG recording that does not come from the brain", "A very strong brain rhythm", "A positive wave at 300 ms", "A type of electrode gel"], e: "Artifacts can be much bigger than the real brain signal and can cause wrong commands." },
+      { t: 5, q: "Eye-blink artifacts are big, slow waves. Where are they strongest?", o: ["At the front: Fp1 and Fp2", "At the back: O1 and O2", "In the middle: C3 and C4", "At Pz"], e: "The forehead electrodes are closest to the eyes." },
+      { t: 5, q: "What does a muscle (jaw clenching, chewing) artifact look like?", o: ["Fast, spiky noise", "A very slow drift", "A steady 50 Hz hum", "Regular spikes about once per second"], e: "Muscle activity is high-frequency, so a low-pass filter helps." },
+      { t: 5, q: "Regular spikes about once per second, near the ears and neck, come from what?", o: ["The heartbeat", "Eye blinks", "Sweat", "The power line"], e: "The heart beats about once per second, and its signal is picked up near the neck." },
+      { t: 5, q: "A sudden jump in ONE channel is most likely what?", o: ["An electrode pop from a loose electrode or dried gel", "An eye blink", "A power-line hum", "A beta rebound"], e: "An electrode pop affects only the channel whose contact changed." },
+      { t: 5, q: "What is the power-line noise frequency in India?", o: ["50 Hz", "60 Hz", "100 Hz", "8 Hz"], e: "Mains electricity in India is 50 Hz, so the notch filter is set to 50 Hz." },
+      { t: 5, q: "Which is the best method to remove eye blinks without losing any trials?", o: ["ICA", "Rejecting the noisy trials", "A low-pass filter", "Adding more gel"], e: "It splits the recording into independent parts, removes the blink part and rebuilds the clean signal." },
+      { t: 5, q: "In trial rejection, which threshold is a typical example for a ‘too noisy’ trial?", o: ["Above ±100 µV", "Above ±1 µV", "Above ±10 V", "Above ±300 ms"], e: "Real EEG is only a few tens of microvolts, so ±100 µV is clearly an artifact." },
+      { t: 5, q: "What is the drawback of rejecting noisy trials?", o: ["Data is lost", "It needs surgery", "It adds 50 Hz noise", "It takes months of training"], e: "Rejection is simple, but every rejected trial is thrown away." },
+      { t: 5, q: "How does regression remove eye artifacts?", o: ["The eye signal is recorded on a separate EOG channel and subtracted from the EEG", "All trials with blinks are deleted", "The 50 Hz component is cut out", "The user is asked to sleep"], e: "A separate eye channel gives a copy of the artifact, which can then be subtracted." },
+      { t: 5, q: "Which filter removes the very slow drift caused by sweat?", o: ["A high-pass filter (about 0.5 Hz)", "A low-pass filter (about 40 Hz)", "A notch filter (50 Hz)", "A Laplacian spatial filter"], e: "Drift is very low frequency, so a high-pass filter blocks it." },
+      { t: 5, q: "Which of these is an artifact from the EQUIPMENT, not from the body?", o: ["Power-line hum", "Eye blink", "Jaw clenching", "Heartbeat"], e: "Equipment artifacts: power line, electrode pop, electrical interference. The other three come from the body." },
+
+      // ---------- 6. Five characteristics ----------
+      { t: 6, q: "Which question does ‘morphology’ answer?", o: ["What shape is the wave?", "When does it happen?", "Which frequency is it?", "Where on the head is it?"], e: "Morphology = shape and size of the waveform: smooth wave, spike or sharp wave." },
+      { t: 6, q: "Which question does the ‘temporal’ characteristic answer?", o: ["When does it happen, and for how long?", "What shape is the wave?", "Where on the head is it?", "How much blood oxygen is used?"], e: "Temporal = time: latency, duration and rhythm." },
+      { t: 6, q: "Which question does the ‘spatial’ characteristic answer?", o: ["Where on the head is it?", "When does it happen?", "What shape is the wave?", "Which frequency is it?"], e: "Spatial = location, left-versus-right difference and symmetry." },
+      { t: 6, q: "What is ‘latency’?", o: ["The delay after an event before the response appears", "The height of the wave", "The position of the electrode", "The number of cycles per second"], e: "Example: the P300 has a latency of about 300 ms." },
+      { t: 6, q: "In morphology, what can a spike indicate?", o: ["Epilepsy", "Deep sleep", "A relaxed state with eyes closed", "Strong attention"], e: "A spike is a very short, sharp wave, and it can be a sign of epilepsy." },
+      { t: 6, q: "What does frequency-domain analysis with FFT lose?", o: ["The time information", "The frequency information", "The electrode names", "The amplitude in microvolts"], e: "It shows which frequencies are present, but not when they happened." },
+      { t: 6, q: "Which analysis suits EEG best, because EEG keeps changing over time?", o: ["Time-frequency analysis (spectrogram or wavelet)", "Frequency-domain analysis only", "Morphology only", "Counting the electrodes"], e: "It shows which frequency AND when — for example, mu power dropping just after the cue." },
+      { t: 6, q: "What is ‘lateralization’?", o: ["The difference in activity between the left and right sides of the brain", "The delay after a stimulus", "The shape of a spike", "The average of all channels"], e: "Example: right-hand imagery shows on the left side (C3) but not on the right." },
+      { t: 6, q: "On a head map, where are alpha, mu and the P300 found?", o: ["Alpha at the back, mu in the middle, P300 strongest at Pz", "Alpha at the front, mu at the back, P300 strongest at Cz", "Alpha in the middle, mu at the back, P300 strongest at Fp1", "Alpha at the sides, mu at the front, P300 strongest at O1"], e: "Alpha = occipital (back), mu = central (motor area), P300 = parietal midline." },
+      { t: 6, q: "What is the FIRST step in the 7-step process of EEG interpretation?", o: ["Check the recording quality and remove artifacts", "Connect it with the patient’s condition and conclude", "Note the timing", "Look at where it occurs"], e: "Nothing else can be trusted until the recording is clean." },
+      { t: 6, q: "Which is an example of ‘reactivity’?", o: ["Alpha disappears when the eyes open", "The P300 appears at Pz", "The power line adds a 50 Hz hum", "A spike indicates epilepsy"], e: "Reactivity means the rhythm reacts to something the person does." },
+      { t: 6, q: "In which unit is EEG amplitude measured?", o: ["Microvolts", "Volts", "Hertz", "Milliseconds"], e: "Scalp signals are extremely small, so they are measured in millionths of a volt." },
+
+      // ---------- 7. Applications ----------
+      { t: 7, q: "What is the P300?", o: ["A positive brain wave about 300 ms after a rare stimulus that the person is waiting for", "A negative wave about 100 ms after any sound", "A rhythm of 300 Hz over the motor area", "A slow drift lasting 300 seconds"], e: "P = positive, 300 = about 300 ms. It appears for a rare, attended target." },
+      { t: 7, q: "Where on the head is the P300 strongest?", o: ["Pz", "C3", "Fp1", "O2"], e: "It is strongest at the parietal midline." },
+      { t: 7, q: "Who first built the P300 speller, and when?", o: ["Farwell and Donchin, 1988", "Hans Berger, 1924", "Jacques Vidal, 1973", "Neuralink, 2024"], e: "The other three belong to: the first human EEG, the term BCI, and human implant trials." },
+      { t: 7, q: "What grid does the classic P300 speller use?", o: ["6 × 6", "3 × 3", "10 × 10", "4 × 8"], e: "36 letters and symbols in six rows and six columns." },
+      { t: 7, q: "How does the P300 speller find the letter the user wants?", o: ["It finds the row and the column that produced a P300; the letter is where they cross", "It listens to the user saying the letter", "It picks the brightest letter on the screen", "It reads the mu rhythm at C3"], e: "Rows and columns flash in random order. Only the target’s row and column produce a P300." },
+      { t: 7, q: "What is the ‘oddball’ effect?", o: ["A rare target among many common stimuli produces a P300", "A loose electrode produces a sudden jump", "A flickering light produces a steady response", "A movement produces a power drop"], e: "The brain reacts to the rare event it has been waiting for." },
+      { t: 7, q: "Why are the flashes repeated several times and averaged?", o: ["The P300 is small, so averaging makes the detection sure", "To make the screen brighter", "To train the user’s muscles", "To remove the need for electrodes"], e: "Averaging cancels the random background activity and keeps the time-locked wave." },
+      { t: 7, q: "Which is a drawback of the P300 speller?", o: ["It is slow (a few letters per minute) and tiring for the eyes", "It needs months of training", "It needs brain surgery", "It works only for left-handed users"], e: "Its good side: almost no training and high accuracy." },
+      { t: 7, q: "What is a neuroprosthetic device?", o: ["A device linked to the nervous system that replaces a lost function", "A filter that removes 50 Hz noise", "A classifier that draws a straight line", "A cap that holds electrodes"], e: "Examples: a brain-controlled artificial arm, a cochlear implant, a speech implant." },
+      { t: 7, q: "In neuroprosthetics, what does FES do?", o: ["It stimulates the patient’s own muscles electrically so that they move", "It filters the signal to 8–30 Hz", "It flashes rows and columns", "It measures blood oxygen"], e: "Instead of a robot arm, the patient’s own muscles are made to move." },
+      { t: 7, q: "What is ‘shared control’ in BCI robotics?", o: ["The user gives the goal and the robot handles small details such as avoiding obstacles", "Two users control one robot together", "The robot decides everything and the user watches", "The user controls every motor one by one"], e: "It reduces the user’s effort: ‘go to the door’ is enough." },
+      { t: 7, q: "Which company makes the Stentrode, placed inside a blood vessel through the neck?", o: ["Synchron", "Neuralink", "Paradromics", "BrainGate"], e: "Because it goes through a blood vessel, no open brain surgery is needed (semi-invasive)." },
+      { t: 7, q: "Which description fits Neuralink?", o: ["A coin-sized implant with thin threads placed by a robot; first human in January 2024", "A very thin film that sits on the brain surface and can be removed", "A stent placed inside a blood vessel through the neck", "A scalp cap with gel electrodes"], e: "It is invasive. Its users control a computer cursor by thought." },
+      { t: 7, q: "Which description fits Precision Neuroscience?", o: ["A very thin film that sits on the brain surface and can be removed", "A coin-sized implant with threads placed by a robot", "A stent placed inside a blood vessel", "A long-running university research project"], e: "It is semi-invasive: on the surface, not inside the brain." },
+      { t: 7, q: "As of 2026, what is the status of brain implants such as Neuralink and Synchron?", o: ["They are still in clinical trials, not regular treatment", "They are sold in ordinary shops", "They have replaced all scalp systems", "They are banned everywhere"], e: "The challenges are surgical risk, long-term reliability, cost and ethics (privacy of thoughts, consent)." },
+      { t: 7, q: "Which neuroprosthesis restores hearing?", o: ["Cochlear implant", "Retinal implant", "Exoskeleton", "Stentrode"], e: "A retinal implant is for vision; an exoskeleton is for movement." },
+
+      // ---------- 8. Frequency bands ----------
+      { t: 8, q: "Which band is seen in deep sleep?", o: ["Delta (0.5–4 Hz)", "Theta (4–8 Hz)", "Alpha (8–13 Hz)", "Beta (13–30 Hz)"], e: "Delta = Deep sleep. It is the slowest band." },
+      { t: 8, q: "What is the frequency range of the alpha band?", o: ["8–13 Hz", "4–8 Hz", "13–30 Hz", "0.5–4 Hz"], e: "Alpha = At rest: relaxed, eyes closed, back of the head." },
+      { t: 8, q: "Which band is seen when a person is alert, thinking and active?", o: ["Beta (13–30 Hz)", "Delta (0.5–4 Hz)", "Theta (4–8 Hz)", "Alpha (8–13 Hz)"], e: "Beta = Busy." },
+      { t: 8, q: "When is the theta band (4–8 Hz) seen?", o: ["When drowsy or in light sleep", "In deep sleep", "During high attention", "When alert and thinking"], e: "Theta = Tired." },
+      { t: 8, q: "Which band is above 30 Hz and linked with high attention?", o: ["Gamma", "Beta", "Alpha", "Theta"], e: "Gamma = Genius. It is the fastest band." },
+      { t: 8, q: "Which is the correct order from the lowest frequency to the highest?", o: ["Delta, Theta, Alpha, Beta, Gamma", "Alpha, Beta, Gamma, Delta, Theta", "Theta, Delta, Beta, Alpha, Gamma", "Gamma, Beta, Alpha, Theta, Delta"], e: "Remember D-T-A-B-G: ‘Do Take A Break, Guys’." },
+      { t: 8, q: "Mu (8–12 Hz) lies in the alpha range. What makes it different from alpha?", o: ["Mu is found over the motor area", "Mu is found at the back of the head", "Mu is seen only in deep sleep", "Mu is above 30 Hz"], e: "Alpha is at the back (occipital). Mu is in the middle, over C3, Cz and C4." },
+      { t: 8, q: "When is alpha strongest?", o: ["When relaxed with the eyes closed", "When solving a hard problem", "In deep sleep", "While chewing"], e: "Alpha disappears when the eyes open." },
+      { t: 8, q: "What is ‘oscillatory activity’?", o: ["Rhythmic waves produced when large groups of neurons fire together", "A single spike from one neuron", "The hum from the power line", "The drift caused by sweat"], e: "These rhythmic waves are grouped into the frequency bands." },
+
+      // ---------- 9. ERP ----------
+      { t: 9, q: "What is an ERP?", o: ["A small voltage change that is time-locked to an event", "A rhythm that is always present at rest", "A slow drift below 1 Hz", "A magnetic field from the heart"], e: "The event can be a sound, a flash or a decision." },
+      { t: 9, q: "Why are many trials averaged to see an ERP?", o: ["It is too small to see in one trial; the random background cancels out and it remains", "To make the recording longer", "To remove the need for a reference electrode", "To change its frequency"], e: "The background activity is random, so it averages towards zero. The time-locked wave does not." },
+      { t: 9, q: "What is the N100?", o: ["A negative peak at about 100 ms", "A positive peak at about 100 ms", "A rhythm at 100 Hz", "A voltage of 100 µV"], e: "N = negative, number = time in milliseconds." },
+      { t: 9, q: "In the name ‘P300’, what does the letter P stand for?", o: ["Positive", "Parietal", "Potential", "Power"], e: "P = positive peak, 300 = about 300 ms. (It happens to be strongest at a parietal electrode, but that is not what P means.)" },
+      { t: 9, q: "Which are the two parameters of an ERP?", o: ["Latency and amplitude", "Frequency and phase", "Gel and impedance", "Mu and beta"], e: "Latency = how long after the event it appears. Amplitude = how big it is." },
+      { t: 9, q: "What does the ‘amplitude’ of an ERP mean?", o: ["How big the wave is", "How long after the event it appears", "Where on the head it is", "How many trials were averaged"], e: "Amplitude is the height of the peak, in microvolts." },
+      { t: 9, q: "Which BCI is built on the ERP?", o: ["The P300 speller", "The Motor Imagery wheelchair", "SCP training", "The cochlear implant"], e: "The speller detects the positive wave that follows the target flash." },
+
+      // ---------- 10. SCP ----------
+      { t: 10, q: "What are SCP?", o: ["Very slow voltage shifts in the cortex, below 1 Hz", "Fast spikes from single neurons", "Waves of 13–30 Hz", "Magnetic fields outside the head"], e: "They last from about 0.3 seconds to several seconds." },
+      { t: 10, q: "In SCP, what does a NEGATIVE shift mean?", o: ["The cortex is getting ready (more active)", "The cortex is less active", "The user is asleep", "The electrode is loose"], e: "Negative = getting ready. Positive = less active." },
+      { t: 10, q: "How does a user produce SCP as a control signal?", o: ["By learned self-control, with feedback", "By imagining a hand movement", "By looking at a flickering light", "By counting the flashes of a letter"], e: "Users learn to shift the potential up or down, and use it to select letters." },
+      { t: 10, q: "What is the main drawback of a BCI that uses SCP?", o: ["It needs months of training and is very slow", "It needs open brain surgery", "It does not work for paralysed patients", "It needs a flashing screen"], e: "Its good side: it works for fully paralysed patients." },
+      { t: 10, q: "How long do SCP shifts last?", o: ["From about 0.3 seconds to several seconds", "About 1 millisecond", "Exactly 300 milliseconds", "Several hours"], e: "They are very slow compared with ordinary rhythms." },
+
+      // ---------- 11. Neuronal potentials ----------
+      { t: 11, q: "What is an action potential (spike)?", o: ["The short electrical pulse a neuron fires, about 1 ms long", "A slow shift lasting several seconds", "The added-up activity of the whole brain", "A wave caused by an eye blink"], e: "It is very short, so it cannot be seen from the scalp." },
+      { t: 11, q: "How can action potentials be recorded?", o: ["Only by electrodes placed inside the brain", "By electrodes on the scalp", "By near-infrared light", "By a shielded-room magnetic sensor only"], e: "Spikes need an invasive recording." },
+      { t: 11, q: "What is an LFP?", o: ["The combined activity of a small group of neurons near the electrode", "The pulse of a single neuron", "The blood-oxygen signal", "The activity of the heart"], e: "It sits between single spikes and the scalp signal." },
+      { t: 11, q: "What mainly forms the scalp EEG?", o: ["Millions of postsynaptic potentials added together", "Single action potentials", "Blood oxygen changes", "Muscle currents"], e: "Postsynaptic potentials are slower, so they add up and reach the scalp." },
+
+      // ---------- 12. 10–20 system ----------
+      { t: 12, q: "Why is it called the ‘10–20’ system?", o: ["Neighbouring electrodes are 10% or 20% of the total head distance apart", "It uses 10 electrodes on the left and 20 on the right", "It records between 10 Hz and 20 Hz", "It takes 10 to 20 minutes to fit"], e: "Because it uses percentages, it fits any head size." },
+      { t: 12, q: "From which two points is the head measured?", o: ["Nasion and inion", "Left ear and right ear only", "Forehead and chin", "C3 and C4"], e: "Nasion = top of the nose, between the eyes. Inion = bump at the back of the head." },
+      { t: 12, q: "What do ODD numbers mean in electrode names?", o: ["Left side", "Right side", "Midline", "Back of the head"], e: "Odd = left, even = right, z = midline." },
+      { t: 12, q: "What does the letter ‘z’ mean in a name such as Cz?", o: ["Midline (zero)", "Left side", "Right side", "Zone of the forehead"], e: "z = zero = the middle line of the head." },
+      { t: 12, q: "What does ‘Fp’ stand for?", o: ["Frontal pole (forehead)", "Front parietal", "Final point", "Frequency peak"], e: "Fp1 and Fp2 sit on the forehead, where eye blinks are strongest." },
+      { t: 12, q: "What does the name C4 tell you?", o: ["Central region, right side", "Central region, left side", "Cerebellum, fourth electrode", "Central region, midline"], e: "C = central, 4 = even = right." },
+      { t: 12, q: "Which region does the letter O stand for?", o: ["Occipital", "Outer", "Orbital", "Odd"], e: "The occipital region is at the back of the head (vision)." },
+      { t: 12, q: "Where is the nasion?", o: ["At the top of the nose, between the eyes", "At the bump at the back of the head", "On the ear lobe", "At the top of the head"], e: "The bump at the back of the head is the inion." },
+      { t: 12, q: "Which of these electrodes is on the LEFT side?", o: ["P3", "P4", "Pz", "O2"], e: "3 is odd, and odd numbers are on the left." },
+
+      // ---------- 13. Recording hardware ----------
+      { t: 13, q: "Which is the correct recording chain?", o: ["Electrodes → Amplifier → Filter → Analog-to-digital converter → Computer", "Electrodes → Computer → Amplifier → Filter → Analog-to-digital converter", "Amplifier → Electrodes → Analog-to-digital converter → Filter → Computer", "Electrodes → Filter → Computer → Amplifier → Analog-to-digital converter"], e: "Pick up, make bigger, clean, turn into numbers, store." },
+      { t: 13, q: "Why must EEG be amplified?", o: ["It is extremely small (microvolts)", "It is too fast to see", "It is magnetic, not electric", "It is always negative"], e: "It is the added-up activity of millions of neurons, but on the scalp it is still tiny." },
+      { t: 13, q: "What are standard scalp electrodes made of?", o: ["Silver/silver-chloride discs with conductive gel", "Copper discs with glue", "Gold discs with water", "Plastic discs without any gel"], e: "They are held by a cap at the standard positions." },
+      { t: 13, q: "What does a differential amplifier do?", o: ["It makes the signal thousands of times bigger and rejects common noise", "It converts the signal into digital numbers", "It removes eye blinks", "It flashes the rows and columns"], e: "Noise that is the same on both inputs is cancelled." },
+      { t: 13, q: "What does the Nyquist rule say?", o: ["Sample at least twice the highest frequency", "Sample at half the highest frequency", "Sample at exactly the highest frequency", "Sample once per second"], e: "Otherwise the fast parts of the signal are not captured correctly." },
+      { t: 13, q: "To record frequencies up to 40 Hz correctly, what is the minimum sampling rate?", o: ["80 samples per second", "40 samples per second", "20 samples per second", "60 samples per second"], e: "Twice the highest frequency: 2 × 40 = 80." },
+      { t: 13, q: "What sampling rates are common for EEG?", o: ["250–1000 samples per second", "1–10 samples per second", "10–20 samples per second", "1 million samples per second"], e: "These rates are comfortably above twice the highest useful frequency." },
+      { t: 13, q: "What is a bipolar montage?", o: ["Each electrode is measured against its neighbour", "Each electrode is measured against one common reference", "Two amplifiers are used together", "Two caps are worn together"], e: "Montage = the way channels are paired and displayed." },
+      { t: 13, q: "What is a referential montage?", o: ["Each electrode is measured against one common reference, often the ear", "Each electrode is measured against its neighbour", "Only the midline electrodes are used", "The reference is changed every second"], e: "Every channel needs a reference; here they all share one." },
+
+      // ---------- 14. Neuroscience ----------
+      { t: 14, q: "About how many neurons are in the human brain?", o: ["About 86 billion", "About 86 million", "About 8,600", "About 860 trillion"], e: "The neuron (nerve cell) is the basic unit of the brain." },
+      { t: 14, q: "What do dendrites do?", o: ["They receive signals", "They send the signal out", "They process the signal", "They release oxygen"], e: "Dendrites receive, the cell body processes, the axon sends." },
+      { t: 14, q: "What does the axon do?", o: ["It sends the signal out", "It receives signals", "It stores memories", "It makes the gel conductive"], e: "The action potential travels along the axon to the next neuron." },
+      { t: 14, q: "What is a synapse?", o: ["The gap where one neuron passes the signal to the next, using neurotransmitters", "The centre of the cell body", "A type of electrode", "A slow brain rhythm"], e: "Neurotransmitters are the chemicals that carry the signal across the gap." },
+      { t: 14, q: "At what voltage does a neuron sit at rest?", o: ["About −70 mV", "About +70 mV", "0 mV", "About −7 V"], e: "When it gets enough input, it fires an action potential." },
+      { t: 14, q: "Which lobe handles vision?", o: ["Occipital", "Frontal", "Parietal", "Temporal"], e: "The occipital lobe is at the back of the head." },
+      { t: 14, q: "Which lobe handles hearing, memory and understanding language?", o: ["Temporal", "Occipital", "Parietal", "Frontal"], e: "The temporal lobes are at the sides, near the ears." },
+      { t: 14, q: "Which lobe handles touch, body position and spatial sense?", o: ["Parietal", "Frontal", "Temporal", "Occipital"], e: "The parietal lobe is at the top, behind the frontal lobe." },
+      { t: 14, q: "Which lobe handles thinking, planning, decisions, movement and speech?", o: ["Frontal", "Parietal", "Occipital", "Temporal"], e: "The frontal lobe is at the front." },
+      { t: 14, q: "What does the cerebellum do?", o: ["Balance and coordination", "Breathing and heartbeat", "Vision", "Hearing"], e: "Breathing and heartbeat are the job of the brainstem." },
+      { t: 14, q: "Where is the motor cortex?", o: ["At the back of the frontal lobe, under C3, Cz and C4", "At the back of the head, under O1 and O2", "On the forehead, under Fp1 and Fp2", "Inside the brainstem"], e: "That is why Motor Imagery is recorded at C3, Cz and C4." },
+      { t: 14, q: "What does the brainstem control?", o: ["Breathing and heartbeat", "Balance and coordination", "Planning and decisions", "Vision"], e: "Balance and coordination are the job of the cerebellum." },
+
+      // ---------- 15. Brain signals used in BCI ----------
+      { t: 15, q: "How does a user produce an SSVEP?", o: ["By looking at a light flickering at a fixed rate", "By imagining a movement", "By counting rare flashes", "By learned self-control over months"], e: "The brain’s visual area follows the same rate as the flickering light." },
+      { t: 15, q: "How does a user produce the mu / beta power change?", o: ["By imagining movement", "By looking at a flickering light", "By paying attention to a rare target", "By closing the eyes"], e: "Imagined movement makes the motor area busy, so its resting rhythm drops." },
+      { t: 15, q: "How does a user produce a P300?", o: ["By paying attention to a rare target", "By imagining movement", "By relaxing with the eyes closed", "By clenching the jaw"], e: "This is the oddball effect." },
+      { t: 15, q: "Which control signal needs the LEAST training?", o: ["P300", "SCP", "Mu / beta rhythm from imagined movement", "All of them need months of training"], e: "The P300 speller needs almost no training; imagined movement needs training; slow shifts need months." },
+      { t: 15, q: "In SSVEP, what does the visual area of the brain do?", o: ["It follows the same rate as the flickering light", "It stops all activity", "It produces a single wave at 300 ms", "It shifts slowly for several seconds"], e: "A light flickering at a fixed rate produces a response at that same rate." },
+
+      // ---------- 16. History ----------
+      { t: 16, q: "Who recorded the first human EEG, and in which year?", o: ["Hans Berger, 1924", "Jacques Vidal, 1973", "Farwell and Donchin, 1988", "Neuralink, 2024"], e: "1924 is the starting point of the whole subject." },
+      { t: 16, q: "Who first used the term ‘brain-computer interface’, and in which year?", o: ["Jacques Vidal, 1973", "Hans Berger, 1924", "Farwell and Donchin, 1988", "Synchron, 2024"], e: "Vidal coined the name about fifty years after the first human recording." },
+      { t: 16, q: "Which is the correct order in time?", o: ["First human EEG → the term BCI is coined → the P300 speller → human implant trials", "The term BCI is coined → first human EEG → human implant trials → the P300 speller", "The P300 speller → first human EEG → the term BCI is coined → human implant trials", "Human implant trials → the P300 speller → the term BCI is coined → first human EEG"], e: "1924 → 1973 → 1988 → 2024 onwards." },
+      { t: 16, q: "What began from 2024 onwards?", o: ["Human trials of implants such as Neuralink", "The first human EEG recording", "The first use of the term BCI", "The first P300 speller"], e: "Neuralink’s first human implant was in January 2024." }
+    ];
+
+    // ---------- MCQ engine ----------
+    const MCQ_PASS = 70; // per-topic pass mark in percent
+    let mcq = { view: 'home', mode: 'practice', kind: 'full', topic: null, label: '', list: [], idx: 0, startedAt: 0, finishedAt: 0, warnUnanswered: false, reviewAll: false, confirmReset: false };
+
+    function mcqCountForTopic(ti) {
+      return MCQ_BANK.filter(q => q.t === ti).length;
+    }
+
+    function buildMcqList(indices) {
+      return indices.map(qi => ({
+        qi,
+        picked: null,
+        opts: shuffled(MCQ_BANK[qi].o.map((text, i) => ({ text, ok: i === 0 })))
+      }));
+    }
+
+    function startMcq(kind, topic) {
+      let indices = MCQ_BANK.map((_, i) => i);
+      let label = '';
+      if (kind === 'full') {
+        indices = shuffled(indices);
+        label = `Full test — all ${MCQ_BANK.length} questions`;
+      } else if (kind === 'quick') {
+        // one question from every topic, then random extras up to 25
+        const picked = [];
+        MCQ_TOPICS.forEach((_, ti) => {
+          const pool = indices.filter(i => MCQ_BANK[i].t === ti);
+          picked.push(pool[Math.floor(Math.random() * pool.length)]);
+        });
+        const rest = shuffled(indices.filter(i => picked.indexOf(i) === -1)).slice(0, 25 - picked.length);
+        indices = shuffled(picked.concat(rest));
+        label = 'Quick mix — 25 questions from all topics';
+      } else if (kind === 'topic') {
+        indices = shuffled(indices.filter(i => MCQ_BANK[i].t === topic));
+        label = `${MCQ_TOPICS[topic].short} — ${MCQ_TOPICS[topic].name}`;
+      } else if (kind === 'wrong') {
+        indices = shuffled((store.wrong || []).filter(i => i >= 0 && i < MCQ_BANK.length));
+        label = 'Retry — questions you got wrong';
+        if (!indices.length) return;
+      }
+      mcq.kind = kind;
+      mcq.topic = kind === 'topic' ? topic : null;
+      mcq.label = label;
+      mcq.list = buildMcqList(indices);
+      mcq.idx = 0;
+      mcq.startedAt = Date.now();
+      mcq.finishedAt = 0;
+      mcq.warnUnanswered = false;
+      mcq.reviewAll = false;
+      mcq.view = 'run';
+      renderMcq();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function startMcqTopic(ti) {
+      switchTab('mcq');
+      startMcq('topic', ti);
+    }
+
+    function setMcqMode(mode) {
+      mcq.mode = mode;
+      renderMcq();
+    }
+
+    function quitMcq() {
+      mcq.view = 'home';
+      renderMcq();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToTopic(ti) {
+      const ref = MCQ_TOPICS[ti].ref;
+      if (ref.tab === 'part1') {
+        switchTab('part1');
+        selectBigAnswer(ref.idx);
+      } else {
+        switchTab('part2');
+        const inp = document.getElementById('part2-search');
+        if (inp && inp.value) { inp.value = ''; renderPart2(); }
+        setTimeout(() => {
+          const el = document.getElementById('p2-card-' + ref.code);
+          if (!el) return;
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('x-flash');
+          setTimeout(() => el.classList.remove('x-flash'), 1800);
+        }, 400);
+      }
+    }
+
+    function mcqTally() {
+      let right = 0, wrong = 0, answered = 0;
+      mcq.list.forEach(it => {
+        if (it.picked === null) return;
+        answered++;
+        if (it.opts[it.picked].ok) right++; else wrong++;
+      });
+      return { right, wrong, answered, total: mcq.list.length };
+    }
+
+    function renderMcq() {
+      const root = document.getElementById('mcq-root');
+      if (!root) return;
+      const btnLabel = document.querySelector('#tab-btn-mcq span');
+      if (btnLabel) btnLabel.textContent = `8. MCQ Test (${MCQ_BANK.length} Questions)`;
+      if (mcq.view === 'run') root.innerHTML = mcq.mode === 'form' ? mcqFormHtml() : mcqPracticeHtml();
+      else if (mcq.view === 'result') root.innerHTML = mcqResultHtml();
+      else root.innerHTML = mcqHomeHtml();
+    }
+
+    // ----- home -----
+    function mcqHomeHtml() {
+      const ever = (store.everCorrect || []).length;
+      const passed = MCQ_TOPICS.filter((_, i) => (store.topicBest || {})[i] >= MCQ_PASS).length;
+      const wrongN = (store.wrong || []).length;
+      const everPct = Math.round((ever / MCQ_BANK.length) * 100);
+      return `
+        <div class="x-card x-stack">
+          <div class="x-row">
+            <div>
+              <div class="x-eyebrow">Check your knowledge</div>
+              <h2 class="x-title">MCQ Test — ${MCQ_BANK.length} questions covering all ${MCQ_TOPICS.length} topics</h2>
+              <p class="x-muted">Every question has one correct answer and a short explanation. The options are shuffled every time.</p>
+            </div>
+          </div>
+          <div class="x-grid x-grid-stats">
+            <div class="x-stat"><b>${ever} / ${MCQ_BANK.length}</b><span>questions answered correctly at least once</span><div class="x-progress"><div style="width:${everPct}%"></div></div></div>
+            <div class="x-stat"><b>${passed} / ${MCQ_TOPICS.length}</b><span>topics passed (${MCQ_PASS}% or more)</span><div class="x-progress"><div style="width:${Math.round(passed / MCQ_TOPICS.length * 100)}%"></div></div></div>
+            <div class="x-stat"><b>${store.fullBest === null || store.fullBest === undefined ? '—' : store.fullBest + '%'}</b><span>best score in the full test</span></div>
+            <div class="x-stat"><b>${wrongN}</b><span>questions waiting in your retry list</span></div>
+          </div>
+        </div>
+
+        <div class="x-card x-stack">
+          <div class="x-eyebrow">Step 1 · Choose how to answer</div>
+          <div class="x-grid x-grid-2">
+            <button onclick="setMcqMode('practice')" class="x-mode ${mcq.mode === 'practice' ? 'is-on' : ''}">
+              <strong>🎯 Practice mode</strong>
+              <span>One question at a time. You see the correct answer and the explanation immediately.</span>
+            </button>
+            <button onclick="setMcqMode('form')" class="x-mode ${mcq.mode === 'form' ? 'is-on' : ''}">
+              <strong>📝 Form mode (exam style)</strong>
+              <span>All questions on one page like a form. Marks and explanations appear only after you press Submit.</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="x-card x-stack">
+          <div class="x-eyebrow">Step 2 · Choose what to test</div>
+          <div class="x-grid x-grid-3">
+            <button onclick="startMcq('full')" class="x-start">
+              <strong>📚 Full test</strong>
+              <span>All ${MCQ_BANK.length} questions, every topic, in random order.</span>
+            </button>
+            <button onclick="startMcq('quick')" class="x-start">
+              <strong>⚡ Quick mix</strong>
+              <span>25 questions, at least one from every topic. About 10 minutes.</span>
+            </button>
+            <button onclick="startMcq('wrong')" class="x-start" ${wrongN ? '' : 'disabled'}>
+              <strong>🔁 Retry wrong answers</strong>
+              <span>${wrongN ? wrongN + ' question' + (wrongN === 1 ? '' : 's') + ' you missed earlier.' : 'Nothing here yet — questions you miss are collected here.'}</span>
+            </button>
+          </div>
+          <div class="x-eyebrow" style="margin-top:6px">Or test one topic</div>
+          <div class="x-grid x-grid-3">
+            ${MCQ_TOPICS.map((tp, i) => {
+              const best = (store.topicBest || {})[i];
+              const has = best !== undefined && best !== null;
+              return `
+                <div class="x-topic">
+                  <div class="x-topic-head">
+                    <span class="x-pill">${escapeHtml(tp.short)}</span>
+                    <span class="x-pill ${has ? (best >= MCQ_PASS ? 'is-good' : 'is-bad') : ''}">${has ? 'Best ' + best + '%' : 'Not tried'}</span>
+                  </div>
+                  <div class="x-topic-name">${escapeHtml(tp.name)}</div>
+                  <div class="x-topic-actions">
+                    <button onclick="startMcq('topic', ${i})" class="x-btn x-btn-primary">Start · ${mcqCountForTopic(i)} questions</button>
+                    <button onclick="goToTopic(${i})" class="x-btn">Read notes</button>
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="x-row">
+          <span class="x-muted">Your progress is saved in this browser only.</span>
+          ${mcq.confirmReset
+            ? `<span class="x-row" style="gap:6px"><span class="x-muted">Erase all saved progress?</span>
+                 <button onclick="mcq.confirmReset = false; resetProgress();" class="x-btn x-btn-danger">Yes, erase</button>
+                 <button onclick="mcq.confirmReset = false; renderMcq();" class="x-btn">Cancel</button></span>`
+            : `<button onclick="mcq.confirmReset = true; renderMcq();" class="x-btn">Reset saved progress</button>`}
+        </div>
+      `;
+    }
+
+    // ----- practice mode: one question at a time -----
+    function mcqPracticeHtml() {
+      const it = mcq.list[mcq.idx];
+      const q = MCQ_BANK[it.qi];
+      const tp = MCQ_TOPICS[q.t];
+      const tally = mcqTally();
+      const done = it.picked !== null;
+      const isLast = mcq.idx === mcq.list.length - 1;
+      const pickedOk = done && it.opts[it.picked].ok;
+      return `
+        <div class="x-card x-stack">
+          <div class="x-row">
+            <div>
+              <div class="x-eyebrow">${escapeHtml(mcq.label)}</div>
+              <div class="x-title">Question ${mcq.idx + 1} of ${mcq.list.length}</div>
+            </div>
+            <div class="x-row" style="gap:6px">
+              <span class="x-pill is-good">✅ ${tally.right}</span>
+              <span class="x-pill is-bad">❌ ${tally.wrong}</span>
+              <button onclick="quitMcq()" class="x-btn">✕ Quit</button>
+            </div>
+          </div>
+          <div class="x-progress"><div style="width:${Math.round((tally.answered / tally.total) * 100)}%"></div></div>
+          <div><span class="x-pill">${escapeHtml(tp.short)} · ${escapeHtml(tp.name)}</span></div>
+          <div class="x-question">${escapeHtml(q.q)}</div>
+          <div class="x-options">
+            ${it.opts.map((op, oi) => {
+              let cls = '';
+              if (done) cls = op.ok ? 'is-correct' : (oi === it.picked ? 'is-wrong' : 'is-dim');
+              return `<button onclick="pickMcq(${oi})" class="x-opt ${cls}" ${done ? 'disabled' : ''}>
+                        <span class="x-opt-key">${'ABCD'[oi]}</span><span>${escapeHtml(op.text)}</span>
+                      </button>`;
+            }).join('')}
+          </div>
+          ${done ? `
+            <div class="x-explain ${pickedOk ? 'good' : 'bad'}">
+              <strong>${pickedOk ? '✅ Correct.' : '❌ Not quite.'}</strong>
+              ${pickedOk ? '' : `The correct answer is: <strong>${escapeHtml(it.opts.find(o => o.ok).text)}</strong>.`}
+              <div style="margin-top:4px">${escapeHtml(q.e)}</div>
+            </div>` : `<div class="x-muted">Tap an answer, or press <span class="x-kbd">A</span> <span class="x-kbd">B</span> <span class="x-kbd">C</span> <span class="x-kbd">D</span> on a keyboard.</div>`}
+          <div class="x-row">
+            <button onclick="gotoMcq(${mcq.idx - 1})" class="x-btn" ${mcq.idx === 0 ? 'disabled' : ''}>← Previous</button>
+            <div class="x-row" style="gap:6px">
+              <button onclick="finishMcq()" class="x-btn">Finish and see result</button>
+              ${isLast ? '' : `<button onclick="gotoMcq(${mcq.idx + 1})" class="x-btn ${done ? 'x-btn-primary' : ''}">${done ? 'Next question →' : 'Skip →'}</button>`}
+            </div>
+          </div>
+          <div class="x-dots">
+            ${mcq.list.map((li, i) => {
+              let cls = '';
+              if (li.picked !== null) cls = li.opts[li.picked].ok ? 'ok' : 'no';
+              return `<button onclick="gotoMcq(${i})" class="x-dot ${cls} ${i === mcq.idx ? 'cur' : ''}" aria-label="Go to question ${i + 1}">${i + 1}</button>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function pickMcq(oi) {
+      const it = mcq.list[mcq.idx];
+      if (!it || it.picked !== null || oi < 0 || oi >= it.opts.length) return;
+      it.picked = oi;
+      recordMcqAnswer(it);
+      renderMcq();
+    }
+
+    function gotoMcq(i) {
+      if (i < 0 || i >= mcq.list.length) return;
+      mcq.idx = i;
+      renderMcq();
+    }
+
+    // remember right / wrong answers for the retry list and the coverage counter
+    function recordMcqAnswer(it) {
+      const ok = it.opts[it.picked].ok;
+      store.everCorrect = store.everCorrect || [];
+      store.wrong = store.wrong || [];
+      if (ok) {
+        if (store.everCorrect.indexOf(it.qi) === -1) store.everCorrect.push(it.qi);
+        store.wrong = store.wrong.filter(x => x !== it.qi);
+      } else if (store.wrong.indexOf(it.qi) === -1) {
+        store.wrong.push(it.qi);
+      }
+      saveProgress();
+    }
+
+    // ----- form mode: all questions on one page -----
+    function mcqFormHtml() {
+      const tally = mcqTally();
+      return `
+        <div class="x-card x-stack">
+          <div class="x-row">
+            <div>
+              <div class="x-eyebrow">Form mode · ${escapeHtml(mcq.label)}</div>
+              <div class="x-title">Answer all ${mcq.list.length} questions, then press Submit</div>
+              <p class="x-muted">You can change an answer any time before submitting. Marks and explanations appear after Submit.</p>
+            </div>
+            <button onclick="quitMcq()" class="x-btn">✕ Quit</button>
+          </div>
+        </div>
+        ${mcq.list.map((it, i) => {
+          const q = MCQ_BANK[it.qi];
+          return `
+            <div class="x-card x-stack x-form-q" id="mcqf-${i}">
+              <div class="x-row">
+                <span class="x-pill">Question ${i + 1} of ${mcq.list.length}</span>
+                <span class="x-pill">${escapeHtml(MCQ_TOPICS[q.t].short)}</span>
+              </div>
+              <div class="x-question">${escapeHtml(q.q)}</div>
+              <div class="x-options">
+                ${it.opts.map((op, oi) => `
+                  <button onclick="pickMcqForm(${i}, ${oi})" class="x-opt ${it.picked === oi ? 'is-selected' : ''}" aria-pressed="${it.picked === oi}">
+                    <span class="x-opt-key">${'ABCD'[oi]}</span><span>${escapeHtml(op.text)}</span>
+                  </button>`).join('')}
+              </div>
+            </div>`;
+        }).join('')}
+        <div class="x-submitbar">
+          <div>
+            <strong id="mcqf-count">${tally.answered} of ${tally.total} answered</strong>
+            <div class="x-progress" style="margin-top:6px"><div id="mcqf-bar" style="width:${Math.round((tally.answered / tally.total) * 100)}%"></div></div>
+            <div id="mcqf-warn" class="x-warn" ${mcq.warnUnanswered ? '' : 'hidden'}></div>
+          </div>
+          <button onclick="submitMcqForm()" class="x-btn x-btn-primary x-btn-lg">Submit answers</button>
+        </div>
+      `;
+    }
+
+    function pickMcqForm(i, oi) {
+      const it = mcq.list[i];
+      if (!it) return;
+      it.picked = oi;
+      const card = document.getElementById('mcqf-' + i);
+      if (card) {
+        card.querySelectorAll('.x-opt').forEach((b, bi) => {
+          b.classList.toggle('is-selected', bi === oi);
+          b.setAttribute('aria-pressed', bi === oi ? 'true' : 'false');
+        });
+      }
+      const tally = mcqTally();
+      const cnt = document.getElementById('mcqf-count');
+      const bar = document.getElementById('mcqf-bar');
+      if (cnt) cnt.textContent = `${tally.answered} of ${tally.total} answered`;
+      if (bar) bar.style.width = Math.round((tally.answered / tally.total) * 100) + '%';
+      if (mcq.warnUnanswered) {
+        mcq.warnUnanswered = false;
+        const w = document.getElementById('mcqf-warn');
+        if (w) w.hidden = true;
+      }
+    }
+
+    function submitMcqForm() {
+      const tally = mcqTally();
+      const missing = tally.total - tally.answered;
+      if (missing > 0 && !mcq.warnUnanswered) {
+        mcq.warnUnanswered = true;
+        const w = document.getElementById('mcqf-warn');
+        if (w) {
+          w.hidden = false;
+          w.textContent = `${missing} question${missing === 1 ? ' is' : 's are'} not answered yet. Press Submit again to finish anyway — unanswered questions count as wrong.`;
+        }
+        const firstBlank = mcq.list.findIndex(it => it.picked === null);
+        const card = document.getElementById('mcqf-' + firstBlank);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          card.classList.add('x-flash');
+          setTimeout(() => card.classList.remove('x-flash'), 1800);
+        }
+        return;
+      }
+      store.wrong = store.wrong || [];
+      mcq.list.forEach(it => { if (it.picked !== null) recordMcqAnswer(it); });
+      // unanswered questions go to the retry list as well
+      mcq.list.forEach(it => {
+        if (it.picked === null && store.wrong.indexOf(it.qi) === -1) store.wrong.push(it.qi);
+      });
+      finishMcq();
+    }
+
+    // ----- result -----
+    function finishMcq() {
+      mcq.finishedAt = Date.now();
+      const perTopic = {};
+      mcq.list.forEach(it => {
+        const t = MCQ_BANK[it.qi].t;
+        perTopic[t] = perTopic[t] || { right: 0, total: 0 };
+        perTopic[t].total++;
+        if (it.picked !== null && it.opts[it.picked].ok) perTopic[t].right++;
+      });
+      mcq.perTopic = perTopic;
+      const tally = mcqTally();
+      mcq.scorePct = tally.total ? Math.round((tally.right / tally.total) * 100) : 0;
+      store.topicBest = store.topicBest || {};
+      // topic bests only count when the whole topic was asked (full test or topic test)
+      if (mcq.kind === 'full' || mcq.kind === 'topic') {
+        Object.keys(perTopic).forEach(t => {
+          const pct = Math.round((perTopic[t].right / perTopic[t].total) * 100);
+          if (store.topicBest[t] === undefined || store.topicBest[t] === null || pct > store.topicBest[t]) store.topicBest[t] = pct;
+          if (pct >= MCQ_PASS) masteredSet.add('mcq-t-' + t);
+        });
+      }
+      if (mcq.kind === 'full' && (store.fullBest === null || store.fullBest === undefined || mcq.scorePct > store.fullBest)) {
+        store.fullBest = mcq.scorePct;
+      }
+      saveProgress();
+      updateGlobalProgress();
+      mcq.view = 'result';
+      renderMcq();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function mcqResultHtml() {
+      const tally = mcqTally();
+      const skipped = tally.total - tally.answered;
+      const secs = Math.max(1, Math.round((mcq.finishedAt - mcq.startedAt) / 1000));
+      const mins = Math.floor(secs / 60);
+      const pct = mcq.scorePct;
+      let verdict = 'Keep going — read the weak topics below and try again.';
+      if (pct >= 90) verdict = 'Excellent. You know this very well.';
+      else if (pct >= 75) verdict = 'Good. Fix the few weak topics below and you are ready.';
+      else if (pct >= 50) verdict = 'Halfway there. Revise the weak topics below, then retry the wrong answers.';
+      const topicRows = Object.keys(mcq.perTopic).map(Number).sort((a, b) => {
+        const pa = mcq.perTopic[a].right / mcq.perTopic[a].total;
+        const pb = mcq.perTopic[b].right / mcq.perTopic[b].total;
+        return pa - pb || a - b;
+      });
+      const reviewList = mcq.list.map((it, i) => ({ it, i })).filter(x => mcq.reviewAll || x.it.picked === null || !x.it.opts[x.it.picked].ok);
+      const missed = tally.total - tally.right;
+      return `
+        <div class="x-card x-stack">
+          <div class="x-row">
+            <div>
+              <div class="x-eyebrow">Result · ${escapeHtml(mcq.label)}</div>
+              <div class="x-score"><b>${tally.right} / ${tally.total}</b><span>${pct}%</span></div>
+              <p class="x-muted">${verdict}</p>
+            </div>
+            <div class="x-grid x-grid-stats" style="min-width:min(100%, 320px)">
+              <div class="x-stat"><b>${tally.wrong}</b><span>wrong</span></div>
+              <div class="x-stat"><b>${skipped}</b><span>not answered</span></div>
+              <div class="x-stat"><b>${mins}:${String(secs % 60).padStart(2, '0')}</b><span>time taken</span></div>
+            </div>
+          </div>
+          <div class="x-progress x-progress-lg"><div style="width:${pct}%; background:${pct >= MCQ_PASS ? 'var(--success)' : (pct >= 50 ? 'var(--warning)' : 'var(--error)')}"></div></div>
+          <div class="x-row" style="justify-content:flex-start">
+            <button onclick="startMcq('wrong')" class="x-btn x-btn-primary" ${(store.wrong || []).length ? '' : 'disabled'}>🔁 Retry wrong answers (${(store.wrong || []).length})</button>
+            <button onclick="startMcq('${mcq.kind === 'wrong' ? 'quick' : mcq.kind}'${mcq.kind === 'topic' ? ', ' + mcq.topic : ''})" class="x-btn">↻ ${mcq.kind === 'wrong' ? 'Try a quick mix' : 'Take this test again'}</button>
+            <button onclick="quitMcq()" class="x-btn">← Back to test menu</button>
+          </div>
+        </div>
+
+        <div class="x-card x-stack">
+          <div class="x-eyebrow">Score by topic — weakest first</div>
+          <div class="x-topicrows">
+            ${topicRows.map(t => {
+              const s = mcq.perTopic[t];
+              const p = Math.round((s.right / s.total) * 100);
+              return `
+                <div class="x-topicrow">
+                  <div class="x-topicrow-name"><span class="x-pill">${escapeHtml(MCQ_TOPICS[t].short)}</span> ${escapeHtml(MCQ_TOPICS[t].name)}</div>
+                  <div class="x-topicrow-bar">
+                    <div class="x-progress"><div style="width:${p}%; background:${p >= MCQ_PASS ? 'var(--success)' : (p >= 50 ? 'var(--warning)' : 'var(--error)')}"></div></div>
+                    <span class="x-num">${s.right}/${s.total}</span>
+                  </div>
+                  <div class="x-topic-actions">
+                    <button onclick="goToTopic(${t})" class="x-btn">Read notes</button>
+                    <button onclick="startMcq('topic', ${t})" class="x-btn">Practise</button>
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="x-card x-stack">
+          <div class="x-row">
+            <div class="x-eyebrow">${mcq.reviewAll ? 'All answers' : (missed ? `Review — ${missed} question${missed === 1 ? '' : 's'} to fix` : 'Nothing to fix — every answer was correct')}</div>
+            <button onclick="mcq.reviewAll = !mcq.reviewAll; renderMcq();" class="x-btn">${mcq.reviewAll ? 'Show only the ones I missed' : 'Show all answers'}</button>
+          </div>
+          ${reviewList.map(({ it, i }) => {
+            const q = MCQ_BANK[it.qi];
+            const ok = it.picked !== null && it.opts[it.picked].ok;
+            return `
+              <div class="x-review ${ok ? 'good' : 'bad'}">
+                <div class="x-muted">Question ${i + 1} · ${escapeHtml(MCQ_TOPICS[q.t].short)}</div>
+                <div class="x-review-q">${escapeHtml(q.q)}</div>
+                ${ok ? '' : `<div>❌ Your answer: ${it.picked === null ? '<em>not answered</em>' : escapeHtml(it.opts[it.picked].text)}</div>`}
+                <div>✅ Correct answer: <strong>${escapeHtml(it.opts.find(o => o.ok).text)}</strong></div>
+                <div class="x-muted" style="margin-top:2px">${escapeHtml(q.e)}</div>
+              </div>`;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // ----- keyboard shortcuts (MCQ practice + flashcards) -----
+    window.addEventListener('keydown', (e) => {
+      const tag = (e.target && e.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (currentTab === 'mcq' && mcq.view === 'run' && mcq.mode === 'practice') {
+        const k = e.key.toLowerCase();
+        const letter = 'abcd'.indexOf(k);
+        const digit = '1234'.indexOf(k);
+        if (k.length === 1 && (letter !== -1 || digit !== -1)) { pickMcq(letter !== -1 ? letter : digit); e.preventDefault(); }
+        else if (e.key === 'ArrowRight' || e.key === 'Enter') { if (e.key === 'Enter' && tag === 'BUTTON') return; gotoMcq(mcq.idx + 1); e.preventDefault(); }
+        else if (e.key === 'ArrowLeft') { gotoMcq(mcq.idx - 1); e.preventDefault(); }
+      } else if (currentTab === 'part3') {
+        if (e.key === ' ') { if (tag === 'BUTTON') return; flipFlashcard(); e.preventDefault(); }
+        else if (e.key === 'ArrowRight') { nextFlashcard(); e.preventDefault(); }
+        else if (e.key === 'ArrowLeft') { prevFlashcard(); e.preventDefault(); }
+        else if (e.key.toLowerCase() === 'm') { markFlashcardMastered(); }
+      }
+    });
+
+    // =========================================================================
+    // 9E. FULL FORMS LIST + GAMES
+    // =========================================================================
+    const ORDER_GAMES = [
+      { title: "The BCI loop", hint: "From the brain to the device and back.", steps: ["Signal acquisition", "Preprocessing", "Feature extraction", "Classification (translation)", "Device command", "Feedback to the user"] },
+      { title: "Motor Imagery pipeline — the 7 steps", hint: "From imagining a movement to the command.", steps: ["Record at C3, Cz and C4", "Clean: 50 Hz notch filter and ICA", "Frequency filter: keep 8–30 Hz", "Spatial filter: CSP", "Feature extraction: band power", "Classification: LDA, SVM or EEGNet", "Command and feedback"] },
+      { title: "The EEG recording chain", hint: "The path of the signal from the scalp to the computer.", steps: ["Electrodes", "Amplifier", "Filter", "Analog-to-digital converter", "Computer"] },
+      { title: "Frequency bands — lowest to highest", hint: "Remember: Do Take A Break, Guys.", steps: ["Delta (deep sleep)", "Theta (drowsy)", "Alpha (relaxed, eyes closed)", "Beta (alert, thinking)", "Gamma (high attention)"] },
+      { title: "Dealing with artifacts — the 5 fixes", hint: "In the order the notes list them.", steps: ["Prevent: fresh gel, relaxed user", "Filter: notch, high-pass, low-pass", "Reject the trials that are too noisy", "Regression: subtract the eye channel", "ICA: remove the blink and muscle parts"] },
+      { title: "How the P300 speller works", hint: "From the grid to the typed letter.", steps: ["The screen shows a 6 × 6 grid of letters", "The user looks at the wanted letter and counts its flashes", "Rows and columns flash one by one in random order", "The target row or column produces a P300", "The computer finds the row and column that gave a P300", "Flashes are repeated and averaged to be sure"] },
+      { title: "EEG interpretation — the 7 steps", hint: "The analytic process from Big Answer 7.", steps: ["Check recording quality and remove artifacts", "Describe the background rhythm", "Identify special waveforms (morphology)", "Note the timing (temporal)", "Look at the frequency and time-frequency content", "Look at where it occurs (spatial)", "Connect it with the task or the patient and conclude"] },
+      { title: "How to write any 10-mark answer", hint: "The 6-step formula.", steps: ["Definition", "Diagram", "Steps or points", "One table", "One example", "Two-line conclusion"] },
+      { title: "History timeline", hint: "Oldest first.", steps: ["Hans Berger records the first human EEG", "Jacques Vidal first uses the term brain-computer interface", "Farwell and Donchin build the P300 speller", "Human trials of implants such as Neuralink begin"] },
+      { title: "The path of a signal through a neuron", hint: "Receive, process, send, pass on.", steps: ["Dendrites receive the signal", "The cell body processes it", "The axon sends the signal out", "The synapse passes it to the next neuron"] }
+    ];
+
+    const MATCH_GAMES = [
+      { title: "Which electrode?", pairs: [["Imagining the right hand", "C3"], ["Imagining the left hand", "C4"], ["Imagining the feet", "Cz"], ["P300 is strongest", "Pz"], ["Eye blinks are strongest", "Fp1 and Fp2"], ["Alpha with eyes closed", "O1 and O2"]] },
+      { title: "Artifact → best fix", pairs: [["Eye blink", "ICA"], ["Muscle noise", "Low-pass filter"], ["Slow drift from sweat or movement", "High-pass filter"], ["50 Hz power line", "Notch filter"], ["A trial that is far too noisy", "Reject the trial"]] },
+      { title: "Frequency band → when it is seen", pairs: [["Delta", "Deep sleep"], ["Theta", "Drowsy, light sleep"], ["Alpha", "Relaxed, eyes closed"], ["Beta", "Alert, thinking, active"], ["Gamma", "High attention"], ["Mu", "Resting motor area"]] },
+      { title: "Recording technique → what it measures", pairs: [["EEG", "Electrical activity from the scalp"], ["MEG", "Magnetic fields of brain currents"], ["fNIRS", "Blood oxygen, using near-infrared light"], ["fMRI", "Blood oxygen, inside a big magnet scanner"], ["ECoG", "Electrical activity from the brain surface"]] },
+      { title: "Spatial filter → what it does", pairs: [["CAR", "Subtracts the average of all channels"], ["Laplacian", "Subtracts the average of neighbouring channels"], ["CSP", "Learns the channel mix that best separates two classes"], ["ICA", "Splits the signal into independent sources"]] },
+      { title: "Classifier or model → simple meaning", pairs: [["LDA", "Draws a straight line between two classes"], ["SVM", "Draws the line with the widest gap"], ["kNN", "The nearest known examples vote"], ["Random Forest", "Many decision trees vote"], ["EEGNet", "A compact CNN made specially for EEG"], ["LSTM", "Remembers what came earlier in time"]] },
+      { title: "Type of BCI → where the sensor is", pairs: [["Invasive", "Inside the brain"], ["Semi-invasive", "On the brain surface or inside a blood vessel"], ["Non-invasive", "On the scalp"], ["Stimulating", "Sends signals into the brain or nerves"], ["Bidirectional", "Reads and also writes"]] },
+      { title: "Brain signal → how the user produces it", pairs: [["Mu and beta power change", "Imagining movement"], ["P300", "Paying attention to a rare target"], ["SSVEP", "Looking at a flickering light"], ["SCP", "Learned self-control"], ["Spikes", "Recorded from inside the brain"]] },
+      { title: "Name → what to remember", pairs: [["Hans Berger", "First human EEG, 1924"], ["Jacques Vidal", "Coined the term BCI, 1973"], ["Farwell and Donchin", "Built the P300 speller, 1988"], ["Neuralink", "Coin-sized implant, threads placed by a robot"], ["Synchron", "Stentrode inside a blood vessel"], ["Precision Neuroscience", "Thin removable film on the brain surface"]] },
+      { title: "Part of the brain → its job", pairs: [["Frontal lobe", "Thinking, planning, movement, speech"], ["Parietal lobe", "Touch and body position"], ["Temporal lobe", "Hearing and memory"], ["Occipital lobe", "Vision"], ["Cerebellum", "Balance and coordination"], ["Brainstem", "Breathing and heartbeat"]] },
+      { title: "10–20 system letters", pairs: [["Fp", "Frontal pole (forehead)"], ["C", "Central"], ["T", "Temporal"], ["O", "Occipital"], ["Odd number", "Left side"], ["Even number", "Right side"], ["z", "Midline"]] }
+    ];
+
+    let currentGame = 'glossary';
+    function switchGame(id) {
+      currentGame = id;
+      ['glossary', 'ffquiz', 'order', 'match'].forEach(g => {
+        document.getElementById('game-panel-' + g).classList.toggle('hidden', g !== id);
+        document.getElementById('game-btn-' + g).classList.toggle('active', g === id);
+      });
+    }
+
+    function initGames() {
+      renderGlossary();
+      nextFullFormQuestion();
+      startOrderGame(0);
+      startMatchGame(0);
+    }
+
+    function markGameDone(key) {
+      store.gamesDone = store.gamesDone || [];
+      if (store.gamesDone.indexOf(key) === -1) { store.gamesDone.push(key); saveProgress(); }
+    }
+
+    // ----- 1. Full forms list -----
+    let glossaryHidden = false;
+    function toggleGlossaryHidden() {
+      glossaryHidden = !glossaryHidden;
+      renderGlossary(true);
+    }
+
+    function renderGlossary(keepFocus) {
+      const panel = document.getElementById('game-panel-glossary');
+      const prev = document.getElementById('glossary-search');
+      const hadFocus = !!prev && document.activeElement === prev;
+      const caret = hadFocus ? prev.selectionStart : 0;
+      const q = (prev ? prev.value : '').toLowerCase().trim();
+      const items = GLOSSARY.filter(g => !g.hide).filter(g =>
+        !q || g.a.toLowerCase().includes(q) || g.f.toLowerCase().includes(q) || g.m.toLowerCase().includes(q));
+      const groups = [];
+      items.forEach(g => { if (groups.indexOf(g.g) === -1) groups.push(g.g); });
+      panel.innerHTML = `
+        <div class="x-card x-stack">
+          <div class="x-row">
+            <div>
+              <div class="x-eyebrow">Every abbreviation in this subject</div>
+              <h2 class="x-title">All Full Forms (${GLOSSARY.filter(g => !g.hide).length})</h2>
+              <p class="x-muted">Across the whole site each abbreviation is now written as its full form first, with the short form in brackets. Units such as Hz and electrode names such as C3 stay short in the notes and are explained here.</p>
+            </div>
+            <div class="x-row" style="gap:6px">
+              <input type="text" id="glossary-search" oninput="renderGlossary(true)" value="${escapeHtml(prev ? prev.value : '')}" placeholder="Search a short form or a word…" class="x-input" />
+              <button onclick="toggleGlossaryHidden()" class="x-btn x-btn-primary">${glossaryHidden ? '👀 Show full forms' : '🙈 Hide full forms (self-test)'}</button>
+            </div>
+          </div>
+        </div>
+        ${groups.map(grp => `
+          <div class="x-card x-stack">
+            <div class="x-eyebrow">${escapeHtml(grp)}</div>
+            <div class="x-gloss">
+              ${items.filter(g => g.g === grp).map(g => `
+                <div class="x-gloss-row">
+                  <div class="x-gloss-abbr">${escapeHtml(g.a)}</div>
+                  <div>
+                    <div onclick="this.classList.add('revealed')" class="x-gloss-full ${glossaryHidden ? 'cloak-blur' : ''}">${escapeHtml(g.f)}</div>
+                    <div class="x-muted">${escapeHtml(g.m)}</div>
+                  </div>
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+        ${items.length ? '' : '<div class="x-card x-muted">No short form matches that search.</div>'}
+      `;
+      if (keepFocus && hadFocus) {
+        const inp = document.getElementById('glossary-search');
+        if (inp) { inp.focus(); inp.setSelectionRange(caret, caret); }
+      }
+    }
+
+    // ----- 2. Full-form quiz -----
+    const FFQ_POOL = GLOSSARY.filter(g => !g.hide && g.g !== '10–20 electrode names');
+    let ffq = { queue: [], cur: null, opts: [], picked: null, right: 0, total: 0, streak: 0, best: 0, type: 'full' };
+
+    function nextFullFormQuestion() {
+      if (!ffq.queue.length) ffq.queue = shuffled(FFQ_POOL.map((_, i) => i));
+      const cur = FFQ_POOL[ffq.queue.pop()];
+      // two kinds of question: short form -> full form, and meaning -> term
+      const type = (cur.g !== 'Units' && Math.random() < 0.35) ? 'meaning' : 'full';
+      const others = shuffled(FFQ_POOL.filter(g => g !== cur && (type === 'full' || g.g !== 'Units'))).slice(0, 3);
+      ffq.cur = cur;
+      ffq.type = type;
+      ffq.picked = null;
+      ffq.opts = shuffled([cur].concat(others));
+      renderFullFormQuiz();
+    }
+
+    function pickFullForm(i) {
+      if (ffq.picked !== null) return;
+      ffq.picked = i;
+      ffq.total++;
+      if (ffq.opts[i] === ffq.cur) { ffq.right++; ffq.streak++; ffq.best = Math.max(ffq.best, ffq.streak); }
+      else ffq.streak = 0;
+      renderFullFormQuiz();
+    }
+
+    function renderFullFormQuiz() {
+      const panel = document.getElementById('game-panel-ffquiz');
+      const c = ffq.cur;
+      const done = ffq.picked !== null;
+      const ok = done && ffq.opts[ffq.picked] === c;
+      const label = g => ffq.type === 'full' ? g.f : `${g.f} (${g.a})`;
+      panel.innerHTML = `
+        <div class="x-card x-stack">
+          <div class="x-row">
+            <div>
+              <div class="x-eyebrow">Full-form quiz</div>
+              <div class="x-title">${ffq.type === 'full' ? 'What is the full form?' : 'Which term matches this meaning?'}</div>
+            </div>
+            <div class="x-row" style="gap:6px">
+              <span class="x-pill is-good">Score ${ffq.right} / ${ffq.total}</span>
+              <span class="x-pill">🔥 Streak ${ffq.streak}</span>
+              <span class="x-pill">Best ${ffq.best}</span>
+            </div>
+          </div>
+          ${ffq.type === 'full'
+            ? `<div class="x-bigabbr">${escapeHtml(c.a)}</div>`
+            : `<div class="x-question">${escapeHtml(c.m)}</div>`}
+          <div class="x-options">
+            ${ffq.opts.map((g, i) => {
+              let cls = '';
+              if (done) cls = g === c ? 'is-correct' : (i === ffq.picked ? 'is-wrong' : 'is-dim');
+              return `<button onclick="pickFullForm(${i})" class="x-opt ${cls}" ${done ? 'disabled' : ''}><span class="x-opt-key">${'ABCD'[i]}</span><span>${escapeHtml(label(g))}</span></button>`;
+            }).join('')}
+          </div>
+          ${done ? `
+            <div class="x-explain ${ok ? 'good' : 'bad'}">
+              <strong>${ok ? '✅ Correct.' : '❌ Not quite.'}</strong> ${escapeHtml(c.a)} = <strong>${escapeHtml(c.f)}</strong>
+              <div style="margin-top:4px">${escapeHtml(c.m)}</div>
+            </div>
+            <div><button onclick="nextFullFormQuestion()" class="x-btn x-btn-primary">Next →</button></div>` : ''}
+        </div>
+      `;
+    }
+
+    // ----- 3. Put the steps in order -----
+    let orderGame = { set: 0, placed: [], pool: [], mistakes: 0 };
+
+    function startOrderGame(setIdx) {
+      const n = ORDER_GAMES[setIdx].steps.length;
+      let pool = shuffled(Array.from({ length: n }, (_, i) => i));
+      // never start already sorted
+      if (pool.every((v, i) => v === i)) pool.reverse();
+      orderGame = { set: setIdx, placed: [], pool, mistakes: 0 };
+      renderOrderGame();
+    }
+
+    function pickOrderStep(stepIdx, btn) {
+      const g = ORDER_GAMES[orderGame.set];
+      if (stepIdx === orderGame.placed.length) {
+        orderGame.placed.push(stepIdx);
+        orderGame.pool = orderGame.pool.filter(x => x !== stepIdx);
+        if (orderGame.placed.length === g.steps.length) markGameDone('order-' + orderGame.set);
+        renderOrderGame();
+      } else {
+        orderGame.mistakes++;
+        const m = document.getElementById('order-mistakes');
+        if (m) m.textContent = `Mistakes: ${orderGame.mistakes}`;
+        if (btn) {
+          btn.classList.remove('x-shake');
+          void btn.offsetWidth;
+          btn.classList.add('x-shake');
+        }
+      }
+    }
+
+    function renderOrderGame() {
+      const panel = document.getElementById('game-panel-order');
+      const g = ORDER_GAMES[orderGame.set];
+      const complete = orderGame.placed.length === g.steps.length;
+      const doneSet = store.gamesDone || [];
+      panel.innerHTML = `
+        <div class="x-card x-stack">
+          <div class="x-eyebrow">Put the steps in order — choose a set</div>
+          <div class="x-chips">
+            ${ORDER_GAMES.map((og, i) => `<button onclick="startOrderGame(${i})" class="x-chip ${i === orderGame.set ? 'is-on' : ''}">${doneSet.indexOf('order-' + i) !== -1 ? '✓ ' : ''}${escapeHtml(og.title)}</button>`).join('')}
+          </div>
+        </div>
+        <div class="x-card x-stack">
+          <div class="x-row">
+            <div>
+              <h2 class="x-title">${escapeHtml(g.title)}</h2>
+              <p class="x-muted">${escapeHtml(g.hint)} Tap the step that comes next.</p>
+            </div>
+            <span class="x-pill" id="order-mistakes">Mistakes: ${orderGame.mistakes}</span>
+          </div>
+          <ol class="x-orderlist">
+            ${g.steps.map((s, i) => i < orderGame.placed.length
+              ? `<li class="is-placed"><span class="x-num">${i + 1}</span><span>${escapeHtml(s)}</span></li>`
+              : `<li class="is-empty"><span class="x-num">${i + 1}</span><span>${i === orderGame.placed.length ? 'Which step comes here?' : '…'}</span></li>`).join('')}
+          </ol>
+          ${complete ? `
+            <div class="x-explain good"><strong>✅ Correct order${orderGame.mistakes ? ` — with ${orderGame.mistakes} mistake${orderGame.mistakes === 1 ? '' : 's'}` : ' — no mistakes'}.</strong> Say the steps once from memory before moving on.</div>
+            <div class="x-row" style="justify-content:flex-start">
+              <button onclick="startOrderGame(${(orderGame.set + 1) % ORDER_GAMES.length})" class="x-btn x-btn-primary">Next set →</button>
+              <button onclick="startOrderGame(${orderGame.set})" class="x-btn">↻ Play again</button>
+            </div>` : `
+            <div class="x-chips">
+              ${orderGame.pool.map(si => `<button onclick="pickOrderStep(${si}, this)" class="x-chip x-chip-step">${escapeHtml(g.steps[si])}</button>`).join('')}
+            </div>`}
+        </div>
+      `;
+    }
+
+    // ----- 4. Match the pairs -----
+    let matchGame = { set: 0, left: [], right: [], sel: null, done: [], mistakes: 0 };
+
+    function startMatchGame(setIdx) {
+      const n = MATCH_GAMES[setIdx].pairs.length;
+      const idx = Array.from({ length: n }, (_, i) => i);
+      matchGame = { set: setIdx, left: shuffled(idx), right: shuffled(idx), sel: null, done: [], mistakes: 0 };
+      renderMatchGame();
+    }
+
+    function pickMatchLeft(i) {
+      if (matchGame.done.indexOf(i) !== -1) return;
+      matchGame.sel = matchGame.sel === i ? null : i;
+      renderMatchGame();
+    }
+
+    function pickMatchRight(i, btn) {
+      if (matchGame.sel === null || matchGame.done.indexOf(i) !== -1) {
+        const tip = document.getElementById('match-tip');
+        if (tip && matchGame.sel === null) tip.textContent = 'First tap an item on the left, then its partner on the right.';
+        return;
+      }
+      if (i === matchGame.sel) {
+        matchGame.done.push(i);
+        matchGame.sel = null;
+        if (matchGame.done.length === MATCH_GAMES[matchGame.set].pairs.length) markGameDone('match-' + matchGame.set);
+        renderMatchGame();
+      } else {
+        matchGame.mistakes++;
+        const m = document.getElementById('match-mistakes');
+        if (m) m.textContent = `Mistakes: ${matchGame.mistakes}`;
+        if (btn) {
+          btn.classList.remove('x-shake');
+          void btn.offsetWidth;
+          btn.classList.add('x-shake');
+        }
+      }
+    }
+
+    function renderMatchGame() {
+      const panel = document.getElementById('game-panel-match');
+      const g = MATCH_GAMES[matchGame.set];
+      const complete = matchGame.done.length === g.pairs.length;
+      const doneSet = store.gamesDone || [];
+      panel.innerHTML = `
+        <div class="x-card x-stack">
+          <div class="x-eyebrow">Match the pairs — choose a set</div>
+          <div class="x-chips">
+            ${MATCH_GAMES.map((mg, i) => `<button onclick="startMatchGame(${i})" class="x-chip ${i === matchGame.set ? 'is-on' : ''}">${doneSet.indexOf('match-' + i) !== -1 ? '✓ ' : ''}${escapeHtml(mg.title)}</button>`).join('')}
+          </div>
+        </div>
+        <div class="x-card x-stack">
+          <div class="x-row">
+            <div>
+              <h2 class="x-title">${escapeHtml(g.title)}</h2>
+              <p class="x-muted" id="match-tip">Tap an item on the left, then its partner on the right.</p>
+            </div>
+            <div class="x-row" style="gap:6px">
+              <span class="x-pill is-good">Matched ${matchGame.done.length} / ${g.pairs.length}</span>
+              <span class="x-pill" id="match-mistakes">Mistakes: ${matchGame.mistakes}</span>
+            </div>
+          </div>
+          <div class="x-match">
+            <div class="x-match-col">
+              ${matchGame.left.map(i => `<button onclick="pickMatchLeft(${i})" class="x-match-item ${matchGame.done.indexOf(i) !== -1 ? 'is-done' : ''} ${matchGame.sel === i ? 'is-sel' : ''}" ${matchGame.done.indexOf(i) !== -1 ? 'disabled' : ''}>${escapeHtml(g.pairs[i][0])}</button>`).join('')}
+            </div>
+            <div class="x-match-col">
+              ${matchGame.right.map(i => `<button onclick="pickMatchRight(${i}, this)" class="x-match-item ${matchGame.done.indexOf(i) !== -1 ? 'is-done' : ''}" ${matchGame.done.indexOf(i) !== -1 ? 'disabled' : ''}>${escapeHtml(g.pairs[i][1])}</button>`).join('')}
+            </div>
+          </div>
+          ${complete ? `
+            <div class="x-explain good"><strong>✅ All matched${matchGame.mistakes ? ` — with ${matchGame.mistakes} mistake${matchGame.mistakes === 1 ? '' : 's'}` : ' — no mistakes'}.</strong></div>
+            <div class="x-row" style="justify-content:flex-start">
+              <button onclick="startMatchGame(${(matchGame.set + 1) % MATCH_GAMES.length})" class="x-btn x-btn-primary">Next set →</button>
+              <button onclick="startMatchGame(${matchGame.set})" class="x-btn">↻ Play again</button>
+            </div>` : ''}
+        </div>
+      `;
+    }
+
+
+    // =========================================================================
     // 10. ANIMATION LOOP & INITIALIZATION
     // =========================================================================
     function animate() {
@@ -2688,6 +4162,11 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
+      // Full forms first: expand the data, then the static page text
+      [VIDEO_SCENES, BIG_ANSWERS, PART2_TOPICS, PART3_2MARK, PART4_1MARK, CHEATSHEET_ITEMS,
+       BANDS_DATA, ELECTRODES_1020, MCQ_TOPICS, MCQ_BANK, ORDER_GAMES, MATCH_GAMES].forEach(expandDeep);
+      expandDom(document.body);
+      loadProgress();
       loadScene(0);
       calcERD();
       initP300Grid();
@@ -2700,6 +4179,10 @@
       renderPart4Table();
       loadQuizQuestion();
       renderCheatSheet();
+      renderMcq();
+      initGames();
+      updateGlobalProgress();
+      watchForNewText();
       requestAnimationFrame(animate);
     });
   </script>
